@@ -3,9 +3,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 // 여기서 부터 미들웨어/데브툴 관련 임포트
 import { composeWithDevTools } from "redux-devtools-extension";
 import logger from "redux-logger";
-import thunk from "redux-thunk";
 import registerReducer from "./reducers/registerReducer";
-import createLogger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./saga";
 const initialState = {

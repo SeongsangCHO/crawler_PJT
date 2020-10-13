@@ -3,7 +3,8 @@ import Header from "./Header";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector} from "react-redux";
+import { BrowserRouter as Router, Route, Switch, useHistory  } from "react-router-dom";
 
 const RegisterWrapper = styled.div`
   width: 100%;
@@ -26,25 +27,48 @@ const PasswordCheck = styled.input`
   border: 1px solid #000;
   margin-bottom: 15px;
 `;
-
 const DoubleCheck = styled.button`
   background-color: lavender;
 `;
-
 const RegisterButton = styled.button`
   background-color: lavender;
 `;
+
+
+
+
 function Register() {
   const dispatch = useDispatch();
-
+  const history = useHistory();
+  const userData = useSelector((state => state.data));
+  
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  //submitting값이 변화할 때 수행되는 useEffect()
+  useEffect(() => {    
+    if (submitting == true) {
+      console.log('submitting is true');
+      //route하는 부분, post요청을 한 다음 해당 uri로 이동
+      //로그인페이지로 이동시키면 될듯.
+      dispatch({
+        type: "SIGN_UP_REQUEST",
+        data: {
+          user_nickname: nickName,
+          user_password: password,
+        },
+      });
+      history.push('/');
+    }
+  },[submitting]);//컴포넌트 갱신 => form 작성 시 수행되야함 , 인자 [] 넣지않음. 
+
+  //비밀번호 인풋 셋팅
   const handlePasswordInput = (e) => {
     setPassword(e.target.value);
-    console.log(password);
   };
 
+  //비밀번호 더블체크  부분
   const handlePasswordCheck = (e) => {
     let doubleCheckValue = e.target.value;
     if (doubleCheckValue == "") {
@@ -58,28 +82,22 @@ function Register() {
     return false;
   };
 
+//form 제출버튼 클릭시 발생하는 이벤트
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (passwordCheck == false && setPassword != "") {
-      console.log("비번이 공백이거나 일치하지 않음");
       alert("비밀번호가 공백이거나 일치하지 않아요");
-      return false;
+      return setSubmitting(false);
     }
-    return dispatch({
-      type: "SIGN_UP_REQUEST",
-      data: {
-        user_nickname: nickName,
-        user_password: password,
-      },
-    });
+
+    return setSubmitting(true);
   };
+  //nickname 입력시 이벤트발생마다 set되는 부분
   const handleNickName = (e) => {
     setNickName(e.target.value);
-    console.log(e.target.value);
   };
   const getNickName = (e) => {
-    console.log(nickName);
     //여기서 서버에서 가져온 데이터랑 중복체크
   };
   return (
