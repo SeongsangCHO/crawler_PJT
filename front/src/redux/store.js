@@ -7,7 +7,8 @@ import registerReducer from "./reducers/registerReducer";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./saga";
 const initialState = {
-  data:{}
+  data: {},
+  
 };
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();

@@ -1,3 +1,4 @@
+import { push } from 'react-router-redux';
 import {
   all,
   fork,
@@ -26,6 +27,10 @@ const localURL = "http://localhost/register";
 // *_SUCCESS 비동기 요청성공
 // *_FAILURE 비동기 요청실패
 
+// function forwardTo(location) {
+//   history.push(location);
+// }
+
 function signUpAPI(signUpData) {
   console.log("signUpAPI in saga");
   return axios.post(localURL, signUpData, {
@@ -34,16 +39,27 @@ function signUpAPI(signUpData) {
 }
 function* signUp(action) {
   try {
+
     console.log("signUp in saga");
-    yield delay(2000);
     const result = yield call(signUpAPI, action.data);
     // yield put(registerSuccess(action.data)); //액션호출안해두되남.
     //signUpAPI 를 호출하고 돌아오는 데이터도 받는다.
     yield put({ type: SIGN_UP_SUCCESS, data: action.data });
-    return (result.status);
+    
+    //성공하면 redirect해야하는데.. succeess를 어떻게 기다리지
+
+    // yield call(forwardTo, "/");
+    // yield put(push('/'));
+
+    //post요청이 성공했을 때
+    //history에 uri는 변경이되는데 컴포넌트가 안바뀌네
+    if (result.status === 200) { 
+      console.log('가입데이터 요청완료');
+      alert('가입성공');
+    }
   } catch (err) {
     console.log(err);
-    yield put(registerFailure());
+    // yield put(registerFailure());
     yield put({ type: SIGN_UP_FAILURE, data: err });
   }
 }
@@ -51,7 +67,7 @@ function* signUp(action) {
 //액션 type - SIGN_UP_REQUEST가 들어올떄까지 기다림
 function* watchSignUp() {
   console.log("watch Sign UP");
-  yield takeEvery(SIGN_UP_REQUEST, signUp); //리듀서 감지
+  yield takeLatest(SIGN_UP_REQUEST, signUp); //리듀서 감지
 }
 
 

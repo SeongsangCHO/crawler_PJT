@@ -5,6 +5,8 @@ const initialState = {
     user_nickname: "",
     user_password: "",
   },
+  isSigningUp: 'init',
+  isSignedUp: 'init',
 };
 
 //상태가 변화할 때 수행되는 함수
