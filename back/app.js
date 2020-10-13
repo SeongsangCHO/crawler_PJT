@@ -6,6 +6,7 @@ let multi = require("./crawler/multi");
 let cluster = require("./crawler/cluster");
 var cors = require('cors')
 const accecptURL = 'http:/localhost:3000'; 
+let db = require("./config/db_config");
 
 const app = express();
 app.use(cors({
@@ -35,6 +36,28 @@ app.get("/api", (req, res) => {
 
 //닉네임 중복체크를 post로 던져서 select, 중복체크, false리턴
 // 그 값에 따라서 alert 반환
+
+app.post("/doublecheck",  cors(accecptURL),(req, res, next) => {
+  //res.set이아닌 setHeader로 했어야함.
+  console.log('double check post request 받음');
+  console.log(req.body.user_nickname);
+  let sql = `select * from users where nickname = '${req.body.user_nickname}'`;
+  //setHeader를 이미 선언하면, body를 다 작성했다는 의미
+  //그리고나서 res.status로 상태코드를 지정하면 에러가 발생할 것
+  //
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    db.query(sql, (error, result) => {
+      console.log(result);
+      if (result[0].nickname == req.body.user_nickname){
+      console.log('select한 결과 있음');
+      console.log(result)
+      res.status(200).json({ error: 'message' });
+      }
+    });
+    res.status(400).json({ error: 'message' });
+  //res.statusCode = 400, 401로 상태코드응답
+  //userData의 password를 bcrpt로 해싱
+});
 
 app.post("/register",  cors(accecptURL),(req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.

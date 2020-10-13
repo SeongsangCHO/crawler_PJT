@@ -102,6 +102,12 @@ function Register() {
   };
   const getNickName = (e) => {
     //여기서 서버에서 가져온 데이터랑 중복체크
+    dispatch({
+      type: "NICK_DOUBLE_CHECK_REQUEST",
+      data: {
+        user_nickname: nickName,
+      },
+    });
   };
   return (
     <RegisterWrapper>

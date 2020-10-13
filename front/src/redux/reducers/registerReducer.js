@@ -1,4 +1,4 @@
-import {SIGN_UP_REQUEST,SIGN_UP_SUCCESS,SIGN_UP_FAILURE} from '../actions/registerAction';
+import {SIGN_UP_REQUEST,SIGN_UP_SUCCESS,SIGN_UP_FAILURE, NICK_DOUBLE_CHECK_REQUEST, NICK_DOUBLE_CHECK_SUCCESS, NICK_DOUBLE_CHECK_FAILURE} from '../actions/registerAction';
 
 const initialState = {
   data: {
@@ -24,6 +24,18 @@ const registerReducer = (state = initialState, action) => {
       return { ...state, data: { ...action.data },isSigningUp : false, isSignedUp:true, };
     }
     case SIGN_UP_FAILURE:{
+      console.log("FAILURE_리듀서");
+      return { ...state, data: {} };
+    }
+    case NICK_DOUBLE_CHECK_REQUEST: {
+      console.log("REQUEST_리듀서");
+      return { ...state, isSigningUp : true, isSignedUp:false, };
+    }
+    case NICK_DOUBLE_CHECK_SUCCESS:{
+      console.log("SUCCESS_리듀서");
+      return { ...state, data: { ...action.data },isSigningUp : false, isSignedUp:true, };
+    }
+    case NICK_DOUBLE_CHECK_FAILURE:{
       console.log("FAILURE_리듀서");
       return { ...state, data: {} };
     }
