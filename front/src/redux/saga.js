@@ -14,13 +14,16 @@ import {
   SIGN_UP_FAILURE,
   registerRequest,
   registerSuccess,
-  registerFailure
+  registerFailure,
+  NICK_DOUBLE_CHECK_REQUEST,
+  NICK_DOUBLE_CHECK_SUCCESS,
+  NICK_DOUBLE_CHECK_FAILURE
 } from "./actions/registerAction";
 
 import axios from "axios";
 
-const localURL = "http://localhost/register";
-
+const registerURL = "http://localhost/register";
+const doubleCheckURL = "http://localhost/doublecheck"
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
 
 // *_REQUEST 비동기 요청
@@ -33,7 +36,15 @@ const localURL = "http://localhost/register";
 
 function signUpAPI(signUpData) {
   console.log("signUpAPI in saga");
-  return axios.post(localURL, signUpData, {
+  return axios.post(registerURL, signUpData, {
+    withCredentials: true,
+  });
+}
+
+function doubleCheckAPI(nickNameData) {
+  console.log("doubleCheckAPI in saga");
+  
+  return axios.post(doubleCheckURL, nickNameData, {
     withCredentials: true,
   });
 }
@@ -64,14 +75,41 @@ function* signUp(action) {
   }
 }
 
+
+function* nickNameDoubleCheck(action){
+  try{
+    console.log("getNickName in saga");
+    const result = yield call(doubleCheckAPI, action.data);
+    if (result.status === 200){
+      alert('사용하실 수 있는 닉네임입니다.');
+    }
+  }
+  catch(err){
+    console.error(err);
+    yield put({ type: NICK_DOUBLE_CHECK_FAILURE, data: err });
+    alert('닉네임이 이미 존재해요!');
+  }
+}
+
+
+
+
+
+
 //액션 type - SIGN_UP_REQUEST가 들어올떄까지 기다림
 function* watchSignUp() {
   console.log("watch Sign UP");
   yield takeLatest(SIGN_UP_REQUEST, signUp); //리듀서 감지
 }
 
+function* watchNickNameDoubleCheck(){
+  console.log("watch getNickName from server");
+  //서버로 post로 닉네임 던진다음, select로 중복체크함
+  //없으면 200상태코드 반환, 있으면 4xx에러 반환. failure에서 console.찍기
+  yield takeLatest(NICK_DOUBLE_CHECK_REQUEST, nickNameDoubleCheck);
+}
 
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
-  yield all([fork(watchSignUp)]);
+  yield all([fork(watchSignUp), fork(watchNickNameDoubleCheck)]);
 }
