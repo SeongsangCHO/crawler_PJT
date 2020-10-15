@@ -55,7 +55,7 @@ app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
   db.query(sql, (error, result) => {
     console.log(result);
     if (result == "") {
-      return res.status(200).json({ message: "가입 success" });
+      return res.status(200).json({ message: "중복체크 success" });
     }
     if (result[0].nickname == req.body.user_nickname) {
       console.log("select한 결과 있음");
@@ -84,6 +84,8 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
   } catch (err) {
     console.error(err);
   }
+  return res.status(200).json({ message: "가입 success" });
+
   //userData의 password를 bcrpt로 해싱
   // res.render("../views/userRegister", {user_data: req.body});
 });
@@ -135,7 +137,7 @@ app.post("/login", cors(accecptURL), (req, res, next) => {
             console.log("이게 db비번"+result[0].password);
             
             console.log("비번이 서로다른데 뭐가달라")
-            res.status(400).json({ error: "invalid user" });
+            res.status(418).json({ error: "invalid user" });
 
 
           }
