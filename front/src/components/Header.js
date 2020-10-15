@@ -13,6 +13,9 @@ function Header() {
       <NavLink className="navbar-brand" to={"/register"}>
         register
       </NavLink>
+      <NavLink className="navbar-brand" to={"/login"}>
+        login
+      </NavLink>
       <Jumbotron />
     </div>
   );

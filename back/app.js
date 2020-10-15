@@ -4,21 +4,27 @@ let ssgCrawler = require("./crawler/ssgCrawler");
 let coupangCrawler = require("./crawler/coupangCrawler");
 let multi = require("./crawler/multi");
 let cluster = require("./crawler/cluster");
-var cors = require('cors')
-const accecptURL = 'http:/localhost:3000'; 
+var cors = require("cors");
+const accecptURL = "http:/localhost:3000";
 let db = require("./config/db_config");
+const bcrypt = require("bcrypt");
+const loginAuth = require("./middlewares/auth");
+const jwt = require("jsonwebtoken");
+const SECRET_KEY = "piTeam";
+const HASH_ROUND = 10;
+require("dotenv").config();
 
 const app = express();
-app.use(cors({
-  origin:"http://localhost:3000",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 const port = process.env.PORT || 80;
 let testAPIRouter = require("./routes/testAPI");
 const { start } = require("repl");
-
-
 
 //템플릿엔진 ejs 설정 __dirname +'views'랑 같음
 app.set("views", path.join(__dirname, "views"));
@@ -37,41 +43,109 @@ app.get("/api", (req, res) => {
 //닉네임 중복체크를 post로 던져서 select, 중복체크, false리턴
 // 그 값에 따라서 alert 반환
 
-app.post("/doublecheck",  cors(accecptURL),(req, res, next) => {
+app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
-  console.log('double check post request 받음');
+  console.log("double check post request 받음");
   console.log(req.body.user_nickname);
   let sql = `select * from users where nickname = '${req.body.user_nickname}'`;
   //setHeader를 이미 선언하면, body를 다 작성했다는 의미
   //그리고나서 res.status로 상태코드를 지정하면 에러가 발생할 것
   //
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    db.query(sql, (error, result) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  db.query(sql, (error, result) => {
+    console.log(result);
+    if (result == "") {
+      return res.status(200).json({ message: "가입 success" });
+    }
+    if (result[0].nickname == req.body.user_nickname) {
+      console.log("select한 결과 있음");
       console.log(result);
-      if (result == '') { 
-        return res.status(200).json({ error: 'message' });
-      }
-      if (result[0].nickname == req.body.user_nickname){
-      console.log('select한 결과 있음');
-      console.log(result)
-      return res.status(400).json({ error: 'message' });
-      }
-    });
+      return res.status(418).json({ error: "message" });
+    }
+  });
   //res.statusCode = 400, 401로 상태코드응답
   //userData의 password를 bcrpt로 해싱
 });
 
-app.post("/register",  cors(accecptURL),(req, res, next) => {
+//가입버튼 클릭시 - 가입요청을 받는 부분
+app.post("/register", cors(accecptURL), (req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log(req.body);
+  try {
+    bcrypt.hash(req.body.user_password, HASH_ROUND, (err, hashPassword) => {
+      let sql = `insert into users (nickname, password) values(?, ?)`;
+      db.query(sql, [req.body.user_nickname, hashPassword], (err, result) => {
+        if (err) {
+          throw err;
+        }
+      });
+    });
+  } catch (err) {
+    console.error(err);
+  }
   //userData의 password를 bcrpt로 해싱
-  res.render("../views/userRegister", {user_data: req.body});
+  // res.render("../views/userRegister", {user_data: req.body});
 });
 //클릭시 처리를 어떻게 해야할까
 //https://stackoverflow.com/questions/55647287/how-to-send-request-on-click-react-hooks-way
 
 //클릭데이터를 서버에 전달해야하는뎀.
+
+//login시 auth에서 로그인데이터가 일치할시 jwt발행, 발급받은 데이터 front에 전달..
+app.post("/login", cors(accecptURL), (req, res, next) => {
+  console.log("로그인에 요청들어옴");
+  console.log(req.body);
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
+  try {
+    let sql = `select * from users where nickname = '${req.body.user_nickname}'`;
+
+    db.query(sql, (error, result) => {
+      if (error) console.error(error);
+      if (result[0] && result[0].nickname === req.body.user_nickname) {
+        bcrypt.compare(req.body.user_password, result[0].password, function (
+          err,
+          hash
+        ) {
+          if (err) {
+            throw err;
+          }
+          console.log(hash)
+          if (hash) {
+
+            const token = jwt.sign(
+              {
+                nickname: req.body.user_nickname,
+              },
+              SECRET_KEY,
+              {
+                expiresIn: "1m",
+              }
+            );
+            console.log(token);
+            res.cookie("user", token);
+            res.status(200).json({
+              result: "ok",
+              token,
+            });
+            console.log("토큰발행성공");
+          } else {
+            console.log("이게 입력 비번"+req.body.user_password);
+            console.log("이게 db비번"+result[0].password);
+            
+            console.log("비번이 서로다른데 뭐가달라")
+            res.status(400).json({ error: "invalid user" });
+
+
+          }
+        });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 //크롤러는 하나임, 데이터를 저장할 크롤러 하나 뿐
 //링크박스 추가시 크롤러데이터를 저장할 부분과 클릭할 때 이를 가져올 부분을 따로 작성해야함.

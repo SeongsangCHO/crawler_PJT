@@ -208,19 +208,11 @@ function CrawlingCard({ obj }) {
   );
 }
 
-const PriceDetail = styled.div`
-  
-`;
+const PriceDetail = styled.div``;
 
-const InfoDetail = styled.div`
-  
-`;
-const LinkDetail = styled.div`
-  
-`;
-const CardDetail = styled.div`
-  
-`;
+const InfoDetail = styled.div``;
+const LinkDetail = styled.div``;
+const CardDetail = styled.div``;
 function ProductCard({ element }) {
   return (
     <ProductCardWrapper>

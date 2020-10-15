@@ -8,7 +8,6 @@ import createSagaMiddleware from "redux-saga";
 import rootSaga from "./saga";
 const initialState = {
   data: {},
-  
 };
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
@@ -22,7 +21,7 @@ const configureStore = () => {
   const store = createStore(
     combineReducers({
       registerReducer,
-  }),
+    }),
     initialState,
     enhancer
   );

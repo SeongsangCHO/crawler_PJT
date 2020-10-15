@@ -3,9 +3,14 @@ import Header from "./Header";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useDispatch , useSelector} from "react-redux";
-import { BrowserRouter as Router, Route, Switch,useHistory   } from "react-router-dom";
-import { withRouter } from 'react-router';
+import { useDispatch, useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
+import { withRouter } from "react-router";
 
 const RegisterWrapper = styled.div`
   width: 100%;
@@ -35,29 +40,26 @@ const RegisterButton = styled.button`
   background-color: lavender;
 `;
 
-
-
-
 function Register() {
   const dispatch = useDispatch();
-  const isDouble = useSelector((state => state.registerReducer.isDouble));
-  const userData = useSelector((state => state.registerReducer));
+  const isDouble = useSelector((state) => state.registerReducer.isDouble);
+  const userData = useSelector((state) => state.registerReducer);
   const history = useHistory();
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   //submitting값이 변화할 때 수행되는 useEffect()
-  useEffect(() => {    
+  useEffect(() => {
     //닉네임 중복체크했는지에 대한 여부도 확인
     //
     if (submitting == true) {
-      console.log('submitting is true');
+      console.log("submitting is true");
       //route하는 부분, post요청을 한 다음 해당 uri로 이동
       //로그인페이지로 이동시키면 될듯.
-      history.push('/');
+      history.push("/");
     }
-  },[submitting,isDouble]);//컴포넌트 갱신 => form 작성 시 수행되야함 , 인자 [] 넣지않음. 
+  }, [submitting, isDouble]); //컴포넌트 갱신 => form 작성 시 수행되야함 , 인자 [] 넣지않음.
 
   //비밀번호 인풋 셋팅
   const handlePasswordInput = (e) => {
@@ -79,7 +81,7 @@ function Register() {
     return false;
   };
 
-//form 제출버튼 클릭시 발생하는 이벤트
+  //form 제출버튼 클릭시 발생하는 이벤트
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -150,9 +152,11 @@ function Register() {
           <label>패스워드 확인해주세요.</label>
         )}
         <div>
-          {isDouble == true ? (<RegisterButton type="submit">가입</RegisterButton>) :
-          <label> 닉네임 중복체크를 확인해주세요.</label>
-          }
+          {isDouble == true ? (
+            <RegisterButton type="submit">가입</RegisterButton>
+          ) : (
+            <label> 닉네임 중복체크를 확인해주세요.</label>
+          )}
         </div>
       </form>
     </RegisterWrapper>
