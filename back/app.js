@@ -48,13 +48,15 @@ app.post("/doublecheck",  cors(accecptURL),(req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     db.query(sql, (error, result) => {
       console.log(result);
+      if (result == '') { 
+        return res.status(200).json({ error: 'message' });
+      }
       if (result[0].nickname == req.body.user_nickname){
       console.log('select한 결과 있음');
       console.log(result)
-      res.status(200).json({ error: 'message' });
+      return res.status(400).json({ error: 'message' });
       }
     });
-    res.status(400).json({ error: 'message' });
   //res.statusCode = 400, 401로 상태코드응답
   //userData의 password를 bcrpt로 해싱
 });

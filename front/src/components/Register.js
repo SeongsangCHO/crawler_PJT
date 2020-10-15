@@ -40,6 +40,7 @@ const RegisterButton = styled.button`
 
 function Register() {
   const dispatch = useDispatch();
+  const isDouble = useSelector((state => state.registerReducer.isDouble));
   const userData = useSelector((state => state.registerReducer));
   const history = useHistory();
   const [nickName, setNickName] = useState("");
@@ -56,7 +57,7 @@ function Register() {
       //로그인페이지로 이동시키면 될듯.
       history.push('/');
     }
-  },[submitting]);//컴포넌트 갱신 => form 작성 시 수행되야함 , 인자 [] 넣지않음. 
+  },[submitting,isDouble]);//컴포넌트 갱신 => form 작성 시 수행되야함 , 인자 [] 넣지않음. 
 
   //비밀번호 인풋 셋팅
   const handlePasswordInput = (e) => {
@@ -108,6 +109,7 @@ function Register() {
         user_nickname: nickName,
       },
     });
+    console.log(isDouble);
   };
   return (
     <RegisterWrapper>
@@ -148,7 +150,9 @@ function Register() {
           <label>패스워드 확인해주세요.</label>
         )}
         <div>
-          <RegisterButton type="submit">가입</RegisterButton>
+          {isDouble == true ? (<RegisterButton type="submit">가입</RegisterButton>) :
+          <label> 닉네임 중복체크를 확인해주세요.</label>
+          }
         </div>
       </form>
     </RegisterWrapper>

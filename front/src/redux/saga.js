@@ -55,7 +55,6 @@ function* signUp(action) {
     const result = yield call(signUpAPI, action.data);
     // yield put(registerSuccess(action.data)); //액션호출안해두되남.
     //signUpAPI 를 호출하고 돌아오는 데이터도 받는다.
-    yield put({ type: SIGN_UP_SUCCESS, data: action.data });
     
     //성공하면 redirect해야하는데.. succeess를 어떻게 기다리지
 
@@ -65,6 +64,7 @@ function* signUp(action) {
     //post요청이 성공했을 때
     //history에 uri는 변경이되는데 컴포넌트가 안바뀌네
     if (result.status === 200) { 
+      yield put({ type: SIGN_UP_SUCCESS, data: action.data });
       console.log('가입데이터 요청완료');
       alert('가입성공');
     }
@@ -80,13 +80,15 @@ function* nickNameDoubleCheck(action){
   try{
     console.log("getNickName in saga");
     const result = yield call(doubleCheckAPI, action.data);
-    if (result.status === 200){
+    if (result.status === 200) {
+      yield put({ type: NICK_DOUBLE_CHECK_SUCCESS, data: action.data, isDouble:true });
+      
       alert('사용하실 수 있는 닉네임입니다.');
     }
   }
   catch(err){
     console.error(err);
-    yield put({ type: NICK_DOUBLE_CHECK_FAILURE, data: err });
+    yield put({ type: NICK_DOUBLE_CHECK_FAILURE, data: err, isDouble:false });
     alert('닉네임이 이미 존재해요!');
   }
 }

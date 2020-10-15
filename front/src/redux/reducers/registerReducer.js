@@ -5,6 +5,7 @@ const initialState = {
     user_nickname: "",
     user_password: "",
   },
+  isDouble: false,
   isSigningUp: 'init',
   isSignedUp: 'init',
 };
@@ -29,15 +30,15 @@ const registerReducer = (state = initialState, action) => {
     }
     case NICK_DOUBLE_CHECK_REQUEST: {
       console.log("REQUEST_리듀서");
-      return { ...state, isSigningUp : true, isSignedUp:false, };
+      return { ...state};
     }
     case NICK_DOUBLE_CHECK_SUCCESS:{
       console.log("SUCCESS_리듀서");
-      return { ...state, data: { ...action.data },isSigningUp : false, isSignedUp:true, };
+      return { ...state, data: { ...action.data },isDouble:action.isDouble};
     }
     case NICK_DOUBLE_CHECK_FAILURE:{
       console.log("FAILURE_리듀서");
-      return { ...state, data: {} };
+      return { ...state, data: {}, isDouble:action.isDouble};
     }
     default:
       return state;
