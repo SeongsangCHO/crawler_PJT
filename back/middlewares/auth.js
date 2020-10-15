@@ -6,6 +6,8 @@ require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY;
 
 exports.createToken = async function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
   try {
     //front에서 보낸요청과 db에서 꺼낸 데이터가 일치하는지 확인하고
     //일치하면 토큰발행
@@ -16,21 +18,20 @@ exports.createToken = async function (req, res, next) {
       if (result[0] && result[0].nickname === req.body.user_nickname) {
         bcrypt.compare(req.body.user_password, result[0].password, function (
           err,
-          result
+          hash
         ) {
-          
           if (err) {
             throw err;
           }
-          
-          if (result) {
+
+          if (hash) {
             console.log(req.body.user_password);
             console.log(result[0].password);
             const token = jwt.sign(
               {
                 nickname: req.body.user_nickname,
               },
-              SECRET_KEY,
+              "piTeam",
               {
                 expiresIn: "1m",
               }

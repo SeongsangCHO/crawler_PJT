@@ -12,8 +12,9 @@ const loginAuth = require("./middlewares/auth");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "piTeam";
 const HASH_ROUND = 10;
+const {verifyToken} = require('./middlewares/verify');
+var cookieParser = require('cookie-parser');
 require("dotenv").config();
-
 const app = express();
 app.use(
   cors({
@@ -21,6 +22,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(cookieParser());
 
 const port = process.env.PORT || 80;
 let testAPIRouter = require("./routes/testAPI");
@@ -32,7 +34,7 @@ app.set("view engine", "ejs");
 
 app.use("/", testAPIRouter);
 app.use(express.json()); //body-parser 대신사용할수있음.
-app.get("/", (req, res) => {
+app.get("/",(req, res) => {
   res.send("hello World");
 });
 
@@ -43,7 +45,7 @@ app.get("/api", (req, res) => {
 //닉네임 중복체크를 post로 던져서 select, 중복체크, false리턴
 // 그 값에 따라서 alert 반환
 
-app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
+app.post("/doublecheck", cors(accecptURL), verifyToken,(req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
   console.log("double check post request 받음");
   console.log(req.body.user_nickname);
@@ -95,59 +97,12 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
 //클릭데이터를 서버에 전달해야하는뎀.
 
 //login시 auth에서 로그인데이터가 일치할시 jwt발행, 발급받은 데이터 front에 전달..
-app.post("/login", cors(accecptURL), (req, res, next) => {
-  console.log("로그인에 요청들어옴");
-  console.log(req.body);
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
-  try {
-    let sql = `select * from users where nickname = '${req.body.user_nickname}'`;
-
-    db.query(sql, (error, result) => {
-      if (error) console.error(error);
-      if (result[0] && result[0].nickname === req.body.user_nickname) {
-        bcrypt.compare(req.body.user_password, result[0].password, function (
-          err,
-          hash
-        ) {
-          if (err) {
-            throw err;
-          }
-          console.log(hash)
-          if (hash) {
-
-            const token = jwt.sign(
-              {
-                nickname: req.body.user_nickname,
-              },
-              SECRET_KEY,
-              {
-                expiresIn: "1m",
-              }
-            );
-            console.log(token);
-            res.cookie("user", token);
-            res.status(200).json({
-              result: "ok",
-              token,
-            });
-            console.log("토큰발행성공");
-          } else {
-            console.log("이게 입력 비번"+req.body.user_password);
-            console.log("이게 db비번"+result[0].password);
-            
-            console.log("비번이 서로다른데 뭐가달라")
-            res.status(418).json({ error: "invalid user" });
-
-
-          }
-        });
-      }
-    });
-  } catch (error) {
-    console.error(error);
-  }
-});
+app.post(
+  "/login",
+  cors(accecptURL),
+  loginAuth.createToken,
+  (req, res, next) => {}
+);
 
 //크롤러는 하나임, 데이터를 저장할 크롤러 하나 뿐
 //링크박스 추가시 크롤러데이터를 저장할 부분과 클릭할 때 이를 가져올 부분을 따로 작성해야함.
