@@ -120,6 +120,7 @@ function Register() {
           <label>닉네임</label>
         </div>
         <NickInput
+        required
           onChange={handleNickName}
           id="nick"
           type="text"
@@ -133,6 +134,7 @@ function Register() {
           <label>패스워드</label>
         </div>
         <PasswordInput
+        required
           type="password"
           onChange={handlePasswordInput}
           placeholder="비밀번호"
@@ -141,6 +143,7 @@ function Register() {
           <label>패스워드 확인</label>
         </div>
         <PasswordCheck
+        required
           onFocus={handlePasswordCheck}
           onChange={handlePasswordCheck}
           type="password"
@@ -153,7 +156,7 @@ function Register() {
         )}
         <div>
           {isDouble == true ? (
-            <RegisterButton type="submit">가입</RegisterButton>
+            <RegisterButton type="submit" required>가입</RegisterButton>
           ) : (
             <label> 닉네임 중복체크를 확인해주세요.</label>
           )}

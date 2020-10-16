@@ -4,7 +4,7 @@ import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
+import Modal from "react-bootstrap/Modal";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
@@ -178,7 +178,86 @@ const ProductCardWrapper = styled.div`
   min-height: 150px;
   height: 100%;
 `;
+
+function AddCategory(props) {
+  const [categoryData, setCategoryData] = useState('');
+  const dispatch = useDispatch();
+  const handleSetCategory = (e) => {
+    setCategoryData(e.target.value);
+    console.log(e.target.value);
+    
+  }
+  const handleAddCategory = (e) => {
+    
+    dispatch({
+      type: "ADD_CATEGORY_REQUEST",
+      category: categoryData,
+    });
+    alert("카테고리 추가 완료");
+    // e.preventDefault();
+    return false;
+  };
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          <h4>관리할 링크의 카테고리를 만드세요</h4>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div>
+          <form onSubmit={handleAddCategory}>
+            <input onChange={handleSetCategory}type="text" placeholder="카테고리 입력" required ></input>
+            <button type="submit">저장하기</button>
+          </form>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
+}
+const ModalWrapper = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+function AddLink(props) {
+  const handleLink = () => {
+    alert("링크 추가 완료");
+  };
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          <h4>링크를 만드세요</h4>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <ModalWrapper>
+          <form onSubmit={handleLink}>
+            <input type="text" placeholder="제목 입력"></input>
+            <input type="text" placeholder="가격 입력"></input>
+            <input type="text" placeholder="링크 입력"></input>
+            <input type="text" placeholder="메모 입력"></input>
+            <button type="submit">저장하기</button>
+          </form>
+        </ModalWrapper>
+      </Modal.Body>
+    </Modal>
+  );
+}
 function CategoryTab({ obj }) {
+  const [modalShow, setModalShow] = useState(false);
+
   return (
     <CategoryWrapper>
       <Nav variant="pills" className="flex-sm-column">
@@ -190,6 +269,8 @@ function CategoryTab({ obj }) {
           </Nav.Item>
         ))}
       </Nav>
+      <button onClick={() => setModalShow(true)}>추가하기</button>
+      <AddCategory show={modalShow} onHide={() => setModalShow(false)} />
     </CategoryWrapper>
   );
 }
@@ -237,6 +318,7 @@ function ProductCard({ element }) {
 }
 const CardTabWrapper = styled.div``;
 function CardTab({ obj }) {
+  const [modalShow, setModalShow] = useState(false);
   return (
     <CardTabWrapper>
       <Tab.Container>
@@ -247,6 +329,8 @@ function CardTab({ obj }) {
                 {obj[Object.keys(obj)]?.map((element) => (
                   <ProductCard element={element} />
                 ))}
+                <button onClick={() => setModalShow(true)}>링크추가하기</button>
+                <AddLink show={modalShow} onHide={() => setModalShow(false)} />
               </CardWrapper>
             </CardTabLeftSection>
 
@@ -284,25 +368,22 @@ function Contentc() {
   //크롤링카드 에 flex 2 지정
   //CardTab의 Tab.컨텐츠를 grid로하고 1fr, 1fr,1fr씩하면 3등분될듯
   //여기서 데이터를 가져와서 props로 전달?
-
   const isLogined = useSelector((state) => state.registerReducer.isLogined);
   return (
     <div className="content-wrapper">
-      {isLogined == true ? (
-        <Tab.Container
-          id="left-tabs"
-          defaultActiveKey={Object.keys(dummy?.category[0])}
-        >
-          <ContentWrapper>
-            <CategoryTab obj={dummy} />
-            <LinkCardSection obj={dummy} />
-          </ContentWrapper>
-        </Tab.Container>
-      ) : (
-        <NavLink className="navbar-brand" to={"/login"}>
-          login
-        </NavLink>
-      )}
+      <Tab.Container
+        id="left-tabs"
+        defaultActiveKey={Object.keys(dummy?.category[0])}
+      >
+        <ContentWrapper>
+          <CategoryTab obj={dummy} />
+          <LinkCardSection obj={dummy} />
+        </ContentWrapper>
+      </Tab.Container>
+
+      <NavLink className="navbar-brand" to={"/login"}>
+        login
+      </NavLink>
     </div>
   );
 }

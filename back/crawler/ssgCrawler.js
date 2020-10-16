@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer");
 let db = require("../config/db_config");
 let iconv = require("iconv-lite");
+const CRAWL_PAGES = 1;
 
 function encodeText(str) {
   let euckrObj = iconv.encode(str, "euc-kr"); //스트링을 euc-kr로 인코딩
@@ -73,15 +74,23 @@ const ssgCrawler = async () => {
     console.log(lastPageNumber);
 
     try {
+      let priority = 1;
+
       //첫페이지 ~ 3페이지까지 크롤링
       for (
-        let pageNumber = 2;
-        pageNumber <= lastPageNumber - (lastPageNumber - 3);
+        let pageNumber = 1;
+        pageNumber <= lastPageNumber - (lastPageNumber - CRAWL_PAGES);
         pageNumber++
       ) {
+        if (pageNumber != 1) {
+          await page.goto(
+            `http://www.ssg.com/search.ssg?target=all&query=${searchText}&page=${pageNumber}`,
+            { waitUntil: "networkidle2" }
+          );
+        }
         for (let idx = 1; idx <= liLength; idx++) {
           let productObj = {};
-          productObj["priority"] = idx + (pageNumber - 2) * liLength;
+          productObj["priority"] = priority++;
 
           productObj["title"] = await page.$eval(
             `#idProductImg li:nth-child(${idx}) div.title a em.tx_ko`,
@@ -98,10 +107,6 @@ const ssgCrawler = async () => {
           );
           productData.push(productObj);
         }
-        await page.goto(
-          `http://www.ssg.com/search.ssg?target=all&query=${searchText}&page=${pageNumber}`,
-          { waitUntil: "networkidle2" }
-        );
       }
     } catch (error) {
       if (error) console.error(error);

@@ -1,6 +1,9 @@
 const puppeteer = require("puppeteer");
 let db = require("../config/db_config");
 
+const CRAWL_PAGES = 1;
+
+
 const coupangCrawler = async () => {
   let start = await new Date().getTime();
   //Common part start//
@@ -69,7 +72,7 @@ const coupangCrawler = async () => {
     //1 ~ 3페이지까지 크롤링
     for (
       let pageNumber = 1;
-      pageNumber <= lastPageNumber - (lastPageNumber - 3);
+      pageNumber <= lastPageNumber - (lastPageNumber - CRAWL_PAGES);
       pageNumber++
     ) {
       if (pageNumber != 1) {

@@ -21,6 +21,9 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  ADD_CATEGORY_REQUEST,
+  ADD_CATEGORY_SUCCESS,
+  ADD_CATEGORY_FAILURE,
 } from "./actions/registerAction";
 
 import axios from "axios";
@@ -28,6 +31,7 @@ import axios from "axios";
 const registerURL = "http://localhost/register";
 const doubleCheckURL = "http://localhost/doublecheck";
 const loginURL = "http://localhost/login";
+const addCategoryURL = "http://localhost/addcategory";
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
 
 // *_REQUEST 비동기 요청
@@ -61,6 +65,15 @@ function loginAPI(loginData) {
   });
 }
 
+function addCategoryAPI(category){
+  console.log("addCategoryAPI in saga");
+  
+  return axios.post(addCategoryURL, {category}, {
+    withCredentials:true,
+  });
+  
+}
+
 function* signUp(action) {
   try {
     console.log("signUp in saga");
@@ -76,7 +89,7 @@ function* signUp(action) {
     //post요청이 성공했을 때
     //history에 uri는 변경이되는데 컴포넌트가 안바뀌네
     console.log(result.status);
-    
+
     if (result.status === 200) {
       yield put({ type: SIGN_UP_SUCCESS, data: action.data });
       console.log("가입데이터 요청완료");
@@ -121,6 +134,25 @@ function* loginRequst(action) {
     console.error(err);
   }
 }
+
+function* addCategory(action) {
+  try {
+    console.log("addCategory in saga");
+    console.log(action.category);
+    const result = yield call(addCategoryAPI, action.category);
+    
+    if (result.status == 200){
+      console.log("요청성공");
+      
+      yield put({type: ADD_CATEGORY_SUCCESS, category: action.category});
+      alert("요청성공")
+    }
+  } catch (err) {
+    yield put ({type: ADD_CATEGORY_FAILURE, err: err});
+    console.error(err);
+  }
+}
+
 //액션 type - SIGN_UP_REQUEST가 들어올떄까지 기다림
 function* watchSignUp() {
   console.log("watch Sign UP");
@@ -138,11 +170,18 @@ function* watchLogin() {
   console.log("watch Login");
   yield takeLatest(LOGIN_REQUEST, loginRequst);
 }
+
+function* watchAddCategory() {
+  console.log("watch AddCategory");
+  yield takeLatest(ADD_CATEGORY_REQUEST, addCategory);
+}
+
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
   yield all([
     fork(watchSignUp),
     fork(watchNickNameDoubleCheck),
-    fork(watchLogin)
+    fork(watchLogin),
+    fork(watchAddCategory),
   ]);
 }

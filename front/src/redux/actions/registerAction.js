@@ -13,6 +13,9 @@ export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 
+export const ADD_CATEGORY_REQUEST = "ADD_CATEGORY_REQUEST";
+export const ADD_CATEGORY_SUCCESS = "ADD_CATEGORY_SUCCESS";
+export const ADD_CATEGORY_FAILURE = "ADD_CATEGORY_FAILURE";
 export function registerRequest(data) {
   console.log("액션 생성함수");
   console.log(data);

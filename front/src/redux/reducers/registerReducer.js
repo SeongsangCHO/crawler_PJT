@@ -8,6 +8,9 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  ADD_CATEGORY_REQUEST,
+  ADD_CATEGORY_SUCCESS,
+  ADD_CATEGORY_FAILURE,
 } from "../actions/registerAction";
 
 const initialState = {
@@ -19,6 +22,7 @@ const initialState = {
   isSigningUp: "init",
   isSignedUp: "init",
   isLogined: false,
+  category:'',
 };
 
 //상태가 변화할 때 수행되는 함수
@@ -44,6 +48,7 @@ const registerReducer = (state = initialState, action) => {
       console.log("FAILURE_리듀서");
       return { ...state, data: {} };
     }
+
     case NICK_DOUBLE_CHECK_REQUEST: {
       console.log("REQUEST_리듀서");
       return { ...state };
@@ -56,6 +61,7 @@ const registerReducer = (state = initialState, action) => {
       console.log("FAILURE_리듀서");
       return { ...state, data: {}, isDouble: action.isDouble };
     }
+
     case LOGIN_REQUEST: {
       console.log("로그인 REQUEST_리듀서");
       return { ...state };
@@ -68,6 +74,20 @@ const registerReducer = (state = initialState, action) => {
       console.log("로그인 FAILURE_리듀서");
       return { ...state, data: {}, isLogined: action.isLogined };
     }
+
+    case ADD_CATEGORY_REQUEST: {
+      console.log("add카테고리 REQUEST_리듀서");
+      return { ...state };
+    }
+    case ADD_CATEGORY_SUCCESS: {
+      console.log("add카테고리 SUCCESS_리듀서");
+      return { ...state, category: action.category};
+    }
+    case ADD_CATEGORY_FAILURE: {
+      console.log("add카테고리 FAILURE_리듀서");
+      return { ...state, data: {}};
+    }
+
     default:
       return state;
   }

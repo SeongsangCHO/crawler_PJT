@@ -52,8 +52,6 @@ function Register() {
     return setInputValid(true);
   };
   const handleSubmit = (e) => {
-//테스트를 위한 이벤트 막기
-    e.preventDefault();
 
     if (inputValid === false) {
       e.preventDefault();
@@ -76,6 +74,7 @@ function Register() {
           <label>닉네임</label>
         </div>
         <NickInput
+        required
           onChange={handleNickName}
           id="nick"
           type="text"
@@ -85,6 +84,7 @@ function Register() {
           <label>패스워드</label>
         </div>
         <PasswordInput
+        required
           onChange={handlePassword}
           type="password"
           placeholder="비밀번호"
