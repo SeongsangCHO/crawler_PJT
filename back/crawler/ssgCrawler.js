@@ -18,7 +18,7 @@ const ssgCrawler = async () => {
   let start = await new Date().getTime();
   //배포시 headless true로 설정해야함.
   //에러핸들링 추가해야함., 블록스코프에 맞춰서
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );
@@ -38,7 +38,7 @@ const ssgCrawler = async () => {
     else request.continue();
   });
   //링크 title을 요청받아와서 사용
-  let searchText = "쌀 2kg";
+  let searchText = "에어팟";
   //searchText로 db에 저장하고
   //이를 외래키로 지정해서 하위 데이터들을 추가시켜주어야하네..a1
 
@@ -118,14 +118,14 @@ const ssgCrawler = async () => {
 
 function dataInsert(crawlerData) {
   crawlerData.forEach((obj) => {
-    // db.query(
-    //   `INSERT INTO product(title, price, link, priority)
-    // VALUES(?,?,?,?)`,
-    //   [obj.title, obj.price, obj.link, obj.priority],
-    //   function (error, result) {
-    //     if (error) console.error(error);
-    //   }
-    // );
+    db.query(
+      `INSERT INTO product(title, price, link, priority)
+    VALUES(?,?,?,?)`,
+      [obj.title, obj.price, obj.link, obj.priority],
+      function (error, result) {
+        if (error) console.error(error);
+      }
+    );
   });
 }
 

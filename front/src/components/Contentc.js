@@ -10,6 +10,8 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
 import TabContainer from "react-bootstrap/TabContainer";
 import "./css/Contentc.css";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 const dummy =
   //사용자가 추가할 category
@@ -282,17 +284,25 @@ function Contentc() {
   //크롤링카드 에 flex 2 지정
   //CardTab의 Tab.컨텐츠를 grid로하고 1fr, 1fr,1fr씩하면 3등분될듯
   //여기서 데이터를 가져와서 props로 전달?
+
+  const isLogined = useSelector((state) => state.registerReducer.isLogined);
   return (
     <div className="content-wrapper">
-      <Tab.Container
-        id="left-tabs"
-        defaultActiveKey={Object.keys(dummy?.category[0])}
-      >
-        <ContentWrapper>
-          <CategoryTab obj={dummy} />
-          <LinkCardSection obj={dummy} />
-        </ContentWrapper>
-      </Tab.Container>
+      {isLogined == true ? (
+        <Tab.Container
+          id="left-tabs"
+          defaultActiveKey={Object.keys(dummy?.category[0])}
+        >
+          <ContentWrapper>
+            <CategoryTab obj={dummy} />
+            <LinkCardSection obj={dummy} />
+          </ContentWrapper>
+        </Tab.Container>
+      ) : (
+        <NavLink className="navbar-brand" to={"/login"}>
+          login
+        </NavLink>
+      )}
     </div>
   );
 }

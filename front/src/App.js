@@ -10,20 +10,23 @@ import Login from "./components/Login";
 import configureStore from "./redux/store";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const store = configureStore();
 console.log(store.getState());
 
 function App() {
+
   return (
     <Provider store={store}>
       <Router>
         <Switch>
           <div className="App">
             <Header />
-            <Route exact path={"/"} component={Contentc} />
+            <Route exact path={"/mylink"} component={Contentc} />
             <Route exact path={"/register"} component={Register} />
             <Route exact path={"/login"} component={Login} />
+
             <Footer />
           </div>
         </Switch>

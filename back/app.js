@@ -45,7 +45,12 @@ app.get("/api", (req, res) => {
 //닉네임 중복체크를 post로 던져서 select, 중복체크, false리턴
 // 그 값에 따라서 alert 반환
 
-app.post("/doublecheck", cors(accecptURL), verifyToken,(req, res, next) => {
+//app.get("/mylink", cors(), verifyToken, (req,res,next)) => 사용자가 mylink를 클릭했을때
+//get요청을보내서 login ID에 해당하는 결과물을 가져올 수 있도록
+//로그인이 되지않았다면 에러를 반환해서 alert창 출력하도록하면 될듯
+//DB설계를 해야겠네
+
+app.post("/doublecheck", cors(accecptURL),(req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
   console.log("double check post request 받음");
   console.log(req.body.user_nickname);
