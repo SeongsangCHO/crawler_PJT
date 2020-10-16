@@ -4,6 +4,10 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import logger from "redux-logger";
 import registerReducer from "./reducers/registerReducer";
+import signUpReducer from "./SignUp/reducer";
+import doubleCheckReducer from "./DoubleCheck/reducer";
+import loginReducer from "./Login/reducer";
+
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./saga";
 const initialState = {
@@ -21,6 +25,9 @@ const configureStore = () => {
   const store = createStore(
     combineReducers({
       registerReducer,
+      signUpReducer,
+      doubleCheckReducer,
+      loginReducer,
     }),
     initialState,
     enhancer

@@ -125,11 +125,12 @@ function* loginRequst(action) {
   try {
     console.log("loginRequest in saga");
     const result = yield call(loginAPI, action.data);
-    console.log(result);
+    console.log(result.status);
     if (result.status == 200) {
       yield put({ type: LOGIN_SUCCESS, data: action.data, isLogined: true });
     }
   } catch (err) {
+    alert("아이디 또는 비밀번호를 다시 확인해주세요");
     yield put({ type: LOGIN_FAILURE, data: err, isLogined: false });
     console.error(err);
   }

@@ -31,49 +31,19 @@ const registerReducer = (state = initialState, action) => {
   console.log("리듀서 호출");
 
   switch (action?.type) {
-    case SIGN_UP_REQUEST: {
-      console.log("REQUEST_리듀서");
-      return { ...state, isSigningUp: true, isSignedUp: false };
-    }
-    case SIGN_UP_SUCCESS: {
-      console.log("SUCCESS_리듀서");
-      return {
-        ...state,
-        data: { ...action.data },
-        isSigningUp: false,
-        isSignedUp: true,
-      };
-    }
-    case SIGN_UP_FAILURE: {
-      console.log("FAILURE_리듀서");
-      return { ...state, data: {} };
-    }
 
-    case NICK_DOUBLE_CHECK_REQUEST: {
-      console.log("REQUEST_리듀서");
-      return { ...state };
-    }
-    case NICK_DOUBLE_CHECK_SUCCESS: {
-      console.log("SUCCESS_리듀서");
-      return { ...state, data: { ...action.data }, isDouble: action.isDouble };
-    }
-    case NICK_DOUBLE_CHECK_FAILURE: {
-      console.log("FAILURE_리듀서");
-      return { ...state, data: {}, isDouble: action.isDouble };
-    }
-
-    case LOGIN_REQUEST: {
-      console.log("로그인 REQUEST_리듀서");
-      return { ...state };
-    }
-    case LOGIN_SUCCESS: {
-      console.log("로그인 SUCCESS_리듀서");
-      return { ...state, data: { ...action.data }, isLogined: action.isLogined };
-    }
-    case LOGIN_FAILURE: {
-      console.log("로그인 FAILURE_리듀서");
-      return { ...state, data: {}, isLogined: action.isLogined };
-    }
+    // case LOGIN_REQUEST: {
+    //   console.log("로그인 REQUEST_리듀서");
+    //   return { ...state };
+    // }
+    // case LOGIN_SUCCESS: {
+    //   console.log("로그인 SUCCESS_리듀서");
+    //   return { ...state, data: { ...action.data }, isLogined: action.isLogined };
+    // }
+    // case LOGIN_FAILURE: {
+    //   console.log("로그인 FAILURE_리듀서");
+    //   return { ...state, data: {}, isLogined: action.isLogined };
+    // }
 
     case ADD_CATEGORY_REQUEST: {
       console.log("add카테고리 REQUEST_리듀서");

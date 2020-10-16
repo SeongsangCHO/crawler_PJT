@@ -44,9 +44,15 @@ exports.createToken = async function (req, res, next) {
             });
             console.log("토큰발행성공");
           } else {
-            res.status(400).json({ error: "invalid user" });
+            console.log("비밀번호달라");
+            
+            return res.status(400).json({ error: "비밀번호가 달라요" });
           }
         });
+      }
+      else{
+        return res.status(400).json({ error: "그런 닉네임은 없어요" });
+
       }
     });
   } catch (error) {

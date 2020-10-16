@@ -52,9 +52,12 @@ function Register() {
     return setInputValid(true);
   };
   const handleSubmit = (e) => {
+    e.preventDefault();
 
     if (inputValid === false) {
       e.preventDefault();
+    return false;
+
     }
     //데이터 post로 서버에 던져주기 dispatch
     dispatch({
@@ -64,7 +67,6 @@ function Register() {
         user_password: password,
       },
     });
-    return true;
   };
   return (
     <LoginFormWrapper>

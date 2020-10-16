@@ -67,7 +67,7 @@ app.post("/doublecheck", cors(accecptURL),(req, res, next) => {
     if (result[0].nickname == req.body.user_nickname) {
       console.log("select한 결과 있음");
       console.log(result);
-      return res.status(418).json({ error: "message" });
+      return res.status(400).json({ error: "message" });
     }
   });
   //res.statusCode = 400, 401로 상태코드응답
@@ -106,7 +106,9 @@ app.post(
   "/login",
   cors(accecptURL),
   loginAuth.createToken,
-  (req, res, next) => {}
+  (req, res, next) => {
+    return res.status(400);
+  }
 );
 
 
