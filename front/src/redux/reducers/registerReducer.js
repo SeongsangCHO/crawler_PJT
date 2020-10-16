@@ -32,31 +32,18 @@ const registerReducer = (state = initialState, action) => {
 
   switch (action?.type) {
 
-    // case LOGIN_REQUEST: {
-    //   console.log("로그인 REQUEST_리듀서");
+    // case ADD_CATEGORY_REQUEST: {
+    //   console.log("add카테고리 REQUEST_리듀서");
     //   return { ...state };
     // }
-    // case LOGIN_SUCCESS: {
-    //   console.log("로그인 SUCCESS_리듀서");
-    //   return { ...state, data: { ...action.data }, isLogined: action.isLogined };
+    // case ADD_CATEGORY_SUCCESS: {
+    //   console.log("add카테고리 SUCCESS_리듀서");
+    //   return { ...state, category: action.category};
     // }
-    // case LOGIN_FAILURE: {
-    //   console.log("로그인 FAILURE_리듀서");
-    //   return { ...state, data: {}, isLogined: action.isLogined };
+    // case ADD_CATEGORY_FAILURE: {
+    //   console.log("add카테고리 FAILURE_리듀서");
+    //   return { ...state, data: {}};
     // }
-
-    case ADD_CATEGORY_REQUEST: {
-      console.log("add카테고리 REQUEST_리듀서");
-      return { ...state };
-    }
-    case ADD_CATEGORY_SUCCESS: {
-      console.log("add카테고리 SUCCESS_리듀서");
-      return { ...state, category: action.category};
-    }
-    case ADD_CATEGORY_FAILURE: {
-      console.log("add카테고리 FAILURE_리듀서");
-      return { ...state, data: {}};
-    }
 
     default:
       return state;

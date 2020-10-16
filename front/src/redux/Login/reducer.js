@@ -7,13 +7,9 @@ import {
 } from "../actions/registerAction";
 
 const initialState = {
-  data: {
-    user_nickname: "",
-    user_password: "",
-  },
-  isDouble: false,
-  isSigningUp: "init",
-  isSignedUp: "init",
+
+  isSigningUp: '',
+  isSignedUp: '',
 };
 
 //상태가 변화할 때 수행되는 함수
@@ -28,11 +24,11 @@ const loginReducer = (state = initialState, action) => {
     }
     case LOGIN_SUCCESS: {
       console.log("로그인 SUCCESS_리듀서");
-      return { ...state, data: { ...action.data }, isLogined: action.isLogined };
+      return { ...state,  isLogined: action.isLogined };
     }
     case LOGIN_FAILURE: {
       console.log("로그인 FAILURE_리듀서");
-      return { ...state, data: {}, isLogined: action.isLogined };
+      return { ...state, isLogined: action.isLogined };
     }
     default:
       return state;

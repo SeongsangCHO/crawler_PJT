@@ -127,11 +127,11 @@ function* loginRequst(action) {
     const result = yield call(loginAPI, action.data);
     console.log(result.status);
     if (result.status == 200) {
-      yield put({ type: LOGIN_SUCCESS, data: action.data, isLogined: true });
+      yield put({ type: LOGIN_SUCCESS, isLogined: true });
     }
   } catch (err) {
     alert("아이디 또는 비밀번호를 다시 확인해주세요");
-    yield put({ type: LOGIN_FAILURE, data: err, isLogined: false });
+    yield put({ type: LOGIN_FAILURE, isLogined: false });
     console.error(err);
   }
 }
@@ -143,8 +143,6 @@ function* addCategory(action) {
     const result = yield call(addCategoryAPI, action.category);
     
     if (result.status == 200){
-      console.log("요청성공");
-      
       yield put({type: ADD_CATEGORY_SUCCESS, category: action.category});
       alert("요청성공")
     }

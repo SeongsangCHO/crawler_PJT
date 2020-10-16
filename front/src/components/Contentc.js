@@ -180,22 +180,30 @@ const ProductCardWrapper = styled.div`
 `;
 
 function AddCategory(props) {
-  const [categoryData, setCategoryData] = useState('');
+  const categoryStatus = useSelector(
+    (state) => state.addCategoryReducer.category
+  );
+  useEffect(() => {}, [categoryStatus]);
+  console.log(categoryStatus);
+  const [categoryData, setCategoryData] = useState("");
   const dispatch = useDispatch();
   const handleSetCategory = (e) => {
     setCategoryData(e.target.value);
     console.log(e.target.value);
-    
-  }
+  };
   const handleAddCategory = (e) => {
-    
+    //페이지리로딩 방지를 위해서 넣어주어야해.
+    e.preventDefault();
     dispatch({
       type: "ADD_CATEGORY_REQUEST",
       category: categoryData,
     });
+    //[추측][비동기처리해서] 그냥 될떄도있고 안될때도있네 => submit로 페이지 리로딩이 되기때문.
     alert("카테고리 추가 완료");
-    // e.preventDefault();
-    return false;
+    console.log(props);
+    props.onHide();
+    //그럼 추가가 완료된 이후에는 모달창을 종료해야하는데?
+
   };
   return (
     <Modal
@@ -212,7 +220,12 @@ function AddCategory(props) {
       <Modal.Body>
         <div>
           <form onSubmit={handleAddCategory}>
-            <input onChange={handleSetCategory}type="text" placeholder="카테고리 입력" required ></input>
+            <input
+              onChange={handleSetCategory}
+              type="text"
+              placeholder="카테고리 입력"
+              required
+            ></input>
             <button type="submit">저장하기</button>
           </form>
         </div>

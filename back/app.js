@@ -80,16 +80,16 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log(req.body);
   try {
-    bcrypt.hash(req.body.user_password, HASH_ROUND, (err, hashPassword) => {
+    bcrypt.hash(req.body.user_password, HASH_ROUND, (bcryptError, hashPassword) => {
       let sql = `insert into users (nickname, password) values(?, ?)`;
-      db.query(sql, [req.body.user_nickname, hashPassword], (err, result) => {
-        if (err) {
-          throw err;
+      db.query(sql, [req.body.user_nickname, hashPassword], (dbError, result) => {
+        if (dbError) {
+          throw dbError;
         }
       });
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
   return res.status(200).json({ message: "가입 success" });
 
@@ -132,7 +132,7 @@ app.get("/craw", (req, res) => {
   ssgCrawler();
   coupangCrawler();
 
-  res.send("쓱, 쿠팡 크롤링 수행");
+  res.send(status);
 });
 app.get("/coupang", (req, res) => {
   let status = "쿠팡크롤러";

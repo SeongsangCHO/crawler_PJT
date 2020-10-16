@@ -7,6 +7,7 @@ import registerReducer from "./reducers/registerReducer";
 import signUpReducer from "./SignUp/reducer";
 import doubleCheckReducer from "./DoubleCheck/reducer";
 import loginReducer from "./Login/reducer";
+import addCategoryReducer from "./AddCategory/reducer";
 
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./saga";
@@ -28,6 +29,7 @@ const configureStore = () => {
       signUpReducer,
       doubleCheckReducer,
       loginReducer,
+      addCategoryReducer,
     }),
     initialState,
     enhancer

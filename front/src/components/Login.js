@@ -52,7 +52,7 @@ function Register() {
     return setInputValid(true);
   };
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     if (inputValid === false) {
       e.preventDefault();
