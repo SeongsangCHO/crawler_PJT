@@ -165,43 +165,38 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
   let mylinkData = {
     category: [],
   };
+  
   let categoryObj = {};
   let categoryMap = new Map();
   let ssgCrawlObj = [];
 
   db.query(sql, (err, result) => {
-    res.json(result);
-
     result.map((element, idx) => {
-      categoryMap.set(element.category, {
-        title: element.linkTitle,
-        link: element.link,
-        price: element.linkPrice,
-        info: element.linkInfo,
-        ssg: [],
-        coupang: [],
-        naver: [],
-      });
-      if (element.crawlSource === "ssg") {
-        console.log('ssg일떄 카테고리 : ' + element.category);
+      if (!categoryMap.get(element.category)) {
+        categoryMap.set(element.category, {
+          title: element.linkTitle,
+          link: element.link,
+          price: element.linkPrice,
+          info: element.linkInfo,
+          ssg: [],
+          coupang: [],
+          naver: [],
+        });
+      }
+        // console.log("ssg일떄 카테고리 : " + element.category);
 
-        console.log('ssg' + element.crawlTitle);
-        
-        categoryMap.get(element.category).ssg.push({
+        let tmp = {
           title: element.crawlTitle,
           price: element.crawlPrice,
           link: element.crawlLink,
-        });
-      }
-
-      ///데이터를 넣을 배열 추가
-      //ex) 생필품 : []
-      //result는 크롤러데이터 갯수니깐,,현재9번
-      //9번반복됨, 각 link에 3개씩 데이터있음
+        };
+        categoryMap.get(element.category)[element.crawlSource].push(tmp);
     });
-    mylinkData.category.push(categoryObj);
+    for(let key of categoryMap.keys())
+     mylinkData.category.push(categoryMap.get(key));
 
-    console.log(categoryMap.get('생필품').ssg);
+    
+    res.json(mylinkData);
   });
 });
 
