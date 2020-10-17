@@ -133,7 +133,7 @@ function* addCategory(action) {
     const result = yield call(addCategoryAPI, action.category);
 
     if (result.status == 200) {
-      yield put({ type: ADD_CATEGORY_SUCCESS, category: action.category });
+      yield put({ type: ADD_CATEGORY_SUCCESS, category: action.category});
       alert("요청성공");
     }
   } catch (err) {

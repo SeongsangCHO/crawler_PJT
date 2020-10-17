@@ -149,7 +149,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
 //링크박스의 제목을 기반으로 크롤러 수행
 //크롤러 데이터를 db에 저장함
 //
-app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
+app.get("/api/mylink", cors(accecptURL), verifyToken,(req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
   let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
@@ -161,8 +161,10 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
  from users
  LEFT join categories on users.id = categories.users_id
  LEFT  join links on categories.id = links.categories_id
- LEFT  join crawl on links.id = crawl.links_id;
- `;
+ LEFT  join crawl on links.id = crawl.links_id
+ where users.nickname = '${res.locals.userNickname}';`;
+ console.log(res.locals.userNickname);
+ 
   let mylinkData = {
     category: [],
   };
@@ -170,11 +172,15 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
   let categoryMap = new Map();
 
   db.query(sql, (err, result) => {
+    console.log(result);
+    if(result){
+      
     result.map((element, idx) => {
       if (!categoryMap.get(element.category)) {
         categoryMap.set(element.category, []);
       }
       let tmpLink = element.link;
+
       if (
         categoryMap.get(element.category)[
           categoryMap.get(element.category).length - 1
@@ -203,7 +209,7 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
           price: element.crawlPrice,
           link: element.crawlLink,
         };
-        console.log(tmp);
+        // console.log(tmp);
 
         categoryMap
           .get(element.category)
@@ -212,7 +218,7 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
           ].push(tmp);
       }
     });
-
+  }
     let obj = Object.fromEntries(categoryMap);
     for (let key of Object.keys(obj)) {
       let tmp = {};
@@ -222,6 +228,7 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
     }
     res.json(mylinkData);
   });
+
 });
 
 app.get("/craw", (req, res) => {

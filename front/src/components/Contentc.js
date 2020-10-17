@@ -596,7 +596,7 @@ function AddCategory(props) {
   const categoryStatus = useSelector(
     (state) => state.addCategoryReducer.category
   );
-  useEffect(() => {}, [categoryStatus]);
+  useEffect(() => {}, []);
   console.log(categoryStatus);
   const [categoryData, setCategoryData] = useState("");
   const dispatch = useDispatch();
@@ -610,6 +610,7 @@ function AddCategory(props) {
     dispatch({
       type: "ADD_CATEGORY_REQUEST",
       category: categoryData,
+      isAdded: false,
     });
     //[추측][비동기처리해서] 그냥 될떄도있고 안될때도있네 => submit로 페이지 리로딩이 되기때문.
     alert("카테고리 추가 완료");
@@ -684,7 +685,6 @@ function AddLink(props) {
 }
 function CategoryTab({ obj }) {
   const [modalShow, setModalShow] = useState(false);
-
   return (
     <CategoryWrapper>
       <Nav variant="pills" className="flex-sm-column">
@@ -796,14 +796,19 @@ function LinkCardSection({ obj }) {
 function Contentc() {
   const dispatch = useDispatch();
   const linkData = useSelector((state => state.linkDataApiCallReducer.data));
-
   useEffect(() => {
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
       type:"LINK_DATA_REQUEST",
       data:{},
     });
-  },[]);
+  },[linkData]);
+    //[linkData] <-로 업데이트 추적해서 실시간으로 랜더링할수있는데 
+    //get요청을 엄청나게 보내네..?
+  // },[linkData]);
+
+
+
   // const dataList = Object.keys(linkData?.category[0]);
   //categoryTab / LinkCard : 1 : 4로 나누기 // OK
   //LinkCard에서  래퍼 flex지정하고 , tabContent를 3 : 2로 나누기
