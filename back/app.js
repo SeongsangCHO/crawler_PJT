@@ -125,7 +125,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   console.log("현재 로그인된 사용자 아이디: " + res.locals.userNickname);
   console.log("전달받은 카테고리 명 : " + req.body.category);
   //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
-  //front에서 전달받은 category명을 테이블에 삽입함 
+  //front에서 전달받은 category명을 테이블에 삽입함
   //카테고리 id도 외래키 userId로 얻을 수 있음
   let sql = `insert into categories (users_id, title) values 
   ((SELECT id from users WHERE nickname = ?), ?);
@@ -148,6 +148,63 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
 //링크박스의 제목을 기반으로 크롤러 수행
 //크롤러 데이터를 db에 저장함
 //
+app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
+  let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
+  links.link as link,
+  crawl.title as crawlTitle,
+  crawl.price as crawlPrice,
+  crawl.source as crawlSource,
+  crawl.link as crawlLink
+ from users
+ inner join categories on users.id = categories.users_id
+ inner join links on categories.id = links.categories_id
+ inner join crawl on links.id = crawl.links_id;
+ `;
+  let mylinkData = {
+    category: [],
+  };
+  let categoryObj = {};
+  let categoryMap = new Map();
+  let ssgCrawlObj = [];
+
+  db.query(sql, (err, result) => {
+    res.json(result);
+
+    result.map((element, idx) => {
+      categoryMap.set(element.category, {
+        title: element.linkTitle,
+        link: element.link,
+        price: element.linkPrice,
+        info: element.linkInfo,
+        ssg: [],
+        coupang: [],
+        naver: [],
+      });
+      if (element.crawlSource === "ssg") {
+        console.log('ssg일떄 카테고리 : ' + element.category);
+
+        console.log('ssg' + element.crawlTitle);
+        
+        categoryMap.get(element.category).ssg.push({
+          title: element.crawlTitle,
+          price: element.crawlPrice,
+          link: element.crawlLink,
+        });
+      }
+
+      ///데이터를 넣을 배열 추가
+      //ex) 생필품 : []
+      //result는 크롤러데이터 갯수니깐,,현재9번
+      //9번반복됨, 각 link에 3개씩 데이터있음
+    });
+    mylinkData.category.push(categoryObj);
+
+    console.log(categoryMap.get('생필품').ssg);
+  });
+});
+
 app.get("/craw", (req, res) => {
   let status = "쓱 ,쿠팡 크롤러";
 

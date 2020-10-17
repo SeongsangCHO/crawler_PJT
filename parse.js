@@ -1,10 +1,9 @@
-
 const dummy =
-//사용자가 추가할 category
-{
-  category: [
+  //사용자가 추가할 category
+  [
     {
-      생필품: [
+      category: "생필품",
+      data: [
         {
           title: "생수",
           link: "생수 링크",
@@ -407,7 +406,8 @@ const dummy =
       ],
     },
     {
-      옷: [
+      category: "옷",
+      data: [
         {
           title: "후드티",
           link: "후드티 링크",
@@ -523,16 +523,10 @@ const dummy =
         },
       ],
     },
-  ],
-};
+  ];
 
-dummy.category.map((cate, idx) => {
-  cate[Object.keys(cate)].map((element, id) => {
-    element.ssg.map((ssgElement) => {
-      console.log(ssgElement);
-      
-    })
+  dummy.map((obj) =>
+  {
+    console.log(obj.data);
+    
   })
-  
-  
-})
