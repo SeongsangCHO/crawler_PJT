@@ -12,8 +12,8 @@ const loginAuth = require("./middlewares/auth");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "piTeam";
 const HASH_ROUND = 10;
-const {verifyToken} = require('./middlewares/verify');
-var cookieParser = require('cookie-parser');
+const { verifyToken } = require("./middlewares/verify");
+var cookieParser = require("cookie-parser");
 require("dotenv").config();
 const app = express();
 app.use(
@@ -34,7 +34,7 @@ app.set("view engine", "ejs");
 
 app.use("/", testAPIRouter);
 app.use(express.json()); //body-parser 대신사용할수있음.
-app.get("/",(req, res) => {
+app.get("/", (req, res) => {
   res.send("hello World");
 });
 
@@ -50,7 +50,7 @@ app.get("/api", (req, res) => {
 //로그인이 되지않았다면 에러를 반환해서 alert창 출력하도록하면 될듯
 //DB설계를 해야겠네
 
-app.post("/doublecheck", cors(accecptURL),(req, res, next) => {
+app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
   console.log("double check post request 받음");
   console.log(req.body.user_nickname);
@@ -80,14 +80,22 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log(req.body);
   try {
-    bcrypt.hash(req.body.user_password, HASH_ROUND, (bcryptError, hashPassword) => {
-      let sql = `insert into users (nickname, password) values(?, ?)`;
-      db.query(sql, [req.body.user_nickname, hashPassword], (dbError, result) => {
-        if (dbError) {
-          throw dbError;
-        }
-      });
-    });
+    bcrypt.hash(
+      req.body.user_password,
+      HASH_ROUND,
+      (bcryptError, hashPassword) => {
+        let sql = `insert into users (nickname, password) values(?, ?)`;
+        db.query(
+          sql,
+          [req.body.user_nickname, hashPassword],
+          (dbError, result) => {
+            if (dbError) {
+              throw dbError;
+            }
+          }
+        );
+      }
+    );
   } catch (error) {
     console.error(error);
   }
@@ -111,13 +119,27 @@ app.post(
   }
 );
 
-
-app.post("/addcategory", cors(accecptURL), verifyToken,(req, res, next) => {
+app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
-  console.log(req.body);  
+  console.log("현재 로그인된 사용자 아이디: " + res.locals.userNickname);
+  console.log("전달받은 카테고리 명 : " + req.body.category);
+  //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
+  //front에서 전달받은 category명을 테이블에 삽입함 
+  //카테고리 id도 외래키 userId로 얻을 수 있음
+  let sql = `insert into categories (users_id, title) values 
+  ((SELECT id from users WHERE nickname = ?), ?);
+  `;
+  db.query(
+    sql,
+    [res.locals.userNickname, req.body.category],
+    (dbError, result) => {
+      if (dbError) {
+        throw dbError;
+      }
+    }
+  );
   return res.status(200).json({ message: "링크추가 success" });
-
 });
 
 //크롤러는 하나임, 데이터를 저장할 크롤러 하나 뿐
