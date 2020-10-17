@@ -688,7 +688,7 @@ function CategoryTab({ obj }) {
   return (
     <CategoryWrapper>
       <Nav variant="pills" className="flex-sm-column">
-        {obj.category.map((cate, idx) => (
+        {obj?.category?.map((cate, idx) => (
           <Nav.Item className="nav-item-card">
             <Nav.Link eventKey={Object.keys(cate)}>
               {Object.keys(cate)}
@@ -712,13 +712,13 @@ function CrawlingCard({ obj }) {
           unmountOnExit="true"
         >
           {element.ssg.map((ssgElement) => (
-            <div>{ssgElement.크롤링제목}</div>
+            <div>{ssgElement.title}</div>
           ))}
           {element.coupang.map((coupangElement) => (
-            <div>{coupangElement.크롤링제목}</div>
+            <div>{coupangElement.title}</div>
           ))}
           {element.naver.map((naverElement) => (
-            <div>{naverElement.크롤링제목}</div>
+            <div>{naverElement.title}</div>
           ))}
         </Tab.Pane>
       ))}
@@ -794,6 +794,17 @@ function LinkCardSection({ obj }) {
 }
 
 function Contentc() {
+  const dispatch = useDispatch();
+  const linkData = useSelector((state => state.linkDataApiCallReducer.data));
+
+  useEffect(() => {
+    //dispatch수행해서 리랜더링될 때 , axios로 api호출
+    dispatch({
+      type:"LINK_DATA_REQUEST",
+      data:{},
+    });
+  },[]);
+  // const dataList = Object.keys(linkData?.category[0]);
   //categoryTab / LinkCard : 1 : 4로 나누기 // OK
   //LinkCard에서  래퍼 flex지정하고 , tabContent를 3 : 2로 나누기
   // 카드탭은,,컨테이너 안에, 컨텐츠 안에 개별적인 아이템이 있음
@@ -803,16 +814,15 @@ function Contentc() {
   //크롤링카드 에 flex 2 지정
   //CardTab의 Tab.컨텐츠를 grid로하고 1fr, 1fr,1fr씩하면 3등분될듯
   //여기서 데이터를 가져와서 props로 전달?
-  const isLogined = useSelector((state) => state.registerReducer.isLogined);
   return (
     <div className="content-wrapper">
       <Tab.Container
         id="left-tabs"
-        defaultActiveKey={Object.keys(dummy?.category[0])}
+        defaultActiveKey="All"
       >
         <ContentWrapper>
-          <CategoryTab obj={dummy} />
-          <LinkCardSection obj={dummy} />
+          <CategoryTab obj={linkData} />
+          <LinkCardSection obj={linkData} />
         </ContentWrapper>
       </Tab.Container>
 

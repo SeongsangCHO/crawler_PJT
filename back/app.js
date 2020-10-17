@@ -163,17 +163,40 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
  inner join crawl on links.id = crawl.links_id;
  `;
   let mylinkData = {
-    category: [],
+    category:[],
   };
-  
-  let categoryObj = {};
+
   let categoryMap = new Map();
-  let ssgCrawlObj = [];
 
   db.query(sql, (err, result) => {
     result.map((element, idx) => {
       if (!categoryMap.get(element.category)) {
-        categoryMap.set(element.category, {
+        categoryMap.set(
+          element.category,
+          []
+          //   {
+          //   title: element.linkTitle,
+          //   link: element.link,
+          //   price: element.linkPrice,
+          //   info: element.linkInfo,
+          //   ssg: [],
+          //   coupang: [],
+          //   naver: [],
+          // }
+        );
+      }
+      let tmpLink = element.link;
+      if (
+        categoryMap.get(element.category)[
+          categoryMap.get(element.category).length - 1] == undefined
+          || categoryMap.get(element.category)[
+            categoryMap.get(element.category).length - 1].link !== tmpLink
+      ) {
+        // console.log("in",categoryMap.get(element.category)[
+        //   categoryMap.get(element.category).length - 1
+        // ]);
+        
+        categoryMap.get(element.category).push({
           title: element.linkTitle,
           link: element.link,
           price: element.linkPrice,
@@ -183,19 +206,26 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
           naver: [],
         });
       }
-        // console.log("ssg일떄 카테고리 : " + element.category);
-
-        let tmp = {
-          title: element.crawlTitle,
-          price: element.crawlPrice,
-          link: element.crawlLink,
-        };
-        categoryMap.get(element.category)[element.crawlSource].push(tmp);
+          let tmp = {
+            title: element.crawlTitle,
+            price: element.crawlPrice,
+            link: element.crawlLink,
+          };
+          categoryMap.get(element.category)[categoryMap.get(element.category). length - 1][element.crawlSource].push(tmp);
     });
-    for(let key of categoryMap.keys())
-     mylinkData.category.push(categoryMap.get(key));
+
+
+
 
     
+    let obj = Object.fromEntries(categoryMap);
+    for (let key of Object.keys(obj)){
+      let tmp = {};
+        tmp[key] = obj[key];
+
+        
+        mylinkData.category.push(tmp);
+      }
     res.json(mylinkData);
   });
 });
