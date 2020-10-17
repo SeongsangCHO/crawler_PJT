@@ -42,8 +42,7 @@ const RegisterButton = styled.button`
 
 function Register() {
   const dispatch = useDispatch();
-  const isDouble = useSelector((state) => state.registerReducer.isDouble);
-  const userData = useSelector((state) => state.registerReducer);
+  const isDouble = useSelector((state) => state.doubleCheckReducer.isDouble);
   const history = useHistory();
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
@@ -104,6 +103,10 @@ function Register() {
     setSubmitting(false);
   };
   const getNickName = (e) => {
+    if (nickName == "") {
+      alert("닉네임 확인해주세요.");
+      return;
+    }
     //여기서 서버에서 가져온 데이터랑 중복체크
     dispatch({
       type: "NICK_DOUBLE_CHECK_REQUEST",
@@ -120,7 +123,7 @@ function Register() {
           <label>닉네임</label>
         </div>
         <NickInput
-        required
+          required
           onChange={handleNickName}
           id="nick"
           type="text"
@@ -134,7 +137,7 @@ function Register() {
           <label>패스워드</label>
         </div>
         <PasswordInput
-        required
+          required
           type="password"
           onChange={handlePasswordInput}
           placeholder="비밀번호"
@@ -143,7 +146,7 @@ function Register() {
           <label>패스워드 확인</label>
         </div>
         <PasswordCheck
-        required
+          required
           onFocus={handlePasswordCheck}
           onChange={handlePasswordCheck}
           type="password"
@@ -156,7 +159,9 @@ function Register() {
         )}
         <div>
           {isDouble == true ? (
-            <RegisterButton type="submit" required>가입</RegisterButton>
+            <RegisterButton type="submit" required>
+              가입
+            </RegisterButton>
           ) : (
             <label> 닉네임 중복체크를 확인해주세요.</label>
           )}

@@ -7,7 +7,6 @@ function Jumbotron() {
 }
 
 function Header() {
-  const isLogined = useSelector((state) => state.registerReducer.isLogined);
 
   return (
     <div className="header-wrapper">
@@ -20,15 +19,12 @@ function Header() {
       <NavLink className="navbar-brand" to={"/register"}>
         register
       </NavLink>
-      {isLogined == false ? (
         <NavLink className="navbar-brand" to={"/login"}>
           login
         </NavLink>
-      ) : (
         <NavLink className="navbar-brand" to={"/logout"}>
           logout
         </NavLink>
-      )}
       <Jumbotron />
     </div>
   );

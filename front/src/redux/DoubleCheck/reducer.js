@@ -7,11 +7,8 @@ import {
 const initialState = {
   data: {
     user_nickname: "",
-    user_password: "",
   },
   isDouble: false,
-  isSigningUp: "init",
-  isSignedUp: "init",
 };
 
 //상태가 변화할 때 수행되는 함수

@@ -12,12 +12,6 @@ import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-  registerRequest,
-  registerSuccess,
-  registerFailure,
-  NICK_DOUBLE_CHECK_REQUEST,
-  NICK_DOUBLE_CHECK_SUCCESS,
-  NICK_DOUBLE_CHECK_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
@@ -25,11 +19,10 @@ import {
   ADD_CATEGORY_SUCCESS,
   ADD_CATEGORY_FAILURE,
 } from "./actions/registerAction";
-
+import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
 import axios from "axios";
 
 const registerURL = "http://localhost/register";
-const doubleCheckURL = "http://localhost/doublecheck";
 const loginURL = "http://localhost/login";
 const addCategoryURL = "http://localhost/addcategory";
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
@@ -49,13 +42,6 @@ function signUpAPI(signUpData) {
   });
 }
 
-function doubleCheckAPI(nickNameData) {
-  console.log("doubleCheckAPI in saga");
-
-  return axios.post(doubleCheckURL, nickNameData, {
-    withCredentials: true,
-  });
-}
 
 function loginAPI(loginData) {
   console.log("loginAPI in saga");
@@ -102,25 +88,9 @@ function* signUp(action) {
   }
 }
 
-function* nickNameDoubleCheck(action) {
-  try {
-    console.log("getNickName in saga");
-    const result = yield call(doubleCheckAPI, action.data);
-    if (result.status === 200) {
-      yield put({
-        type: NICK_DOUBLE_CHECK_SUCCESS,
-        data: action.data,
-        isDouble: true,
-      });
 
-      alert("사용하실 수 있는 닉네임입니다.");
-    }
-  } catch (err) {
-    console.error(err);
-    yield put({ type: NICK_DOUBLE_CHECK_FAILURE, data: err, isDouble: false });
-    alert("닉네임이 이미 존재해요!");
-  }
-}
+
+
 function* loginRequst(action) {
   try {
     console.log("loginRequest in saga");
@@ -158,12 +128,6 @@ function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp); //리듀서 감지
 }
 
-function* watchNickNameDoubleCheck() {
-  console.log("watch getNickName from server");
-  //서버로 post로 닉네임 던진다음, select로 중복체크함
-  //없으면 200상태코드 반환, 있으면 4xx에러 반환. failure에서 console.찍기
-  yield takeLatest(NICK_DOUBLE_CHECK_REQUEST, nickNameDoubleCheck);
-}
 
 function* watchLogin() {
   console.log("watch Login");
@@ -179,7 +143,7 @@ function* watchAddCategory() {
 export default function* rootSaga() {
   yield all([
     fork(watchSignUp),
-    fork(watchNickNameDoubleCheck),
+    fork(doubleCheckSaga.watchNickNameDoubleCheck),
     fork(watchLogin),
     fork(watchAddCategory),
   ]);

@@ -14,15 +14,7 @@ import {
 } from "../actions/registerAction";
 
 const initialState = {
-  data: {
-    user_nickname: "",
-    user_password: "",
-  },
-  isDouble: false,
-  isSigningUp: "init",
-  isSignedUp: "init",
-  isLogined: false,
-  category:'',
+
 };
 
 //상태가 변화할 때 수행되는 함수

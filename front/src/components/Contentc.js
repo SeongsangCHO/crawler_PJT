@@ -183,7 +183,9 @@ function AddCategory(props) {
   const categoryStatus = useSelector(
     (state) => state.addCategoryReducer.category
   );
-  useEffect(() => {}, [categoryStatus]);
+  useEffect(() => {
+    
+  }, [categoryStatus]);
   console.log(categoryStatus);
   const [categoryData, setCategoryData] = useState("");
   const dispatch = useDispatch();
@@ -203,7 +205,7 @@ function AddCategory(props) {
     console.log(props);
     props.onHide();
     //그럼 추가가 완료된 이후에는 모달창을 종료해야하는데?
-
+    //props로 전달된 onHide호출해서 창내림
   };
   return (
     <Modal
@@ -222,6 +224,7 @@ function AddCategory(props) {
           <form onSubmit={handleAddCategory}>
             <input
               onChange={handleSetCategory}
+              autoFocus
               type="text"
               placeholder="카테고리 입력"
               required
