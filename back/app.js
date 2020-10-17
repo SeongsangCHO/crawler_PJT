@@ -139,6 +139,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
       }
     }
   );
+
   return res.status(200).json({ message: "링크추가 success" });
 });
 
@@ -158,12 +159,12 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
   crawl.source as crawlSource,
   crawl.link as crawlLink
  from users
- inner join categories on users.id = categories.users_id
- inner join links on categories.id = links.categories_id
- inner join crawl on links.id = crawl.links_id;
+ LEFT join categories on users.id = categories.users_id
+ LEFT  join links on categories.id = links.categories_id
+ LEFT  join crawl on links.id = crawl.links_id;
  `;
   let mylinkData = {
-    category:[],
+    category: [],
   };
 
   let categoryMap = new Map();
@@ -171,31 +172,21 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
   db.query(sql, (err, result) => {
     result.map((element, idx) => {
       if (!categoryMap.get(element.category)) {
-        categoryMap.set(
-          element.category,
-          []
-          //   {
-          //   title: element.linkTitle,
-          //   link: element.link,
-          //   price: element.linkPrice,
-          //   info: element.linkInfo,
-          //   ssg: [],
-          //   coupang: [],
-          //   naver: [],
-          // }
-        );
+        categoryMap.set(element.category, []);
       }
       let tmpLink = element.link;
       if (
         categoryMap.get(element.category)[
-          categoryMap.get(element.category).length - 1] == undefined
-          || categoryMap.get(element.category)[
-            categoryMap.get(element.category).length - 1].link !== tmpLink
+          categoryMap.get(element.category).length - 1
+        ] == undefined ||
+        categoryMap.get(element.category)[
+          categoryMap.get(element.category).length - 1
+        ].link !== tmpLink
       ) {
         // console.log("in",categoryMap.get(element.category)[
         //   categoryMap.get(element.category).length - 1
         // ]);
-        
+
         categoryMap.get(element.category).push({
           title: element.linkTitle,
           link: element.link,
@@ -206,26 +197,29 @@ app.get("/api/mylink", cors(accecptURL), (req, res, next) => {
           naver: [],
         });
       }
-          let tmp = {
-            title: element.crawlTitle,
-            price: element.crawlPrice,
-            link: element.crawlLink,
-          };
-          categoryMap.get(element.category)[categoryMap.get(element.category). length - 1][element.crawlSource].push(tmp);
+      if (element.crawlTitle !== null) {
+        let tmp = {
+          title: element.crawlTitle,
+          price: element.crawlPrice,
+          link: element.crawlLink,
+        };
+        console.log(tmp);
+
+        categoryMap
+          .get(element.category)
+          [categoryMap.get(element.category).length - 1][
+            element.crawlSource
+          ].push(tmp);
+      }
     });
 
-
-
-
-    
     let obj = Object.fromEntries(categoryMap);
-    for (let key of Object.keys(obj)){
+    for (let key of Object.keys(obj)) {
       let tmp = {};
-        tmp[key] = obj[key];
+      tmp[key] = obj[key];
 
-        
-        mylinkData.category.push(tmp);
-      }
+      mylinkData.category.push(tmp);
+    }
     res.json(mylinkData);
   });
 });
