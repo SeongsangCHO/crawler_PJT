@@ -11,7 +11,7 @@ const verifyToken = (req, res, next) => {
     const decoded = jwt.verify(clientToken, "piTeam");
 
     if (decoded) {
-      res.locals.loginNickname = decoded.nickname;
+      res.locals.userNickname = decoded.nickname;
       next();
     } else {
       res.status(401).json({ error: "unauthorized" });

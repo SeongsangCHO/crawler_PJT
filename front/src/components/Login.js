@@ -32,10 +32,15 @@ const SubmitButton = styled.button`
 `;
 function Register() {
   const dispatch = useDispatch();
+  const isLogined = useSelector((state => state.loginReducer.isLogined));
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const [inputValid, setInputValid] = useState(false);
   
+  useEffect(() => {
+    console.log(isLogined);
+    
+  },[isLogined])
   const handleNickName = (e) => {
     setNickName(e.target.value);
     console.log(nickName);
@@ -44,7 +49,7 @@ function Register() {
     setPassword(e.target.value);
     console.log(password);
   };
-  const handleLogin = () => {
+  const handleLogin = (e) => {
     if (nickName === "" || password === "") {
       alert("닉네임 또는 패스워드를 확인해주세요");
       return setInputValid(false);
@@ -52,12 +57,11 @@ function Register() {
     return setInputValid(true);
   };
   const handleSubmit = (e) => {
-    // e.preventDefault();
-
+    e.preventDefault();
+    
     if (inputValid === false) {
-      e.preventDefault();
-    return false;
-
+      return false;
+      
     }
     //데이터 post로 서버에 던져주기 dispatch
     dispatch({

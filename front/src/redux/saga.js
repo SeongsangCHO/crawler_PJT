@@ -18,8 +18,15 @@ import {
   ADD_CATEGORY_REQUEST,
   ADD_CATEGORY_SUCCESS,
   ADD_CATEGORY_FAILURE,
+  
+  NICK_DOUBLE_CHECK_REQUEST,
+  NICK_DOUBLE_CHECK_SUCCESS,
+  NICK_DOUBLE_CHECK_FAILURE,
 } from "./actions/registerAction";
+
 import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
+import loginSaga from "../redux/Login/saga.js";
+
 import axios from "axios";
 
 const registerURL = "http://localhost/register";
@@ -43,22 +50,7 @@ function signUpAPI(signUpData) {
 }
 
 
-function loginAPI(loginData) {
-  console.log("loginAPI in saga");
 
-  return axios.post(loginURL, loginData, {
-    withCredentials: true,
-  });
-}
-
-function addCategoryAPI(category){
-  console.log("addCategoryAPI in saga");
-  
-  return axios.post(addCategoryURL, {category}, {
-    withCredentials:true,
-  });
-  
-}
 
 function* signUp(action) {
   try {
@@ -91,6 +83,26 @@ function* signUp(action) {
 
 
 
+
+
+//액션 type - SIGN_UP_REQUEST가 들어올떄까지 기다림
+function* watchSignUp() {
+  console.log("watch Sign UP");
+  yield takeLatest(SIGN_UP_REQUEST, signUp); //리듀서 감지
+}
+
+
+
+
+function loginAPI(loginData) {
+  console.log("loginAPI in saga");
+
+  return axios.post(loginURL, loginData, {
+    withCredentials: true,
+  });
+}
+
+
 function* loginRequst(action) {
   try {
     console.log("loginRequest in saga");
@@ -105,6 +117,23 @@ function* loginRequst(action) {
     console.error(err);
   }
 }
+function* watchLogin() {
+  console.log("watch Login");
+  yield takeLatest(LOGIN_REQUEST, loginRequst);
+}
+
+
+
+
+
+function addCategoryAPI(category){
+  console.log("addCategoryAPI in saga");
+  
+  return axios.post(addCategoryURL, {category}, {
+    withCredentials:true,
+  });
+  
+}
 
 function* addCategory(action) {
   try {
@@ -117,33 +146,69 @@ function* addCategory(action) {
       alert("요청성공")
     }
   } catch (err) {
+    alert("로그인이 필요합니다");
     yield put ({type: ADD_CATEGORY_FAILURE, err: err});
     console.error(err);
   }
 }
 
-//액션 type - SIGN_UP_REQUEST가 들어올떄까지 기다림
-function* watchSignUp() {
-  console.log("watch Sign UP");
-  yield takeLatest(SIGN_UP_REQUEST, signUp); //리듀서 감지
-}
-
-
-function* watchLogin() {
-  console.log("watch Login");
-  yield takeLatest(LOGIN_REQUEST, loginRequst);
-}
 
 function* watchAddCategory() {
   console.log("watch AddCategory");
   yield takeLatest(ADD_CATEGORY_REQUEST, addCategory);
 }
 
+
+
+
+
+const doubleCheckURL = "http://localhost/doublecheck";
+
+function doubleCheckAPI(nickNameData) {
+  console.log("doubleCheckAPI in saga");
+
+  return axios.post(doubleCheckURL, nickNameData, {
+    withCredentials: true,
+  });
+}
+
+
+function* nickNameDoubleCheck(action) {
+  try {
+    console.log("getNickName in saga");
+    const result = yield call(doubleCheckAPI, action.data);
+    if (result.status === 200) {
+      yield put({
+        type: NICK_DOUBLE_CHECK_SUCCESS,
+        data: action.data,
+        isDouble: true,
+      });
+
+      alert("사용하실 수 있는 닉네임입니다.");
+    }
+  } catch (err) {
+    console.error(err);
+    yield put({ type: NICK_DOUBLE_CHECK_FAILURE, data: err, isDouble: false });
+    alert("닉네임이 이미 존재해요!");
+  }
+}
+
+function* watchNickNameDoubleCheck() {
+  console.log("watch getNickName from server");
+  //서버로 post로 닉네임 던진다음, select로 중복체크함
+  //없으면 200상태코드 반환, 있으면 4xx에러 반환. failure에서 console.찍기
+  yield takeLatest(NICK_DOUBLE_CHECK_REQUEST, nickNameDoubleCheck);
+}
+
+
+
+
+
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
   yield all([
     fork(watchSignUp),
-    fork(doubleCheckSaga.watchNickNameDoubleCheck),
+    fork(watchNickNameDoubleCheck),
     fork(watchLogin),
     fork(watchAddCategory),
   ]);

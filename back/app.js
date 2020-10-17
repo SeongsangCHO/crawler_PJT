@@ -112,7 +112,7 @@ app.post(
 );
 
 
-app.post("/addcategory", cors(accecptURL),(req, res, next) => {
+app.post("/addcategory", cors(accecptURL), verifyToken,(req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
   console.log(req.body);  
