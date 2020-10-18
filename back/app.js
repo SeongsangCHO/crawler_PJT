@@ -140,8 +140,15 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
     }
   );
 
-  return res.status(200).json({ message: "링크추가 success" });
+  return res.status(200).json({ message: "카테고리 추가  success" });
 });
+
+app.post("/addlink", cors(accecptURL), verifyToken, (req,res,next) => {
+
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  console.log("server addlink call");
+  return res.status(200).json({message : "링크 추가 SUCCESS"});
+})
 
 //크롤러는 하나임, 데이터를 저장할 크롤러 하나 뿐
 //링크박스 추가시 크롤러데이터를 저장할 부분과 클릭할 때 이를 가져올 부분을 따로 작성해야함.

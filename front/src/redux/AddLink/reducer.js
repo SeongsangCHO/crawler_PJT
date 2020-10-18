@@ -6,12 +6,18 @@ import {
 } from "../actions/registerAction";
 
 const initialState = {
-  data:{},
+  data:{
+    title : '',
+    price : '',
+    link :  '',
+    info :  '',
+    currentCategory: '',
+  },
 };
 
 //상태가 변화할 때 수행되는 함수
 //Type에 따른 상태변화
-const addCategoryReducer = (state = initialState, action) => {
+const addLinkReducer = (state = initialState, action) => {
 
   switch (action?.type) {
     case ADD_LINK_REQUEST: {
@@ -31,4 +37,4 @@ const addCategoryReducer = (state = initialState, action) => {
       return state;
   }
 };
-export default addCategoryReducer;
+export default addLinkReducer;

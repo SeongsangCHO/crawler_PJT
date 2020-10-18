@@ -11,7 +11,7 @@ import addCategoryReducer from "./AddCategory/reducer";
 import linkDataApiCallReducer from './LinkDataApiCall/reducer';
 import createSagaMiddleware from "redux-saga";
 import currentCategoryReducer from './CurrentCategory/reducer';
-
+import addLinkReducer from './AddLink/reducer';
 
 import rootSaga from "./saga";
 const initialState = {
@@ -35,6 +35,7 @@ const configureStore = () => {
       addCategoryReducer,
       linkDataApiCallReducer,
       currentCategoryReducer,
+      addLinkReducer,
     }),
     initialState,
     enhancer
