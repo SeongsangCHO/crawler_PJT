@@ -149,7 +149,9 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   const { title, price, link, info, currentCategory } = req.body;
 
 
-  let sql = `insert into links (title, price, link, info, categories_id) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'))`;
+  let sql = `insert into links (title, price, link, info, categories_id, users_id) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
+  and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
+  (select id from users where nickname = '${res.locals.userNickname}'))`;
 
   db.query(sql, [title, price, link, info], (dbError, result) => {
     if (dbError) throw dbError;

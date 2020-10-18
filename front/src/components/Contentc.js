@@ -674,6 +674,8 @@ function AddLink(props) {
         currentCategory: currentCategory,
       }
     })
+    props.onHide();
+
   };
   return (
     <Modal
@@ -690,7 +692,7 @@ function AddLink(props) {
       <Modal.Body>
         <ModalWrapper>
           <form onSubmit={handleAddLink}>
-          <input type="text" placeholder={currentCategory}></input>
+          <input type="hidden" placeholder={currentCategory}></input>
 
             <input name="title" type="text" placeholder="제목 입력"></input>
             <input name="price" type="text" placeholder="가격 입력"></input>
@@ -789,8 +791,8 @@ function ProductCard({ element }) {
           </Nav.Link>
           <CardDetail>
             <PriceDetail>가격: {element.price}</PriceDetail>
-            <InfoDetail>내가입력: {element.info}</InfoDetail>
-            <LinkDetail>link: {element.link}</LinkDetail>
+            <LinkDetail>링크: {element.link}</LinkDetail>
+            <InfoDetail>메모: {element.info}</InfoDetail>
           </CardDetail>
         </Nav.Item>
       ) : (
@@ -845,13 +847,16 @@ function LinkCardSection({ obj }) {
 function Contentc() {
   const dispatch = useDispatch();
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
+  const currentLink = useSelector((state => state.addLinkReducer.data.link));
+  const currentTitle = useSelector((state => state.addLinkReducer.data.title));
+  const currentCategory = useSelector((state => state.addCategoryReducer.category));
   useEffect(() => {
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
       type: "LINK_DATA_REQUEST",
       data: {},
     });
-  }, []);
+  }, [currentCategory, currentLink,currentTitle]);//linkData가 서버에서 받아오는 데이터
   //[linkData] <-로 업데이트 추적해서 실시간으로 랜더링할수있는데
   //get요청을 엄청나게 보내네..?
   // },[linkData]);
