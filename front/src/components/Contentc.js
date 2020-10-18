@@ -684,21 +684,29 @@ function AddLink(props) {
   );
 }
 function CategoryTab({ obj }) {
+  const dispatch = useDispatch();
   const [modalShow, setModalShow] = useState(false);
   const handleCateClick = (e) => {
     //현재 클릭되었을 때 innerHTML로 값을 얻을 수 있음
     //클릭된 값을 saga로 던져주면서 링크카드에서 useSelector로 가져오면 되겠다.
     console.log(e.currentTarget.innerHTML);
-    console.log('cate');
-
-  }
+    //여기서 dispatch 수행해서 카테고리 상태값 지정, default는 없게하면 될듯 or 초기페이지 설정? => 언제하냐
+    dispatch({
+      type: "GET_CATEGORY_REQUEST",
+      currentCategory: e.currentTarget.innerHTML,
+    });
+  };
   return (
     <CategoryWrapper>
       <Nav variant="pills" className="flex-sm-column">
         {obj?.category?.map((cate, idx) => (
           <Nav.Item className="nav-item-card">
             {Object.keys(cate) != "null" ? (
-              <Nav.Link value ={Object.keys(cate) }onClick={handleCateClick}eventKey={Object.keys(cate)}>
+              <Nav.Link
+                value={Object.keys(cate)}
+                onClick={handleCateClick}
+                eventKey={Object.keys(cate)}
+              >
                 {Object.keys(cate)}
               </Nav.Link>
             ) : (
@@ -744,29 +752,30 @@ const LinkDetail = styled.div``;
 const CardDetail = styled.div``;
 
 function ProductCard({ element }) {
-
   const handleCardClick = (e) => {
     console.log(e.target.value);
-  }
+  };
   return (
     <ProductCardWrapper>
       {element.title != null ? (
-      <Nav.Item>
-        <Nav.Link onClick={handleCardClick}
-          justify="true"
-          className="nav-link-style"
-          eventKey={element.title}
-        >
-          {element.title}
-        </Nav.Link>
-        <CardDetail>
-          <PriceDetail>가격: {element.price}</PriceDetail>
-          <InfoDetail>내가입력: {element.info}</InfoDetail>
-          <LinkDetail>link: {element.link}</LinkDetail>
-        </CardDetail>
-      </Nav.Item>
-      )
-      : (<div>링크추가하세요</div>)}
+        <Nav.Item>
+          <Nav.Link
+            onClick={handleCardClick}
+            justify="true"
+            className="nav-link-style"
+            eventKey={element.title}
+          >
+            {element.title}
+          </Nav.Link>
+          <CardDetail>
+            <PriceDetail>가격: {element.price}</PriceDetail>
+            <InfoDetail>내가입력: {element.info}</InfoDetail>
+            <LinkDetail>link: {element.link}</LinkDetail>
+          </CardDetail>
+        </Nav.Item>
+      ) : (
+        <div>링크추가하세요</div>
+      )}
     </ProductCardWrapper>
   );
 }

@@ -17,7 +17,12 @@ export const ADD_CATEGORY_FAILURE = "ADD_CATEGORY_FAILURE";
 
 export const LINK_DATA_REQUEST = "LINK_DATA_REQUEST";
 export const LINK_DATA_SUCCESS = "LINK_DATA_SUCCESS";
-export const LINK_DATA_FAILURE = "LINK_DATA_FAILURE"
+export const LINK_DATA_FAILURE = "LINK_DATA_FAILURE";
+
+export const GET_CATEGORY_REQUEST = "GET_CATEGORY_REQUEST";
+export const GET_CATEGORY_SUCCESS = "GET_CATEGORY_SUCCESS";
+export const GET_CATEGORY_FAILURE = "GET_CATEGORY_FAILURE";
+
 
 export function registerRequest(data) {
   console.log("액션 생성함수");

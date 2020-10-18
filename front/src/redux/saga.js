@@ -24,6 +24,9 @@ import {
   LINK_DATA_REQUEST,
   LINK_DATA_SUCCESS,
   LINK_DATA_FAILURE,
+  GET_CATEGORY_REQUEST,
+  GET_CATEGORY_SUCCESS,
+  GET_CATEGORY_FAILURE,
 } from "./actions/registerAction";
 
 import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
@@ -133,7 +136,7 @@ function* addCategory(action) {
     const result = yield call(addCategoryAPI, action.category);
 
     if (result.status == 200) {
-      yield put({ type: ADD_CATEGORY_SUCCESS, category: action.category});
+      yield put({ type: ADD_CATEGORY_SUCCESS, category: action.category });
       alert("요청성공");
     }
   } catch (err) {
@@ -178,8 +181,6 @@ function* nickNameDoubleCheck(action) {
   }
 }
 
-
-
 function* watchNickNameDoubleCheck() {
   console.log("watch getNickName from server");
   //서버로 post로 닉네임 던진다음, select로 중복체크함
@@ -187,7 +188,7 @@ function* watchNickNameDoubleCheck() {
   yield takeLatest(NICK_DOUBLE_CHECK_REQUEST, nickNameDoubleCheck);
 }
 
-function getLinkDataAPI(){
+function getLinkDataAPI() {
   console.log("getLinkDataAPI in saga");
 
   return axios.get(linkDataApiCallURL, {
@@ -200,8 +201,8 @@ function* getLinkData(action) {
     console.log("getlinkData");
     const result = yield call(getLinkDataAPI, action.data);
     console.log(result);
-    if(result.status == 200){
-      yield put({type: LINK_DATA_SUCCESS, data:result.data});
+    if (result.status == 200) {
+      yield put({ type: LINK_DATA_SUCCESS, data: result.data });
     }
   } catch (error) {
     yield put({ type: LINK_DATA_FAILURE, err: error });
@@ -215,6 +216,21 @@ function* watchGetLinkData() {
   yield takeLatest(LINK_DATA_REQUEST, getLinkData);
 }
 
+function* getCategory(action) {
+  try {
+    yield put({type: GET_CATEGORY_SUCCESS, currentCategory: action.currentCategory});
+  } catch (err) {
+
+    yield put({type: GET_CATEGORY_FAILURE, currentCategory: action.currentCategory});
+    console.error(err);
+  }
+}
+
+function* watchGetCategory() {
+  console.log("watch getCategory");
+  yield takeLatest(GET_CATEGORY_REQUEST, getCategory);
+}
+
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
   yield all([
@@ -223,5 +239,6 @@ export default function* rootSaga() {
     fork(watchLogin),
     fork(watchAddCategory),
     fork(watchGetLinkData),
+    fork(watchGetCategory),
   ]);
 }

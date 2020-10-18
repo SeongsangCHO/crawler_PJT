@@ -9,7 +9,6 @@ const initialState = {
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
-  console.log("리듀서 호출");
 
   switch (action?.type) {
     case LINK_DATA_REQUEST: {
