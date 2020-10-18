@@ -685,14 +685,25 @@ function AddLink(props) {
 }
 function CategoryTab({ obj }) {
   const [modalShow, setModalShow] = useState(false);
+  const handleCateClick = (e) => {
+    //현재 클릭되었을 때 innerHTML로 값을 얻을 수 있음
+    //클릭된 값을 saga로 던져주면서 링크카드에서 useSelector로 가져오면 되겠다.
+    console.log(e.currentTarget.innerHTML);
+    console.log('cate');
+
+  }
   return (
     <CategoryWrapper>
       <Nav variant="pills" className="flex-sm-column">
         {obj?.category?.map((cate, idx) => (
           <Nav.Item className="nav-item-card">
-            <Nav.Link eventKey={Object.keys(cate)}>
-              {Object.keys(cate)}
-            </Nav.Link>
+            {Object.keys(cate) != "null" ? (
+              <Nav.Link value ={Object.keys(cate) }onClick={handleCateClick}eventKey={Object.keys(cate)}>
+                {Object.keys(cate)}
+              </Nav.Link>
+            ) : (
+              <Nav.Link>카테고리 추가하세요</Nav.Link>
+            )}
           </Nav.Item>
         ))}
       </Nav>
@@ -731,11 +742,17 @@ const PriceDetail = styled.div``;
 const InfoDetail = styled.div``;
 const LinkDetail = styled.div``;
 const CardDetail = styled.div``;
+
 function ProductCard({ element }) {
+
+  const handleCardClick = (e) => {
+    console.log(e.target.value);
+  }
   return (
     <ProductCardWrapper>
+      {element.title != null ? (
       <Nav.Item>
-        <Nav.Link
+        <Nav.Link onClick={handleCardClick}
           justify="true"
           className="nav-link-style"
           eventKey={element.title}
@@ -748,9 +765,12 @@ function ProductCard({ element }) {
           <LinkDetail>link: {element.link}</LinkDetail>
         </CardDetail>
       </Nav.Item>
+      )
+      : (<div>링크추가하세요</div>)}
     </ProductCardWrapper>
   );
 }
+
 const CardTabWrapper = styled.div``;
 function CardTab({ obj }) {
   const [modalShow, setModalShow] = useState(false);
@@ -795,19 +815,17 @@ function LinkCardSection({ obj }) {
 
 function Contentc() {
   const dispatch = useDispatch();
-  const linkData = useSelector((state => state.linkDataApiCallReducer.data));
+  const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
   useEffect(() => {
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
-      type:"LINK_DATA_REQUEST",
-      data:{},
+      type: "LINK_DATA_REQUEST",
+      data: {},
     });
-  },[linkData]);
-    //[linkData] <-로 업데이트 추적해서 실시간으로 랜더링할수있는데 
-    //get요청을 엄청나게 보내네..?
+  }, []);
+  //[linkData] <-로 업데이트 추적해서 실시간으로 랜더링할수있는데
+  //get요청을 엄청나게 보내네..?
   // },[linkData]);
-
-
 
   // const dataList = Object.keys(linkData?.category[0]);
   //categoryTab / LinkCard : 1 : 4로 나누기 // OK
@@ -821,10 +839,7 @@ function Contentc() {
   //여기서 데이터를 가져와서 props로 전달?
   return (
     <div className="content-wrapper">
-      <Tab.Container
-        id="left-tabs"
-        defaultActiveKey="All"
-      >
+      <Tab.Container id="left-tabs" defaultActiveKey="All">
         <ContentWrapper>
           <CategoryTab obj={linkData} />
           <LinkCardSection obj={linkData} />
