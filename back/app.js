@@ -143,12 +143,19 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   return res.status(200).json({ message: "카테고리 추가  success" });
 });
 
-app.post("/addlink", cors(accecptURL), verifyToken, (req,res,next) => {
-
+app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log("server addlink call");
-  return res.status(200).json({message : "링크 추가 SUCCESS"});
-})
+  const { title, price, link, info, currentCategory } = req.body;
+
+
+  let sql = `insert into links (title, price, link, info, categories_id) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'))`;
+
+  db.query(sql, [title, price, link, info], (dbError, result) => {
+    if (dbError) throw dbError;
+  });
+  return res.status(200).json({ message: "링크 추가 SUCCESS" });
+});
 
 //크롤러는 하나임, 데이터를 저장할 크롤러 하나 뿐
 //링크박스 추가시 크롤러데이터를 저장할 부분과 클릭할 때 이를 가져올 부분을 따로 작성해야함.
@@ -156,7 +163,7 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req,res,next) => {
 //링크박스의 제목을 기반으로 크롤러 수행
 //크롤러 데이터를 db에 저장함
 //
-app.get("/api/mylink", cors(accecptURL), verifyToken,(req, res, next) => {
+app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
   let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
@@ -170,8 +177,8 @@ app.get("/api/mylink", cors(accecptURL), verifyToken,(req, res, next) => {
  LEFT  join links on categories.id = links.categories_id
  LEFT  join crawl on links.id = crawl.links_id
  where users.nickname = '${res.locals.userNickname}';`;
- console.log(res.locals.userNickname);
- 
+  console.log(res.locals.userNickname);
+
   let mylinkData = {
     category: [],
   };
@@ -180,52 +187,51 @@ app.get("/api/mylink", cors(accecptURL), verifyToken,(req, res, next) => {
 
   db.query(sql, (err, result) => {
     console.log(result);
-    if(result){
-      
-    result.map((element, idx) => {
-      if (!categoryMap.get(element.category)) {
-        categoryMap.set(element.category, []);
-      }
-      let tmpLink = element.link;
+    if (result) {
+      result.map((element, idx) => {
+        if (!categoryMap.get(element.category)) {
+          categoryMap.set(element.category, []);
+        }
+        let tmpLink = element.link;
 
-      if (
-        categoryMap.get(element.category)[
-          categoryMap.get(element.category).length - 1
-        ] == undefined ||
-        categoryMap.get(element.category)[
-          categoryMap.get(element.category).length - 1
-        ].link !== tmpLink
-      ) {
-        // console.log("in",categoryMap.get(element.category)[
-        //   categoryMap.get(element.category).length - 1
-        // ]);
+        if (
+          categoryMap.get(element.category)[
+            categoryMap.get(element.category).length - 1
+          ] == undefined ||
+          categoryMap.get(element.category)[
+            categoryMap.get(element.category).length - 1
+          ].link !== tmpLink
+        ) {
+          // console.log("in",categoryMap.get(element.category)[
+          //   categoryMap.get(element.category).length - 1
+          // ]);
 
-        categoryMap.get(element.category).push({
-          title: element.linkTitle,
-          link: element.link,
-          price: element.linkPrice,
-          info: element.linkInfo,
-          ssg: [],
-          coupang: [],
-          naver: [],
-        });
-      }
-      if (element.crawlTitle !== null) {
-        let tmp = {
-          title: element.crawlTitle,
-          price: element.crawlPrice,
-          link: element.crawlLink,
-        };
-        // console.log(tmp);
+          categoryMap.get(element.category).push({
+            title: element.linkTitle,
+            link: element.link,
+            price: element.linkPrice,
+            info: element.linkInfo,
+            ssg: [],
+            coupang: [],
+            naver: [],
+          });
+        }
+        if (element.crawlTitle !== null) {
+          let tmp = {
+            title: element.crawlTitle,
+            price: element.crawlPrice,
+            link: element.crawlLink,
+          };
+          // console.log(tmp);
 
-        categoryMap
-          .get(element.category)
-          [categoryMap.get(element.category).length - 1][
-            element.crawlSource
-          ].push(tmp);
-      }
-    });
-  }
+          categoryMap
+            .get(element.category)
+            [categoryMap.get(element.category).length - 1][
+              element.crawlSource
+            ].push(tmp);
+        }
+      });
+    }
     let obj = Object.fromEntries(categoryMap);
     for (let key of Object.keys(obj)) {
       let tmp = {};
@@ -235,7 +241,6 @@ app.get("/api/mylink", cors(accecptURL), verifyToken,(req, res, next) => {
     }
     res.json(mylinkData);
   });
-
 });
 
 app.get("/craw", (req, res) => {
