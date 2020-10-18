@@ -614,7 +614,6 @@ function AddCategory(props) {
     });
     //[추측][비동기처리해서] 그냥 될떄도있고 안될때도있네 => submit로 페이지 리로딩이 되기때문.
     alert("카테고리 추가 완료");
-    console.log(props);
     props.onHide();
     //그럼 추가가 완료된 이후에는 모달창을 종료해야하는데?
     //props로 전달된 onHide호출해서 창내림
@@ -654,8 +653,12 @@ const ModalWrapper = styled.div`
 `;
 
 function AddLink(props) {
-  const handleLink = () => {
+  const currentCategory = useSelector((state => state.currentCategoryReducer.currentCategory));
+
+  const handleLink = (e) => {
+    e.preventDefault();
     alert("링크 추가 완료");
+    console.log(currentCategory);
   };
   return (
     <Modal
