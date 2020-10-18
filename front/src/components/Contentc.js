@@ -653,12 +653,27 @@ const ModalWrapper = styled.div`
 `;
 
 function AddLink(props) {
+  // Custom hook으로 onChange하는 거 다 묶어야겠다.
   const currentCategory = useSelector((state => state.currentCategoryReducer.currentCategory));
+  const dispatch = useDispatch();
 
-  const handleLink = (e) => {
+
+  const handleAddLink = (e) => {
+    const formData = e.target;
+    
     e.preventDefault();
     alert("링크 추가 완료");
-    console.log(currentCategory);
+    //여기서 dispatch 수행해서 post요청해야함
+    dispatch({
+      type:"ADD_LINK_REQUEST",
+      data : {
+        title: formData.title.value,
+        price: formData.price.value,
+        link: formData.link.value,
+        info: formData.info.value,
+        currentCategory: currentCategory,
+      }
+    })
   };
   return (
     <Modal
@@ -674,11 +689,13 @@ function AddLink(props) {
       </Modal.Header>
       <Modal.Body>
         <ModalWrapper>
-          <form onSubmit={handleLink}>
-            <input type="text" placeholder="제목 입력"></input>
-            <input type="text" placeholder="가격 입력"></input>
-            <input type="text" placeholder="링크 입력"></input>
-            <input type="text" placeholder="메모 입력"></input>
+          <form onSubmit={handleAddLink}>
+          <input type="text" placeholder={currentCategory}></input>
+
+            <input name="title" type="text" placeholder="제목 입력"></input>
+            <input name="price" type="text" placeholder="가격 입력"></input>
+            <input name="link" type="text" placeholder="링크 입력"></input>
+            <input name="info" type="text" placeholder="메모 입력"></input>
             <button type="submit">저장하기</button>
           </form>
         </ModalWrapper>

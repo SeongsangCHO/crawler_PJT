@@ -27,6 +27,9 @@ import {
   GET_CATEGORY_REQUEST,
   GET_CATEGORY_SUCCESS,
   GET_CATEGORY_FAILURE,
+  ADD_LINK_REQUEST,
+  ADD_LINK_SUCCESS,
+  ADD_LINK_FAILURE,
 } from "./actions/registerAction";
 
 import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
@@ -218,10 +221,15 @@ function* watchGetLinkData() {
 
 function* getCategory(action) {
   try {
-    yield put({type: GET_CATEGORY_SUCCESS, currentCategory: action.currentCategory});
+    yield put({
+      type: GET_CATEGORY_SUCCESS,
+      currentCategory: action.currentCategory,
+    });
   } catch (err) {
-
-    yield put({type: GET_CATEGORY_FAILURE, currentCategory: action.currentCategory});
+    yield put({
+      type: GET_CATEGORY_FAILURE,
+      currentCategory: action.currentCategory,
+    });
     console.error(err);
   }
 }
@@ -240,5 +248,6 @@ export default function* rootSaga() {
     fork(watchAddCategory),
     fork(watchGetLinkData),
     fork(watchGetCategory),
+    // fork(watchAddLink),
   ]);
 }

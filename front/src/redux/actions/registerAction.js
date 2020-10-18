@@ -23,6 +23,9 @@ export const GET_CATEGORY_REQUEST = "GET_CATEGORY_REQUEST";
 export const GET_CATEGORY_SUCCESS = "GET_CATEGORY_SUCCESS";
 export const GET_CATEGORY_FAILURE = "GET_CATEGORY_FAILURE";
 
+export const ADD_LINK_REQUEST = "ADD_LINK_REQUEST";
+export const ADD_LINK_SUCCESS = "ADD_LINK_SUCCESS";
+export const ADD_LINK_FAILURE = "ADD_LINK_FAILURE";
 
 export function registerRequest(data) {
   console.log("액션 생성함수");
