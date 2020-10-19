@@ -188,7 +188,6 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   let categoryMap = new Map();
 
   db.query(sql, (err, result) => {
-    console.log(result);
     if (result) {
       result.map((element, idx) => {
         if (!categoryMap.get(element.category)) {

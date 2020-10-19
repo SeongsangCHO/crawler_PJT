@@ -25,15 +25,13 @@ exports.createToken = async function (req, res, next) {
           }
 
           if (hash) {
-            console.log(req.body.user_password);
-            console.log(result[0].password);
             const token = jwt.sign(
               {
                 nickname: req.body.user_nickname,
               },
               "piTeam",
               {
-                expiresIn: "1m",
+                expiresIn: "5m",
               }
             );
             console.log(token);

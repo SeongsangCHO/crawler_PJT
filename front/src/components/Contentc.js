@@ -597,12 +597,10 @@ function AddCategory(props) {
     (state) => state.addCategoryReducer.category
   );
   useEffect(() => {}, []);
-  console.log(categoryStatus);
   const [categoryData, setCategoryData] = useState("");
   const dispatch = useDispatch();
   const handleSetCategory = (e) => {
     setCategoryData(e.target.value);
-    console.log(e.target.value);
   };
   const handleAddCategory = (e) => {
     //페이지리로딩 방지를 위해서 넣어주어야해.
@@ -711,7 +709,6 @@ function CategoryTab({ obj }) {
   const handleCateClick = (e) => {
     //현재 클릭되었을 때 innerHTML로 값을 얻을 수 있음
     //클릭된 값을 saga로 던져주면서 링크카드에서 useSelector로 가져오면 되겠다.
-    console.log(e.currentTarget.innerHTML);
     //여기서 dispatch 수행해서 카테고리 상태값 지정, default는 없게하면 될듯 or 초기페이지 설정? => 언제하냐
     dispatch({
       type: "GET_CATEGORY_REQUEST",
@@ -775,7 +772,15 @@ const CardDetail = styled.div``;
 
 function ProductCard({ element }) {
   const handleCardClick = (e) => {
-    console.log(e.target.value);
+    //여기서 innerHTML해서 제목데이터를 상태로 관리하고,
+    // link card의 제목을 클릭할 때마다, 상태값으로 관리
+    // 상태값이 변경될 때마다 dispatch로 호출
+    // user_id랑 일치하고, title이 같은 
+    // [핵심]links의 id를 crawl테이블에 저장 상품명, 가격, 우선순위(1,2,3), link =>크롤링결과를 insert함
+    // [분기]links_id가 crawl테이블에 존재할때,
+    // 크롤러 무한요청을 막기위해 크롤링데이터가 있을때
+    // 시간데이터도 넣어서 현재시간으로부터 하루정도? 지났으면 크롤링을 수행
+    // 없으면 이미 데이터가 있는 것이므로 그대로 두면됨
   };
   return (
     <ProductCardWrapper>
