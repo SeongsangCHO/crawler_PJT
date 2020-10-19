@@ -30,6 +30,9 @@ import {
   ADD_LINK_REQUEST,
   ADD_LINK_SUCCESS,
   ADD_LINK_FAILURE,
+  RUN_CRAWLER_REQUEST,
+  RUN_CRAWLER_SUCCESS,
+  RUN_CRAWLER_FAILURE,
 } from "./actions/registerAction";
 
 import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
@@ -42,6 +45,7 @@ const loginURL = "http://localhost/login";
 const addCategoryURL = "http://localhost/addcategory";
 const linkDataApiCallURL = "http://localhost/api/mylink";
 const addLinkURL = "http://localhost/addlink";
+const crawlURL = "http://localhost/crawler"
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
 
 // *_REQUEST 비동기 요청
@@ -239,29 +243,54 @@ function* watchGetCategory() {
   yield takeLatest(GET_CATEGORY_REQUEST, getCategory);
 }
 
-function addLinkAPI(linkData){
+function addLinkAPI(linkData) {
   console.log("call addLinkAPI");
-  
+
   return axios.post(addLinkURL, linkData, {
-    withCredentials:true,
-  })
+    withCredentials: true,
+  });
 }
 
 function* addLink(action) {
   try {
     const result = yield call(addLinkAPI, action.data);
-    if (result.status == 200){
-      yield put({type:ADD_LINK_SUCCESS, data:action.data});
+    if (result.status == 200) {
+      yield put({ type: ADD_LINK_SUCCESS, data: action.data });
     }
   } catch (error) {
     console.error(error);
-    yield put({type:ADD_LINK_FAILURE});
+    yield put({ type: ADD_LINK_FAILURE });
   }
 }
 
 function* watchAddLink() {
   console.log("watch AddLink");
   yield takeLatest(ADD_LINK_REQUEST, addLink);
+}
+
+function runCrawlerAPI(currentLinkTitle){
+  //여기까지 잘 전달되는데..
+ //객체형태로 전달해주어야하는군,.
+  return axios.post(crawlURL, {currentLinkTitle} ,{
+    withCredentials: true,
+  });
+}
+
+function* runCrawler(action) {
+  try {
+    const result = yield call(runCrawlerAPI, action.currentLinkTitle);
+    if (result.status == 200){
+      yield put({type: RUN_CRAWLER_SUCCESS, currentLinkTitle: action.currentLinkTitle});
+    }
+  } catch (error) {
+    console.error(error);
+    yield put({type: RUN_CRAWLER_FAILURE});
+  }
+}
+
+function* watchRunCrawler() {
+  console.log("watch Crawler");
+  yield takeLatest(RUN_CRAWLER_REQUEST, runCrawler);
 }
 
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
@@ -274,5 +303,6 @@ export default function* rootSaga() {
     fork(watchGetLinkData),
     fork(watchGetCategory),
     fork(watchAddLink),
+    fork(watchRunCrawler),
   ]);
 }

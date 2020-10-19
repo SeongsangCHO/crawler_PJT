@@ -244,7 +244,10 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   });
 });
 
-app.get("/craw", (req, res) => {
+app.post("/crawler", cors(accecptURL), verifyToken,(req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
+  console.log("req.body : ",req.body);
   let status = "쓱 ,쿠팡 크롤러";
 
   ssgCrawler();
@@ -252,6 +255,7 @@ app.get("/craw", (req, res) => {
 
   res.send(status);
 });
+
 app.get("/coupang", (req, res) => {
   let status = "쿠팡크롤러";
   coupangCrawler();

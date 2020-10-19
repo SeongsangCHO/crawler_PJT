@@ -652,28 +652,34 @@ const ModalWrapper = styled.div`
 
 function AddLink(props) {
   // Custom hook으로 onChange하는 거 다 묶어야겠다.
-  const currentCategory = useSelector((state => state.currentCategoryReducer.currentCategory));
+  const currentCategory = useSelector(
+    (state) => state.currentCategoryReducer.currentCategory
+  );
   const dispatch = useDispatch();
-
 
   const handleAddLink = (e) => {
     const formData = e.target;
-    
+
     e.preventDefault();
     alert("링크 추가 완료");
     //여기서 dispatch 수행해서 post요청해야함
     dispatch({
-      type:"ADD_LINK_REQUEST",
-      data : {
+      type: "ADD_LINK_REQUEST",
+      data: {
         title: formData.title.value,
         price: formData.price.value,
         link: formData.link.value,
         info: formData.info.value,
         currentCategory: currentCategory,
-      }
-    })
-    props.onHide();
+      },
+    });
 
+    dispatch({
+      type: "RUN_CRAWLER_REQUEST",
+      currentLinkTitle: formData.title.value,
+    });
+
+    props.onHide();
   };
   return (
     <Modal
@@ -690,7 +696,7 @@ function AddLink(props) {
       <Modal.Body>
         <ModalWrapper>
           <form onSubmit={handleAddLink}>
-          <input type="hidden" placeholder={currentCategory}></input>
+            <input type="hidden" placeholder={currentCategory}></input>
 
             <input name="title" type="text" placeholder="제목 입력"></input>
             <input name="price" type="text" placeholder="가격 입력"></input>
@@ -771,16 +777,23 @@ const LinkDetail = styled.div``;
 const CardDetail = styled.div``;
 
 function ProductCard({ element }) {
+  const dispatch = useDispatch();
   const handleCardClick = (e) => {
     //여기서 innerHTML해서 제목데이터를 상태로 관리하고,
     // link card의 제목을 클릭할 때마다, 상태값으로 관리
     // 상태값이 변경될 때마다 dispatch로 호출
-    // user_id랑 일치하고, title이 같은 
+    // user_id랑 일치하고, title이 같은
     // [핵심]links의 id를 crawl테이블에 저장 상품명, 가격, 우선순위(1,2,3), link =>크롤링결과를 insert함
     // [분기]links_id가 crawl테이블에 존재할때,
     // 크롤러 무한요청을 막기위해 크롤링데이터가 있을때
     // 시간데이터도 넣어서 현재시간으로부터 하루정도? 지났으면 크롤링을 수행
     // 없으면 이미 데이터가 있는 것이므로 그대로 두면됨
+    console.log(e.currentTarget.innerHTML);
+
+    // dispatch({
+    //   type: "RUN_CRAWLER_REQUEST",
+    //   currentLinkTitle : e.currentTarget.innerHTML,
+    // });
   };
   return (
     <ProductCardWrapper>
@@ -852,16 +865,18 @@ function LinkCardSection({ obj }) {
 function Contentc() {
   const dispatch = useDispatch();
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
-  const currentLink = useSelector((state => state.addLinkReducer.data.link));
-  const currentTitle = useSelector((state => state.addLinkReducer.data.title));
-  const currentCategory = useSelector((state => state.addCategoryReducer.category));
+  const currentLink = useSelector((state) => state.addLinkReducer.data.link);
+  const currentTitle = useSelector((state) => state.addLinkReducer.data.title);
+  const currentCategory = useSelector(
+    (state) => state.addCategoryReducer.category
+  );
   useEffect(() => {
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
       type: "LINK_DATA_REQUEST",
       data: {},
     });
-  }, [currentCategory, currentLink,currentTitle]);//linkData가 서버에서 받아오는 데이터
+  }, [currentCategory, currentLink, currentTitle]); //linkData가 서버에서 받아오는 데이터
   //[linkData] <-로 업데이트 추적해서 실시간으로 랜더링할수있는데
   //get요청을 엄청나게 보내네..?
   // },[linkData]);

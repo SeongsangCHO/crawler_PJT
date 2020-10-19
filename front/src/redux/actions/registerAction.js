@@ -27,6 +27,10 @@ export const ADD_LINK_REQUEST = "ADD_LINK_REQUEST";
 export const ADD_LINK_SUCCESS = "ADD_LINK_SUCCESS";
 export const ADD_LINK_FAILURE = "ADD_LINK_FAILURE";
 
+export const RUN_CRAWLER_REQUEST = "RUN_CRAWLER_REQUEST";
+export const RUN_CRAWLER_SUCCESS = "RUN_CRAWLER_SUCCESS";
+export const RUN_CRAWLER_FAILURE = "RUN_CRAWLER_FAILURE";
+
 export function registerRequest(data) {
   console.log("액션 생성함수");
   console.log(data);
