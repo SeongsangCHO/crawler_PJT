@@ -15,7 +15,7 @@ function encodeText(str) {
 //품목기반으로 검색한 크롤링을 해야하는데,
 //크롤링에 인자전달하는 방법
 //db에서 select한 결과를 갖고 크롤링을 해야할듯
-const ssgCrawler = async (searchTitle) => {
+const ssgCrawler = async (searchTitle, linkId) => {
   let start = await new Date().getTime();
   //배포시 headless true로 설정해야함.
   //에러핸들링 추가해야함., 블록스코프에 맞춰서
@@ -58,7 +58,7 @@ const ssgCrawler = async (searchTitle) => {
 
   const ulContentSelector = `#divProductImg > #idProductImg li`;
   let productData = [];
-
+  let lastPageNumber;
   const liLength = await page.evaluate((SELECTOR) => {
     //page당 아이템 갯수 출력 80개
     return document.querySelectorAll(SELECTOR).length;
@@ -66,23 +66,27 @@ const ssgCrawler = async (searchTitle) => {
   if (liLength <= 0) {
     //li 태그의 길이가 없다 == 검색결과 없을때 크롤링종료
     console.log("ssg_ li length is zero");
+    await page.close(); // 페이지 닫기
+    await browser.close(); // 브라우저 닫기
+    return "2"; // 검색결과 없을때
   } else {
     //마지막 페이지 번호를 구함
-    let totalProduct = await page.$eval(`div#area_itemCount > .tx_ko`, (element) => {
-      //btn Last가 없을수도있구나.
-      console.log(element);
-      
-      return element.innerText.split(" ")[0];
-    });
-    let lastPageNumber = Math.ceil(totalProduct / liLength);
-    
+    let totalProduct = await page.$eval(
+      `div#area_itemCount > .tx_ko`,
+      (element) => {
+        return element.innerText.replace(/,/gi, "").split(" ")[0];
+      }
+    );
+    lastPageNumber = Math.ceil(totalProduct / liLength);
+
     //페이지가 10개이상일때 last버튼 찾도록 지정
-    if (lastPageNumber >= 10){
-    lastPageNumber = await page.$eval(`.btn_last`, (element) => {
-      //btn Last가 없을수도있구나.
-      return element.getAttribute("data-filter-value").split("=")[1];
-    });
-  }
+    if (lastPageNumber >= 10) {
+      lastPageNumber = await page.$eval(`.btn_last`, (element) => {
+        //btn Last가 없을수도있구나.
+        return element.getAttribute("data-filter-value").split("=")[1];
+      });
+    }
+    
     try {
       let priority = 1;
 
@@ -128,27 +132,47 @@ const ssgCrawler = async (searchTitle) => {
 
   await page.close(); // 페이지 닫기
   await browser.close(); // 브라우저 닫기
-  if (dataInsert(productData) === "SUCCESS"){
+  if (dataInsert(productData, linkId) === "SUCCESS") {
     return "1";
   }
   return "0";
 };
 
-function dataInsert(crawlerData) {
+function dataInsert(crawlerData, linkId) {
   //필터로 갯수 조절하면 될듯
   //성공하면 return되도록
-  crawlerData.forEach((obj) => {
+  console.log("링크 아이디" , linkId);
+  
+  crawlerData.filter((obj) => {
+    return obj.priority <= 3;
+  }).forEach((filterd) => {
     db.query(
-      `INSERT INTO product(title, price, link, priority)
-    VALUES(?,?,?,?)`,
-      [obj.title, obj.price, obj.link, obj.priority],
+      `
+    INSERT INTO crawl(links_id, title, price,  priority, source, link)
+    VALUES(?, ?, ?, ?, ?, ? )`,
+      [linkId, filterd.title, filterd.price,  filterd.priority, 'ssg',filterd.link],
       function (error, result) {
-        if (error){ console.error(error);
-        return "FAILURE"}
+        if (error) {
+          console.error(error);
+          return "FAILURE";
+        }
       }
     );
   });
   return "SUCCESS";
+
+  // crawlerData.forEach((obj) => {
+  //   db.query(
+  //     `INSERT INTO product(title, price, link, priority)
+  //   VALUES(?,?,?,?)`,
+  //     [obj.title, obj.price, obj.link, obj.priority],
+  //     function (error, result) {
+  //       if (error){ console.error(error);
+  //       return "FAILURE"}
+  //     }
+  //   );
+  // });
+  // return "SUCCESS";
 }
 
 module.exports = ssgCrawler;

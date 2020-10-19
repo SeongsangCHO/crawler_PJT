@@ -756,7 +756,12 @@ function CrawlingCard({ obj }) {
           unmountOnExit="true"
         >
           {element.ssg.map((ssgElement) => (
+            <>
             <div>{ssgElement.title}</div>
+            <div>{ssgElement.price}</div>
+            <div>{ssgElement.link}</div>
+            <div>{ssgElement.source}</div>
+            </>
           ))}
           {element.coupang.map((coupangElement) => (
             <div>{coupangElement.title}</div>

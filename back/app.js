@@ -246,14 +246,27 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
 
 app.post("/crawler", cors(accecptURL), verifyToken,(req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  let serachText = req.body.currentLinkTitle;
+  let searchText = req.body.currentLinkTitle;
   let status = "쓱 ,쿠팡 크롤러";
-  ssgCrawler(serachText).then((result)=>{
-    //끝나면 리턴받긴하네
-    console.log(result);
+  
+  //0 : 실패
+  //1 : 성공
+  //2 : 검색결과 없음
+  
+  let findLinkId = `select id from links where users_id =
+  (select id from users where nickname = '${res.locals.userNickname}'
+  and title ='${searchText}'
+  )`;
+  db.query(findLinkId, (dbErr, dbResult)=>{
+    console.log("findID : ",dbResult[0].id);
     
-  });
-  coupangCrawler(serachText);
+    ssgCrawler(searchText, dbResult[0].id).then((result)=>{
+      //끝나면 리턴받긴하네
+      console.log(result);
+      
+    });
+    coupangCrawler(searchText, dbResult[0].id);
+  })
   
     
     return res.status(200);
