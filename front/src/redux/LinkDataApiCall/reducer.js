@@ -6,6 +6,7 @@ import {
 
 const initialState = {
   data:'',
+  isCalled: false,
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
@@ -13,17 +14,17 @@ const linkDataApiCallReducer = (state = initialState, action) => {
   switch (action?.type) {
     case LINK_DATA_REQUEST: {
       console.log("링크API REQUEST_리듀서");
-      return { ...state };
+      return { ...state ,isCalled:false};
     }
     case LINK_DATA_SUCCESS: {
       console.log("링크API SUCCESS_리듀서");
       console.log(action.data);
       
-      return { ...state,  data: {...action.data} };
+      return { ...state,  data: {...action.data} ,isCalled:true};
     }
     case LINK_DATA_FAILURE: {
       console.log("링크API FAILURE_리듀서");
-      return { ...state, error: action?.err };
+      return { ...state, error: action?.err ,isCalled:false};
     }
     default:
       return state;

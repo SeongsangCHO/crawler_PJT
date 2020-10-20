@@ -12,7 +12,8 @@ import TabContainer from "react-bootstrap/TabContainer";
 import "./css/Contentc.css";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-
+import Spinner from "react-bootstrap/Spinner";
+import Badge from "react-bootstrap/Badge";
 const dummy =
   //사용자가 추가할 category
   {
@@ -570,13 +571,14 @@ const CardTabLeftSection = styled.div`
 
 const CardTabRightSection = styled.div`
   border: 1px solid black;
-
+  flex-wrap: nowrap;
   flex: 1;
 `;
 
 const CrawlingCardWrapper = styled.div`
   border: 1px solid black;
   padding: 5px;
+  height: 100%;
 `;
 const ContentWrapper = styled.div`
   display: flex;
@@ -677,7 +679,7 @@ function AddLink(props) {
     dispatch({
       type: "RUN_CRAWLER_REQUEST",
       currentLinkTitle: formData.title.value,
-      isCrawled:false,
+      isCrawled: false,
     });
 
     props.onHide();
@@ -747,8 +749,9 @@ function CategoryTab({ obj }) {
   );
 }
 
-function CrawlingCard({ obj }) {
+const CrawlListCard = styled.div``;
 
+function CrawlingCard({ obj }) {
   return (
     <CrawlingCardWrapper>
       {obj[Object.keys(obj)]?.map((element, id) => (
@@ -758,15 +761,25 @@ function CrawlingCard({ obj }) {
           unmountOnExit="true"
         >
           {element.ssg.map((ssgElement) => (
-            <>
+            <CrawlListCard>
+              <div>
+                <Badge pill variant="warning">
+                  SSG
+                </Badge>
+              </div>
               <div>{ssgElement.title}</div>
               <div>{ssgElement.price}</div>
-              <div>{ssgElement.link}</div>
-              <div>{ssgElement.source}</div>
-            </>
+            </CrawlListCard>
           ))}
           {element.coupang.map((coupangElement) => (
-            <div>{coupangElement.title}</div>
+            <CrawlListCard>
+              <div>
+                <Badge pill variant="primary">
+                  COUPANG
+                </Badge>
+              </div>
+              <div>{coupangElement.title}</div>
+            </CrawlListCard>
           ))}
           {element.naver.map((naverElement) => (
             <div>{naverElement.title}</div>
@@ -829,7 +842,10 @@ function ProductCard({ element }) {
 
 const CardTabWrapper = styled.div``;
 function CardTab({ obj }) {
-
+  const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled);
+  const linkDataIsCalled = useSelector(
+    (state) => state.linkDataApiCallReducer.isCalled
+  );
 
   const [modalShow, setModalShow] = useState(false);
   return (
@@ -848,7 +864,11 @@ function CardTab({ obj }) {
             </CardTabLeftSection>
 
             <CardTabRightSection>
-              <CrawlingCard obj={obj} />
+              {linkDataIsCalled == true ? (
+                <CrawlingCard obj={obj} />
+              ) : (
+                <Spinner animation="border" variant="primary" />
+              )}
             </CardTabRightSection>
           </Tab.Content>
         </Nav>
@@ -875,8 +895,8 @@ function Contentc() {
   const dispatch = useDispatch();
   const currentLinkTitle = useSelector(
     (state) => state.runCrawlerReducer.currentLinkTitle
-    );
-    
+  );
+
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
   const currentLink = useSelector((state) => state.addLinkReducer.data.link);
   const currentTitle = useSelector((state) => state.addLinkReducer.data.title);
@@ -888,12 +908,12 @@ function Contentc() {
     dispatch({
       type: "LINK_DATA_REQUEST",
       data: {},
+      isCalled: false,
     });
-  }, [currentCategory, currentLink, currentTitle,currentLinkTitle]); //linkData가 서버에서 받아오는 데이터
+  }, [currentCategory, currentLink, currentTitle, currentLinkTitle]); //linkData가 서버에서 받아오는 데이터
   //뭘로 progress를 띄우지, 크롤러 success가 아직 안됬음,
   //requst보낼때마다 false로 던지고, 성공하면 true로 반환하게.
 
-  
   //[linkData] <-로 업데이트 추적해서 실시간으로 랜더링할수있는데
   //get요청을 엄청나게 보내네..?
   // },[linkData]);

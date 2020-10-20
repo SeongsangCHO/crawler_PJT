@@ -269,10 +269,13 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
     //   console.log(result);
     //   return res.status(200).json({ message: "성공?" });
     // });
-    const crawlers = [ssgCrawler(searchText, dbResult[0].id), coupangCrawler(searchText, dbResult[0].id)];
+    const crawlers = [
+      ssgCrawler(searchText, dbResult[0].id),
+      coupangCrawler(searchText, dbResult[0].id),
+    ];
     Promise.all(crawlers).then((result) => {
       console.log(result);
-      return res.status(200).json({message : "성공"});
+      return res.status(200).json({ message: "성공" });
     });
   });
   console.log("이걸안기다려주네");

@@ -208,10 +208,10 @@ function* getLinkData(action) {
     console.log("getlinkData");
     const result = yield call(getLinkDataAPI, action.data);
     if (result.status == 200) {
-      yield put({ type: LINK_DATA_SUCCESS, data: result.data });
+      yield put({ type: LINK_DATA_SUCCESS, data: result.data ,isCalled:true});
     }
   } catch (error) {
-    yield put({ type: LINK_DATA_FAILURE, err: error });
+    yield put({ type: LINK_DATA_FAILURE, err: error,isCalled:false });
 
     console.error(error);
   }
