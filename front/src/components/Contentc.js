@@ -652,10 +652,10 @@ const ModalWrapper = styled.div`
 
 function AddLink(props) {
   // Custom hook으로 onChange하는 거 다 묶어야겠다.
+  const dispatch = useDispatch();
   const currentCategory = useSelector(
     (state) => state.currentCategoryReducer.currentCategory
   );
-  const dispatch = useDispatch();
 
   const handleAddLink = (e) => {
     const formData = e.target;
@@ -677,6 +677,7 @@ function AddLink(props) {
     dispatch({
       type: "RUN_CRAWLER_REQUEST",
       currentLinkTitle: formData.title.value,
+      isCrawled:false,
     });
 
     props.onHide();
@@ -747,6 +748,7 @@ function CategoryTab({ obj }) {
 }
 
 function CrawlingCard({ obj }) {
+
   return (
     <CrawlingCardWrapper>
       {obj[Object.keys(obj)]?.map((element, id) => (
@@ -757,10 +759,10 @@ function CrawlingCard({ obj }) {
         >
           {element.ssg.map((ssgElement) => (
             <>
-            <div>{ssgElement.title}</div>
-            <div>{ssgElement.price}</div>
-            <div>{ssgElement.link}</div>
-            <div>{ssgElement.source}</div>
+              <div>{ssgElement.title}</div>
+              <div>{ssgElement.price}</div>
+              <div>{ssgElement.link}</div>
+              <div>{ssgElement.source}</div>
             </>
           ))}
           {element.coupang.map((coupangElement) => (
@@ -827,6 +829,8 @@ function ProductCard({ element }) {
 
 const CardTabWrapper = styled.div``;
 function CardTab({ obj }) {
+
+
   const [modalShow, setModalShow] = useState(false);
   return (
     <CardTabWrapper>
@@ -869,6 +873,10 @@ function LinkCardSection({ obj }) {
 
 function Contentc() {
   const dispatch = useDispatch();
+  const currentLinkTitle = useSelector(
+    (state) => state.runCrawlerReducer.currentLinkTitle
+    );
+    
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
   const currentLink = useSelector((state) => state.addLinkReducer.data.link);
   const currentTitle = useSelector((state) => state.addLinkReducer.data.title);
@@ -881,7 +889,11 @@ function Contentc() {
       type: "LINK_DATA_REQUEST",
       data: {},
     });
-  }, [currentCategory, currentLink, currentTitle]); //linkData가 서버에서 받아오는 데이터
+  }, [currentCategory, currentLink, currentTitle,currentLinkTitle]); //linkData가 서버에서 받아오는 데이터
+  //뭘로 progress를 띄우지, 크롤러 success가 아직 안됬음,
+  //requst보낼때마다 false로 던지고, 성공하면 true로 반환하게.
+
+  
   //[linkData] <-로 업데이트 추적해서 실시간으로 랜더링할수있는데
   //get요청을 엄청나게 보내네..?
   // },[linkData]);

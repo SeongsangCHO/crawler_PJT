@@ -207,7 +207,6 @@ function* getLinkData(action) {
   try {
     console.log("getlinkData");
     const result = yield call(getLinkDataAPI, action.data);
-    console.log(result);
     if (result.status == 200) {
       yield put({ type: LINK_DATA_SUCCESS, data: result.data });
     }
@@ -279,6 +278,7 @@ function runCrawlerAPI(currentLinkTitle){
 function* runCrawler(action) {
   try {
     const result = yield call(runCrawlerAPI, action.currentLinkTitle);
+    console.log(result);
     if (result.status == 200){
       yield put({type: RUN_CRAWLER_SUCCESS, currentLinkTitle: action.currentLinkTitle});
     }

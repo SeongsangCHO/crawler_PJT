@@ -148,7 +148,6 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   console.log("server addlink call");
   const { title, price, link, info, currentCategory } = req.body;
 
-
   let sql = `insert into links (title, price, link, info, categories_id, users_id) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
   and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
   (select id from users where nickname = '${res.locals.userNickname}'))`;
@@ -244,34 +243,39 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   });
 });
 
-app.post("/crawler", cors(accecptURL), verifyToken,(req, res) => {
+app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   let searchText = req.body.currentLinkTitle;
   let status = "쓱 ,쿠팡 크롤러";
-  
+
   //0 : 실패
   //1 : 성공
   //2 : 검색결과 없음
-  
+
   let findLinkId = `select id from links where users_id =
   (select id from users where nickname = '${res.locals.userNickname}'
   and title ='${searchText}'
   )`;
-  db.query(findLinkId, (dbErr, dbResult)=>{
-    console.log("findID : ",dbResult[0].id);
-    
-    ssgCrawler(searchText, dbResult[0].id).then((result)=>{
-      //끝나면 리턴받긴하네
+  db.query(findLinkId, (dbErr, dbResult) => {
+    console.log("findID : ", dbResult[0].id);
+
+    // ssgCrawler(searchText, dbResult[0].id).then((result) => {
+    //   //끝나면 리턴받긴하네
+    //   //크롤러들의 수행이 끝나면 성공값을 리턴해야함.
+
+    //   console.log(result);
+    // });
+    // coupangCrawler(searchText, dbResult[0].id).then((result) => {
+    //   console.log(result);
+    //   return res.status(200).json({ message: "성공?" });
+    // });
+    const crawlers = [ssgCrawler(searchText, dbResult[0].id), coupangCrawler(searchText, dbResult[0].id)];
+    Promise.all(crawlers).then((result) => {
       console.log(result);
-      
+      return res.status(200).json({message : "성공"});
     });
-    coupangCrawler(searchText, dbResult[0].id).then((result) => {
-      console.log(result);
-    });
-  })
-  
-    
-    return res.status(200);
+  });
+  console.log("이걸안기다려주네");
 });
 
 app.get("/coupang", (req, res) => {
