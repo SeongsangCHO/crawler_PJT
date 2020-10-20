@@ -16,6 +16,11 @@ function encodeText(str) {
 //크롤링에 인자전달하는 방법
 //db에서 select한 결과를 갖고 크롤링을 해야할듯
 const ssgCrawler = async (searchTitle, linkId) => {
+  const NO_SEARCH_DATA = 2;
+  const SUCCESS = 1;
+  const FAILURE = 0;
+  
+
   let start = await new Date().getTime();
   //배포시 headless true로 설정해야함.
   //에러핸들링 추가해야함., 블록스코프에 맞춰서
@@ -68,7 +73,7 @@ const ssgCrawler = async (searchTitle, linkId) => {
     console.log("ssg_ li length is zero");
     await page.close(); // 페이지 닫기
     await browser.close(); // 브라우저 닫기
-    return "2"; // 검색결과 없을때
+    return NO_SEARCH_DATA; // 검색결과 없을때
   } else {
     //마지막 페이지 번호를 구함
     let totalProduct = await page.$eval(
@@ -133,9 +138,9 @@ const ssgCrawler = async (searchTitle, linkId) => {
   await page.close(); // 페이지 닫기
   await browser.close(); // 브라우저 닫기
   if (dataInsert(productData, linkId) === "SUCCESS") {
-    return "1";
+    return SUCCESS;
   }
-  return "0";
+  return FAILURE;
 };
 
 function dataInsert(crawlerData, linkId) {

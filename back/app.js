@@ -265,7 +265,9 @@ app.post("/crawler", cors(accecptURL), verifyToken,(req, res) => {
       console.log(result);
       
     });
-    coupangCrawler(searchText, dbResult[0].id);
+    coupangCrawler(searchText, dbResult[0].id).then((result) => {
+      console.log(result);
+    });
   })
   
     
