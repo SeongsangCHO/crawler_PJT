@@ -11,7 +11,7 @@ const coupangCrawler = async (searchText, linkId) => {
   let start = await new Date().getTime();
   // 페이지당 보여줄 프로덕츠 수
   //Common part start//
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );
@@ -67,7 +67,7 @@ const coupangCrawler = async (searchText, linkId) => {
       }
     );
     console.log("total Products : ", totalProducts);
-
+    lastPageNumber = Math.ceil(totalProducts / listSize);
     if (+totalProducts === 0) {
       //검색결과가 없음
       console.log("검색결과가 없습니다.");
@@ -75,15 +75,18 @@ const coupangCrawler = async (searchText, linkId) => {
       await browser.close(); // 브라우저 닫기
       return "2";
     }
-    await page.waitForSelector("div.search-pagination a.btn-last.disabled");
   } catch (error) {
     console.error(error);
   }
-  if (+totalProducts > listSize)
+  if (lastPageNumber >= 10) {
+    console.log(totalProducts);
+
+    await page.waitForSelector("div.search-pagination a.btn-last.disabled");
     lastPageNumber = await page.$eval(
       "div.search-pagination a.btn-last.disabled",
       (element) => element.textContent
     );
+  }
   // lastPage넘버 set end//
 
   console.log("lastPageNumber: ", lastPageNumber);
@@ -122,32 +125,40 @@ const coupangCrawler = async (searchText, linkId) => {
 
       for (let idx = 1; idx <= productAmountPerPage; idx++) {
         let productObj = {};
-
-        //우선순위, 제목, 가격, link 를 찾아서 추가해주는 part, TODO : unit-price도 추가해야할지 고민
-        productObj["priority"] = priority++;
-        productObj["title"] = await page.$eval(
-          `#productList li:nth-child(${idx}) div.name`,
-          (element) => {
-            return element.textContent || "";
-          }
-        );
-        productObj["price"] = await page.$eval(
-          `#productList li:nth-child(${idx}) .price-value`,
-          (element) => {
-            return element.textContent || "";
-          }
-        );
-        productObj["link"] = await page.$eval(
-          `#productList li:nth-child(${idx}) a`,
-          (element) => {
-            return element.href || "";
-          }
-        );
+        try {
+          //우선순위, 제목, 가격, link 를 찾아서 추가해주는 part, TODO : unit-price도 추가해야할지 고민
+          productObj["priority"] = priority++;
+          //광고를 지우고 그 idx로 selector이용하니 없는데 접근한다고해서
+          //exception 발생함.
+          productObj["title"] = await page.$eval(
+            `#productList li:nth-child(${idx}) div.name`,
+            (element) => {
+              return element.textContent || "";
+            }
+          );
+          productObj["price"] = await page.$eval(
+            `#productList li:nth-child(${idx}) .price-value`,
+            (element) => {
+              return element.textContent || "";
+            }
+          );
+          productObj["link"] = await page.$eval(
+            `#productList li:nth-child(${idx}) a`,
+            (element) => {
+              return element.href || "";
+            }
+          );
+        } catch (error) {
+          console.error(error);
+        }
         //데이터가 존재할때만 추가함.
         if (productObj.title && productObj.price && productObj.link)
           productData.push(productObj);
         //존재하지않으면 우선순위 증가하지 않도록 --
-        else priority--;
+        else {
+          priority--;
+          continue;
+        }
       }
     }
   } catch (error) {
