@@ -749,11 +749,39 @@ function CategoryTab({ obj }) {
   );
 }
 
-const CrawlListCard = styled.div``;
-
+const SsgBadge = styled.span`
+  display: inline;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  color: #000;
+  background-color: #f6ae14;
+  padding-right: 0.6em;
+  padding-left: 0.6em;
+  border-radius: 10rem;
+`;
+const CrawlListCard = styled.div`
+  border: 1px solid #000;
+`;
+const BadgeDiv = styled.div``;
+const TitleLink = styled.a`
+  dispaly: block;
+  font-size: 13px;
+`;
+const PriceSpan = styled.span`
+  font-size: 14px;
+`;
 function CrawlingCard({ obj }) {
   return (
     <CrawlingCardWrapper>
+      <span> 상품 알아보기 </span>
       {obj[Object.keys(obj)]?.map((element, id) => (
         <Tab.Pane
           eventKey={element.title}
@@ -762,23 +790,32 @@ function CrawlingCard({ obj }) {
         >
           {element.ssg.map((ssgElement) => (
             <CrawlListCard>
-              <div>
-                <Badge pill variant="warning">
+              <BadgeDiv>
+                <SsgBadge pill variant="warning">
                   SSG
-                </Badge>
+                </SsgBadge>
+              </BadgeDiv>
+              <TitleLink target="_blank" href={ssgElement.link}>
+                {ssgElement.title}
+              </TitleLink>
+              <div>
+                <PriceSpan>{ssgElement.price}</PriceSpan>
               </div>
-              <div>{ssgElement.title}</div>
-              <div>{ssgElement.price}</div>
             </CrawlListCard>
           ))}
           {element.coupang.map((coupangElement) => (
             <CrawlListCard>
-              <div>
+              <BadgeDiv>
                 <Badge pill variant="primary">
                   COUPANG
                 </Badge>
+              </BadgeDiv>
+              <TitleLink target="_blank" href={coupangElement.link}>
+                {coupangElement.title}
+              </TitleLink>
+              <div>
+                <PriceSpan>{coupangElement.price}원</PriceSpan>
               </div>
-              <div>{coupangElement.title}</div>
             </CrawlListCard>
           ))}
           {element.naver.map((naverElement) => (
@@ -793,7 +830,7 @@ function CrawlingCard({ obj }) {
 const PriceDetail = styled.div``;
 
 const InfoDetail = styled.div``;
-const LinkDetail = styled.div``;
+const LinkDetail = styled.a``;
 const CardDetail = styled.div``;
 
 function ProductCard({ element }) {
@@ -829,7 +866,7 @@ function ProductCard({ element }) {
           </Nav.Link>
           <CardDetail>
             <PriceDetail>가격: {element.price}</PriceDetail>
-            <LinkDetail>링크: {element.link}</LinkDetail>
+            <LinkDetail target="_blank" href={element.link}>링크</LinkDetail>
             <InfoDetail>메모: {element.info}</InfoDetail>
           </CardDetail>
         </Nav.Item>

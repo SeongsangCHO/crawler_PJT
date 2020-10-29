@@ -7,7 +7,7 @@ import {
 } from "../actions/registerAction";
 
 const initialState = {
-
+  user_nickname: '',
   isSigningUp: '',
   isSignedUp: '',
 };
@@ -23,7 +23,7 @@ const loginReducer = (state = initialState, action) => {
     }
     case LOGIN_SUCCESS: {
       console.log("로그인 SUCCESS_리듀서");
-      return { ...state,  isLogined: action.isLogined };
+      return { ...state,user_nickname: action.user_nickname,  isLogined: action.isLogined };
     }
     case LOGIN_FAILURE: {
       console.log("로그인 FAILURE_리듀서");

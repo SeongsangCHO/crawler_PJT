@@ -111,7 +111,8 @@ function* loginRequst(action) {
     const result = yield call(loginAPI, action.data);
     console.log(result.status);
     if (result.status == 200) {
-      yield put({ type: LOGIN_SUCCESS, isLogined: true });
+      yield put({ type: LOGIN_SUCCESS,user_nickname:action.data.user_nickname, isLogined: true });
+      alert("로그인 성공");
     }
   } catch (err) {
     alert("아이디 또는 비밀번호를 다시 확인해주세요");

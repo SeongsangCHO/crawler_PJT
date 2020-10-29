@@ -3,15 +3,6 @@ let db = require("../config/db_config");
 let iconv = require("iconv-lite");
 const CRAWL_PAGES = 1;
 
-function encodeText(str) {
-  let euckrObj = iconv.encode(str, "euc-kr"); //스트링을 euc-kr로 인코딩
-  let result = "";
-  for (const code of euckrObj) {
-    result += "%" + code.toString(16); //인코딩된(euc-kr용 숫자로 바뀐) 숫자를 16진법으로 변환한 뒤 %와 결합해서 URL용 EUC-KR버전으로 바꿈
-  }
-  return result;
-}
-
 //품목기반으로 검색한 크롤링을 해야하는데,
 //크롤링에 인자전달하는 방법
 //db에서 select한 결과를 갖고 크롤링을 해야할듯
@@ -19,12 +10,11 @@ const ssgCrawler = async (searchTitle, linkId) => {
   const NO_SEARCH_DATA = 2;
   const SUCCESS = 1;
   const FAILURE = 0;
-  
 
   let start = await new Date().getTime();
   //배포시 headless true로 설정해야함.
   //에러핸들링 추가해야함., 블록스코프에 맞춰서
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );
@@ -43,21 +33,12 @@ const ssgCrawler = async (searchTitle, linkId) => {
       request.abort();
     else request.continue();
   });
-  //링크 title을 요청받아와서 사용
-  let searchText = "에어팟";
-  //searchText로 db에 저장하고
-  //이를 외래키로 지정해서 하위 데이터들을 추가시켜주어야하네..a1
-
-  let encodedSearchText = encodeText(searchText);
 
   //시간제한 없애기
   await page.setDefaultNavigationTimeout(0);
   //동시에 여러 페이지 newPage로 띄워서  promise.all로 각각 페이지를 모듈로 나눠서 크롤링실행해야겠다.
   await page.goto(
     `http://www.ssg.com/search.ssg?target=all&query=${searchTitle}&page=1`,
-    // http://www.ssg.com/search.ssg?target=all&query=%EB%AC%BC&sort=sale 판매량순
-    // http://www.ssg.com/search.ssg?target=all&query=%EB%AC%BC&page=1
-    //page로 넘기면 검색가능
     { waitUntil: "networkidle2" }
   );
 
@@ -91,10 +72,9 @@ const ssgCrawler = async (searchTitle, linkId) => {
         return element.getAttribute("data-filter-value").split("=")[1];
       });
     }
-    
+
     try {
       let priority = 1;
-
       //첫페이지 ~ 3페이지까지 크롤링
       for (
         let pageNumber = 1;
@@ -146,24 +126,33 @@ const ssgCrawler = async (searchTitle, linkId) => {
 function dataInsert(crawlerData, linkId) {
   //필터로 갯수 조절하면 될듯
   //성공하면 return되도록
-  console.log("링크 아이디" , linkId);
-  
-  crawlerData.filter((obj) => {
-    return obj.priority <= 3;
-  }).forEach((filterd) => {
-    db.query(
-      `
+  console.log("링크 아이디", linkId);
+
+  crawlerData
+    .filter((obj) => {
+      return obj.priority <= 3;
+    })
+    .forEach((filterd) => {
+      db.query(
+        `
     INSERT INTO crawl(links_id, title, price,  priority, source, link)
     VALUES(?, ?, ?, ?, ?, ? )`,
-      [linkId, filterd.title, filterd.price,  filterd.priority, 'ssg',filterd.link],
-      function (error, result) {
-        if (error) {
-          console.error(error);
-          return "FAILURE";
+        [
+          linkId,
+          filterd.title,
+          filterd.price,
+          filterd.priority,
+          "ssg",
+          filterd.link,
+        ],
+        function (error, result) {
+          if (error) {
+            console.error(error);
+            return "FAILURE";
+          }
         }
-      }
-    );
-  });
+      );
+    });
   return "SUCCESS";
 
   // crawlerData.forEach((obj) => {

@@ -31,7 +31,7 @@ exports.createToken = async function (req, res, next) {
               },
               "piTeam",
               {
-                expiresIn: "5m",
+                expiresIn: "30m",
               }
             );
             console.log(token);

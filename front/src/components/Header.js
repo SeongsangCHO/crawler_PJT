@@ -7,7 +7,8 @@ function Jumbotron() {
 }
 
 function Header() {
-
+  const isLogined = useSelector((state) => state.loginReducer.isLogined);
+  const userNickName = useSelector((state => state.loginReducer.user_nickname));
   return (
     <div className="header-wrapper">
       <NavLink className="navbar-brand" to={"/"}>
@@ -19,9 +20,9 @@ function Header() {
       <NavLink className="navbar-brand" to={"/register"}>
         register
       </NavLink>
-        <NavLink className="navbar-brand" to={"/login"}>
+        {!userNickName ? (<NavLink className="navbar-brand" to={"/login"}>
           login
-        </NavLink>
+  </NavLink>) : <span>{userNickName}님 안녕하세요</span>}
         <NavLink className="navbar-brand" to={"/logout"}>
           logout
         </NavLink>

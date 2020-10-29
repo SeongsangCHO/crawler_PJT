@@ -27,6 +27,7 @@ app.use(cookieParser());
 const port = process.env.PORT || 80;
 let testAPIRouter = require("./routes/testAPI");
 const { start } = require("repl");
+const naverCrawler = require("./crawler/naverCrawler");
 
 //템플릿엔진 ejs 설정 __dirname +'views'랑 같음
 app.set("views", path.join(__dirname, "views"));
@@ -272,6 +273,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
     const crawlers = [
       ssgCrawler(searchText, dbResult[0].id),
       coupangCrawler(searchText, dbResult[0].id),
+      naverCrawler(searchText, dbResult[0].id),
     ];
     Promise.all(crawlers).then((result) => {
       console.log(result);
@@ -288,7 +290,7 @@ app.get("/coupang", (req, res) => {
 });
 app.get("/multi", (req, res) => {
   let status = "멀티플 크롤러";
-  multi();
+  naverCrawler("물",1);
   res.send(status);
 });
 

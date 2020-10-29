@@ -36,10 +36,14 @@ function Register() {
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const [inputValid, setInputValid] = useState(false);
+  const history = useHistory();
   
   useEffect(() => {
-    console.log(isLogined);
-    
+    if (isLogined == true)
+    {
+      console.log("로그인 성공");
+      history.push("/");
+    }
   },[isLogined])
   const handleNickName = (e) => {
     setNickName(e.target.value);
