@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink , Link} from "react-router-dom";
 import "./css/Header.css";
 
 function Jumbotron() {
@@ -13,15 +13,18 @@ const NavBarWrapper = styled.div``;
 function NavBar() {
   return (
     <NavBarWrapper id="NavBarWrapper">
-      <ul>
+      <ul id="nav-bar-ul">
         <li>
-          <NavLink to={"/"}>Home</NavLink>
-        </li>{" "}
-        <li>
-          <NavLink to={"/mylink"}>mylink</NavLink>
+          <Link to={"/mylink"}><a className="nav-item">테스트</a></Link>
         </li>
         <li>
-          <NavLink to={"/mylink"}>할인정보확인</NavLink>
+          <NavLink to={"/"} className="nav-item">Home</NavLink>
+        </li>{" "}
+        <li>
+          <NavLink  to={"/mylink"}  className="nav-item">mylink</NavLink>
+        </li>
+        <li>
+          <NavLink to={"/mylink"} className="nav-item">할인정보확인</NavLink>
         </li>
       </ul>
     </NavBarWrapper>

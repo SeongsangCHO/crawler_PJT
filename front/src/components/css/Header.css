@@ -1,31 +1,29 @@
-.header-wrapper{}
+.header-wrapper {
+}
 
-#Top-header{
+#Top-header {
   margin: 20px 0px 20px 40px;
-  display:flex;
+  display: flex;
   justify-content: space-between;
 }
 
-#Logo{
-
+#Logo {
 }
-#Top-header-left > a{
+#Top-header-left > a {
   margin: 5px;
 }
-.register{
-
+.register {
 }
-.login{
-  
+.login {
 }
-#NavBarWrapper{
-  background-color: aqua;
+#NavBarWrapper {
   width: 100%;
   height: 50px;
-  box-shadow: inset 0px -4px gray;
 }
 
-#NavBarWrapper ul{
+#NavBarWrapper ul {
+  box-shadow: inset 0px -4px rgba(0, 0, 0, 0.64);
+  background-color: rgba(122, 209, 71, 0.99);
   width: 100%;
   height: 100%;
   padding: 0;
@@ -41,8 +39,27 @@
   margin: 0px 0px 0px 40px;
 }
 
-#jumbotron{
+#jumbotron {
   width: 100%;
   height: 420px;
-  background-color: coral;
+  background-color: rgba(122, 209, 71, 0.64);
 }
+
+#nav-bar-ul{
+  width: 100%;
+  height: 100%;
+  margin:0;
+  padding:0;
+}
+#nav-bar-ul > a.nav-item {
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#nav-bar-ul > a.nav-item:hover {
+  color: red;
+  cursor: pointer;
+  text-decoration: none;
+}
+
