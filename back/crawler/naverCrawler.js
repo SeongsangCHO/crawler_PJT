@@ -30,6 +30,7 @@ const pageDown = async (page) => {
 
 const naverCrawler = async (searchTitle, linkId) => {
   let start = await new Date().getTime();
+  let productData = [];
 
   const browser = await puppeteer.launch({ headless: false });
   await browser.userAgent(
@@ -119,13 +120,12 @@ const naverCrawler = async (searchTitle, linkId) => {
         //광고 제거 후 페이지당 품목 갯수
         let productAmountPerPage = await page.evaluate(() => {
           return document.querySelectorAll(`.list_basis > div > div`).length;
-        })
+        });
         console.log(productAmountPerPage);
 
-        for(let idx = 1; idx <= productAmountPerPage; idx++)
-        {
+        for (let idx = 1; idx <= productAmountPerPage; idx++) {
           let productObj = {};
-          try{
+          try {
             productObj["priority"] = priority++;
             productObj["title"] = await page.$eval(
               `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div a`,
@@ -133,9 +133,30 @@ const naverCrawler = async (searchTitle, linkId) => {
                 return element.innerText || "";
               }
             );
-            console.log(productObj.title);
-            
-          }catch(error){console.error(error);}
+            productObj["price"] = await page.$eval(
+              `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div:nth-child(2) strong`,
+              (element) => {
+                return element.innerText.includes('최저') ?
+                  element.innerText.slice(2, element.innerText.indexOf('원') + 1)
+                : element.innerText || "";
+              }
+            );
+            productObj["link"] = await page.$eval(
+              `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div:nth-child(1) a`,
+              (element) => {
+                return element.href || "";
+              }
+            );
+            if (productObj.title && productObj.price && productObj.link)
+              productData.push(productObj);
+            //존재하지않으면 우선순위 증가하지 않도록 --
+            else {
+              priority--;
+              continue;
+            }
+          } catch (error) {
+            console.error(error);
+          }
         }
       }
     } else {
@@ -148,9 +169,41 @@ const naverCrawler = async (searchTitle, linkId) => {
   } catch (error) {
     console.error(error);
   }
-  let productData = [];
-  // await page.close(); // 페이지 닫기
-  // await browser.close(); // 브라우저 닫기
+  if (dataInsert(productData, linkId) == FAILURE)
+  return FAILURE;
+  await page.close(); // 페이지 닫기
+  await browser.close(); // 브라우저 닫기
+  let end = await new Date().getTime();
+  console.log("네이버 크롤러 time :" + (end - start) / 1000);
+  return SUCCESS;
 };
+
+function dataInsert(crawlerData, linkId){
+  crawlerData.filter((obj) =>{
+    return obj.priority <= 3;
+  })
+  .forEach((filtered)=>{
+    db.query(
+      `
+      INSERT INTO crawl(links_id, title, price, priority, source, link)
+      VALUES(?, ?, ?, ?, ?, ?)
+      `,
+      [
+        linkId,
+        filtered.title,
+        filtered.price,
+        filtered.priority,
+        "naver",
+        filtered.link,
+      ],
+      function (error, result){
+        if (error){
+          console.error(error);
+          return FAILURE;
+        }
+      });
+  });
+  return SUCCESS;
+}
 
 module.exports = naverCrawler;

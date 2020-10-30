@@ -42,7 +42,7 @@ const coupangCrawler = async (searchText, linkId) => {
     await page.setDefaultNavigationTimeout(0);
     //동시에 여러 페이지 newPage로 띄워서  promise.all로 각각 페이지를 모듈로 나눠서 크롤링실행해야겠다.
     await page.goto(
-      `https://www.coupang.com/np/search?q=${searchText}&channel=user&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=${listSize}&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=1&rocketAll=false&searchIndexingToken=1=4&backgroundColor=`,
+      `https://www.coupang.com/np/search?q=${searchText}&channel=user&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=${LIST_SIZE}&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=1&rocketAll=false&searchIndexingToken=1=4&backgroundColor=`,
       //page로 넘기면 검색가능
       { waitUntil: "networkidle2" }
     );
@@ -67,7 +67,7 @@ const coupangCrawler = async (searchText, linkId) => {
       }
     );
     console.log("total Products : ", totalProducts);
-    lastPageNumber = Math.ceil(totalProducts / listSize);
+    lastPageNumber = Math.ceil(totalProducts / LIST_SIZE);
     if (+totalProducts === 0) {
       //검색결과가 없음
       console.log("검색결과가 없습니다.");

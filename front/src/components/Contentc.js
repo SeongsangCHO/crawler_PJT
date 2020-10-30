@@ -819,7 +819,19 @@ function CrawlingCard({ obj }) {
             </CrawlListCard>
           ))}
           {element.naver.map((naverElement) => (
-            <div>{naverElement.title}</div>
+            <CrawlListCard>
+              <BadgeDiv>
+                <Badge pill variant="success">
+                  NAVER
+                </Badge>
+                <TitleLink target="_blank" href={naverElement.link}>
+                  <div>{naverElement.title}</div>
+                </TitleLink>
+                <div>
+                <PriceSpan>{naverElement.price}</PriceSpan>
+              </div>
+              </BadgeDiv>
+            </CrawlListCard>
           ))}
         </Tab.Pane>
       ))}
@@ -866,7 +878,9 @@ function ProductCard({ element }) {
           </Nav.Link>
           <CardDetail>
             <PriceDetail>가격: {element.price}</PriceDetail>
-            <LinkDetail target="_blank" href={element.link}>링크</LinkDetail>
+            <LinkDetail target="_blank" href={element.link}>
+              링크
+            </LinkDetail>
             <InfoDetail>메모: {element.info}</InfoDetail>
           </CardDetail>
         </Nav.Item>
