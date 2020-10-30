@@ -2,6 +2,7 @@ const puppeteer = require("puppeteer");
 let db = require("../config/db_config");
 const CRAWL_PAGES = 1;
 const NO_SEARCH_DATA = 2;
+const LIST_SIZE = 40;
 const SUCCESS = 1;
 const FAILURE = 0;
 
@@ -15,7 +16,7 @@ const pageDown = async (page) => {
   const scrollHeight = "document.body.scrollHeight";
   let previousHeight = await page.evaluate(scrollHeight);
   await page.evaluate(`window.scrollTo(0, ${scrollHeight})`);
-  await delay(1000);
+  await delay(5000);
   try {
     //한번에 맨 밑으로 내려갔을때, 무한 스크롤에 한번 걸리는 경우가 없을때
     //에러가 생기는데, 음
@@ -61,61 +62,95 @@ const naverCrawler = async (searchTitle, linkId) => {
   await pageDown(page);
 
   //검색결과가 없다면 2 리턴
-  try{
-  const isSearchResult = await page.$eval(
-    `#__next > div > div:nth-child(2) > div > div:nth-child(3)`,
-    (element) => {
-      return element.childNodes.length;
-    }
-  );
-  console.log(isSearchResult);
-
-  if (isSearchResult != 1) {
-    //검색결과가 있을 때 수행해야 하는 `부분
-    //전체 상품갯수
-    const totalProducts = await page.evaluate(() => {
-      return document
-        .querySelector(`.seller_filter_area li span`)
-        .innerText.replace(/,/gi, "");
-    });
-    //페이지당 상품 갯수
-    const productsPerPages = await page.evaluate(() => {
-      return document.querySelectorAll(`.list_basis > div > div`).length;
-    });
-    //총 페이지 수
-    const totalPages = Math.floor(+totalProducts / productsPerPages);
-
-
-    let priority = 1;
-    let lastPageNumber = CRAWL_PAGES;
-
-    if (totalPages - CRAWL_PAGES <= 0) lastPageNumber = totalPages;
-    console.log(lastPageNumber);
-    for (let pageNumber = 1; pageNumber <= lastPageNumber; pageNumber++) {
-      if (pageNumber != 1) {
-        await page.goto(
-          `https://search.shopping.naver.com/search/all?frm=NVSHATC&origQuery=%EB%AC%BC&pagingIndex=${pageNumber}&pagingSize=40&productSet=total&query=%EB%AC%BC&sort=rel&timestamp=&viewType=list`,
-          //page로 넘기면 검색가능
-          { waitUntil: "networkidle2" }
-        );
-        await pageDown(page);
+  try {
+    const isSearchResult = await page.$eval(
+      `#__next > div > div:nth-child(2) > div > div:nth-child(3) > div`,
+      (element) => {
+        return element.childNodes.length;
       }
-      console.log(pageNumber);
-    }
-  } else {
-    console.log("검색 결과가 없어요");
+    );
+    console.log(isSearchResult);
 
-    await page.close(); // 페이지 닫기
-    await browser.close(); // 브라우저 닫기
-    return NO_SEARCH_DATA;
+    if (isSearchResult != 1) {
+      //검색결과가 있을 때 수행해야 하는 `부분
+      //전체 상품갯수
+      const totalProducts = await page.evaluate(() => {
+        return document
+          .querySelector(`.seller_filter_area li span`)
+          .innerText.replace(/,/gi, "");
+      });
+      //페이지당 상품 갯수
+      const productsPerPages = await page.evaluate(() => {
+        return document.querySelectorAll(`.list_basis > div > div`).length;
+      });
+      //총 페이지 수
+      const totalPages = Math.floor(+totalProducts / productsPerPages);
+
+      let priority = 1;
+      let lastPageNumber = CRAWL_PAGES;
+
+      //전체페이지가 크롤링할 페이지 수 보다 적을경우 검색페이지를 최대 페이지만큼 하도록 지정
+      if (totalPages - CRAWL_PAGES < 0) lastPageNumber = totalPages;
+
+      console.log(lastPageNumber);
+
+      for (let pageNumber = 1; pageNumber <= lastPageNumber; pageNumber++) {
+        console.log("지맘대로여");
+
+        if (pageNumber != 1) {
+          await page.goto(
+            `https://search.shopping.naver.com/search/all?frm=NVSHATC&origQuery=%EB%AC%BC&pagingIndex=${pageNumber}&pagingSize=40&productSet=total&query=%EB%AC%BC&sort=rel&timestamp=&viewType=list`,
+            //page로 넘기면 검색가능
+            { waitUntil: "networkidle2" }
+          );
+          //페이지 맨 밑 스크롤
+          await pageDown(page);
+        }
+        //광고 지우기
+        for (let idx = 0; idx < LIST_SIZE; idx++) {
+          await page.evaluate(() => {
+            let adCard = document.querySelector("li.ad");
+            if (adCard) {
+              adCard.parentElement.remove();
+              //광고상품 카운트
+            }
+          });
+        }
+        //광고 제거 후 페이지당 품목 갯수
+        let productAmountPerPage = await page.evaluate(() => {
+          return document.querySelectorAll(`.list_basis > div > div`).length;
+        })
+        console.log(productAmountPerPage);
+
+        for(let idx = 1; idx <= productAmountPerPage; idx++)
+        {
+          let productObj = {};
+          try{
+            productObj["priority"] = priority++;
+            productObj["title"] = await page.$eval(
+              `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div a`,
+              (element) => {
+                return element.innerText || "";
+              }
+            );
+            console.log(productObj.title);
+            
+          }catch(error){console.error(error);}
+        }
+      }
+    } else {
+      console.log("검색 결과가 없어요");
+
+      await page.close(); // 페이지 닫기
+      await browser.close(); // 브라우저 닫기
+      return NO_SEARCH_DATA;
+    }
+  } catch (error) {
+    console.error(error);
   }
-}catch(error)
-{
-  console.error(error);
-}
   let productData = [];
-  await page.close(); // 페이지 닫기
-  await browser.close(); // 브라우저 닫기
-}
+  // await page.close(); // 페이지 닫기
+  // await browser.close(); // 브라우저 닫기
+};
 
 module.exports = naverCrawler;

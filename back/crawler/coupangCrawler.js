@@ -5,7 +5,7 @@ const CRAWL_PAGES = 1;
 const NO_SEARCH_DATA = 2;
 const SUCCESS = 1;
 const FAILURE = 0;
-const listSize = 72;
+const LIST_SIZE = 72;
 
 const coupangCrawler = async (searchText, linkId) => {
   let start = await new Date().getTime();
@@ -111,7 +111,7 @@ const coupangCrawler = async (searchText, linkId) => {
           { waitUntil: "networkidle2" }
         );
       }
-      for (let idx = 0; idx < listSize; idx++) {
+      for (let idx = 0; idx < LIST_SIZE; idx++) {
         //페이지당 광고 삭제
         await page.evaluate(() => {
           let badge = document.querySelector(".search-product__ad-badge");
@@ -122,8 +122,6 @@ const coupangCrawler = async (searchText, linkId) => {
       let productAmountPerPage = await page.evaluate(() => {
         return document.querySelectorAll(`#productList li`).length;
       });
-      console.log("광고제거 값:"+productAmountPerPage);
-
       //요소가 존재하는지 확인해야함- > 에러체크
 
       for (let idx = 1; idx <= productAmountPerPage; idx++) {
