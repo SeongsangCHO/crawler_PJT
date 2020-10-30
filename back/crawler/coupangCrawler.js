@@ -95,6 +95,7 @@ const coupangCrawler = async (searchText, linkId) => {
 
   //crawling part start//
   let productData = [];
+
   try {
     let priority = 1;
     //1 ~ 3페이지까지 크롤링
@@ -110,16 +111,18 @@ const coupangCrawler = async (searchText, linkId) => {
           { waitUntil: "networkidle2" }
         );
       }
-      //페이지당 광고 삭제
-      await page.evaluate(() => {
-        let badge = document.querySelector(".search-product__ad-badge");
-        if (badge) badge.remove();
-      });
-
+      for (let idx = 0; idx < listSize; idx++) {
+        //페이지당 광고 삭제
+        await page.evaluate(() => {
+          let badge = document.querySelector(".search-product__ad-badge");
+          if (badge) badge.remove();
+        });
+      }
       //페이지당 상품 갯수 => 페이지당 광고를 삭제하고나서 해당 페이지에 존재하는 상품갯수
       let productAmountPerPage = await page.evaluate(() => {
         return document.querySelectorAll(`#productList li`).length;
       });
+      console.log("광고제거 값:"+productAmountPerPage);
 
       //요소가 존재하는지 확인해야함- > 에러체크
 

@@ -16,16 +16,15 @@ const pageDown = async (page) => {
   let previousHeight = await page.evaluate(scrollHeight);
   await page.evaluate(`window.scrollTo(0, ${scrollHeight})`);
   await delay(1000);
-  try{
-    console.log(scrollHeight, previousHeight);
+  try {
     //한번에 맨 밑으로 내려갔을때, 무한 스크롤에 한번 걸리는 경우가 없을때
     //에러가 생기는데, 음
     await page.waitForFunction(`${scrollHeight} > ${previousHeight}`, {
       timeout: 2000,
     });
-}catch(error){
-  console.error(error);
-}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const naverCrawler = async (searchTitle, linkId) => {
@@ -62,14 +61,15 @@ const naverCrawler = async (searchTitle, linkId) => {
   await pageDown(page);
 
   //검색결과가 없다면 2 리턴
-
+  try{
   const isSearchResult = await page.$eval(
-    `#__next > div > div:nth-child(2) > div > div:nth-child(3) > div`,
+    `#__next > div > div:nth-child(2) > div > div:nth-child(3)`,
     (element) => {
       return element.childNodes.length;
-  });
+    }
+  );
   console.log(isSearchResult);
-  
+
   if (isSearchResult != 1) {
     //검색결과가 있을 때 수행해야 하는 `부분
     //전체 상품갯수
@@ -84,22 +84,38 @@ const naverCrawler = async (searchTitle, linkId) => {
     });
     //총 페이지 수
     const totalPages = Math.floor(+totalProducts / productsPerPages);
-    console.log(productsPerPages);
-    console.log(totalProducts);
-    console.log(totalPages);
+
+
+    let priority = 1;
+    let lastPageNumber = CRAWL_PAGES;
+
+    if (totalPages - CRAWL_PAGES <= 0) lastPageNumber = totalPages;
+    console.log(lastPageNumber);
+    for (let pageNumber = 1; pageNumber <= lastPageNumber; pageNumber++) {
+      if (pageNumber != 1) {
+        await page.goto(
+          `https://search.shopping.naver.com/search/all?frm=NVSHATC&origQuery=%EB%AC%BC&pagingIndex=${pageNumber}&pagingSize=40&productSet=total&query=%EB%AC%BC&sort=rel&timestamp=&viewType=list`,
+          //page로 넘기면 검색가능
+          { waitUntil: "networkidle2" }
+        );
+        await pageDown(page);
+      }
+      console.log(pageNumber);
+    }
   } else {
     console.log("검색 결과가 없어요");
-    
+
     await page.close(); // 페이지 닫기
     await browser.close(); // 브라우저 닫기
     return NO_SEARCH_DATA;
   }
-
+}catch(error)
+{
+  console.error(error);
+}
+  let productData = [];
   await page.close(); // 페이지 닫기
   await browser.close(); // 브라우저 닫기
-
-  //둘의 결과가 너무 다른데,, 검색결과 0이라는 것도 없고
-  //힌트가,,
-};
+}
 
 module.exports = naverCrawler;
