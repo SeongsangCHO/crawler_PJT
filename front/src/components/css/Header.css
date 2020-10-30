@@ -1,0 +1,48 @@
+.header-wrapper{}
+
+#Top-header{
+  margin: 20px 0px 20px 40px;
+  display:flex;
+  justify-content: space-between;
+}
+
+#Logo{
+
+}
+#Top-header-left > a{
+  margin: 5px;
+}
+.register{
+
+}
+.login{
+  
+}
+#NavBarWrapper{
+  background-color: aqua;
+  width: 100%;
+  height: 50px;
+  box-shadow: inset 0px -4px gray;
+}
+
+#NavBarWrapper ul{
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+#NavBarWrapper ul li {
+  height: 100%;
+  line-height: 48px;
+  float: left;
+  vertical-align: middle;
+  margin: 0px 0px 0px 40px;
+}
+
+#jumbotron{
+  width: 100%;
+  height: 420px;
+  background-color: coral;
+}
