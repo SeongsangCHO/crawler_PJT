@@ -290,7 +290,7 @@ app.get("/coupang", (req, res) => {
 });
 app.get("/multi", (req, res) => {
   let status = "멀티플 크롤러";
-  naverCrawler("물",19);
+  naverCrawler("물", 19);
   res.send(status);
 });
 
