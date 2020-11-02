@@ -65,7 +65,7 @@ const naverCrawler = async (searchTitle, linkId) => {
   //검색결과가 없다면 2 리턴
   try {
     //특정 검색어 했을때 못찾는 에러가 발생함.
-    
+
     const isSearchResult = await page.$eval(
       `#__next > div > div:nth-child(2) > div > div:nth-child(3) > div`,
       (element) => {
@@ -186,6 +186,7 @@ function dataInsert(crawlerData, linkId){
   })
   .forEach((filtered)=>{
     db.query(
+      //insert time, update time 넣기, now()
       `
       INSERT INTO crawl(links_id, title, price, priority, source, link)
       VALUES(?, ?, ?, ?, ?, ?)

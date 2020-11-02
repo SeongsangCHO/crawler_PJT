@@ -280,7 +280,6 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
       return res.status(200).json({ message: "성공" });
     });
   });
-  console.log("이걸안기다려주네");
 });
 
 app.get("/coupang", (req, res) => {
