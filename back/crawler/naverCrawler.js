@@ -67,14 +67,14 @@ const naverCrawler = async (searchTitle, linkId) => {
     //특정 검색어 했을때 못찾는 에러가 발생함.
 
     const isSearchResult = await page.$eval(
-      `#__next > div > div:nth-child(2) > div > div:nth-child(3) > div`,
+      `#powerlink-div`,
       (element) => {
         return element.childNodes.length;
       }
     );
     console.log(isSearchResult);
 
-    if (isSearchResult != 1) {
+    if (isSearchResult && isSearchResult != 0) {
       //검색결과가 있을 때 수행해야 하는 `부분
       //전체 상품갯수
       const totalProducts = await page.evaluate(() => {
@@ -172,7 +172,7 @@ const naverCrawler = async (searchTitle, linkId) => {
     console.error(error);
   }
   if (dataInsert(productData, linkId) == FAILURE)
-  return FAILURE;
+    return FAILURE;
   await page.close(); // 페이지 닫기
   await browser.close(); // 브라우저 닫기
   let end = await new Date().getTime();
