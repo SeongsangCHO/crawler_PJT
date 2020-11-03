@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { NavLink , Link} from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import "./css/Header.css";
+import { logoImage } from "./public/logo-image.svg";
 
 function Jumbotron() {
   return <div id="jumbotron">Jumbotron</div>;
@@ -15,16 +16,24 @@ function NavBar() {
     <NavBarWrapper id="NavBarWrapper">
       <ul id="nav-bar-ul">
         <li>
-          <Link to={"/mylink"}><a className="nav-item">테스트</a></Link>
+          <Link to={"/"}>
+            <a className="nav-item">Home</a>
+          </Link>
         </li>
         <li>
-          <NavLink to={"/"} className="nav-item">Home</NavLink>
+          <NavLink to={"/hmoe"} className="nav-item">
+            ㅋ
+          </NavLink>
         </li>{" "}
         <li>
-          <NavLink  to={"/mylink"}  className="nav-item">mylink</NavLink>
+          <NavLink to={"/mylink"} className="nav-item">
+            mylink
+          </NavLink>
         </li>
         <li>
-          <NavLink to={"/mylink"} className="nav-item">할인정보확인</NavLink>
+          <NavLink to={"/bv"} className="nav-item">
+            할인정보확인
+          </NavLink>
         </li>
       </ul>
     </NavBarWrapper>
@@ -37,13 +46,15 @@ function Header() {
   return (
     <div className="header-wrapper">
       <div id="Top-header">
+        <logoImage />
         <div id="Logo">다링</div>
+        <img src={logoImage} alt="React Logo" />
         <div id="Top-header-left">
-          <NavLink className="register" to={"/register"}>
+          <NavLink className="user-register" to={"/register"}>
             register
           </NavLink>
           {!userNickName ? (
-            <NavLink className="login" to={"/login"}>
+            <NavLink className="user-register" to={"/login"}>
               login
             </NavLink>
           ) : (

@@ -7,9 +7,9 @@
 }
 
 #nav-item a {
-  background-color: aqua;
+  background-color: #ffffff;
 }
 
-#nav-item a :active {
-  background-color: aqua;
+#nav-item a.active {
+  background-color: #006E3F;
 }
