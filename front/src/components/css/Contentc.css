@@ -2,11 +2,14 @@
 }
 .direction {
 }
-.nav-link-style{
-  font-size:15px;
-  text-align: center;
-  background-color: aliceblue;
+
+.nav-item-card {
 }
 
-.nav-item-card{
+#nav-item a {
+  background-color: aqua;
+}
+
+#nav-item a :active {
+  background-color: aqua;
 }

@@ -73,7 +73,7 @@ const coupangCrawler = async (searchText, linkId) => {
       console.log("검색결과가 없습니다.");
       await page.close(); // 페이지 닫기
       await browser.close(); // 브라우저 닫기
-      return "2";
+      return NO_SEARCH_DATA;
     }
   } catch (error) {
     console.error(error);

@@ -867,11 +867,11 @@ function ProductCard({ element }) {
   return (
     <ProductCardWrapper>
       {element.title != null ? (
-        <Nav.Item>
+        <Nav.Item id="nav-item">
           <Nav.Link
+            id="nav-link"
             onClick={handleCardClick}
             justify="true"
-            className="nav-link-style"
             eventKey={element.title}
           >
             {element.title}
