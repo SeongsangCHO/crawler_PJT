@@ -7,25 +7,37 @@
   justify-content: space-between;
 }
 
+#left-header-section{
+  width: 300px;
+}
+
+#LogoImage{
+  width: 50px;
+  margin-right: 16px;
+}
+
 #Logo {
+  display: inline-block;
   font-family: HangeulNuri-Bold;
   font-size: 30px;
   font-weight: 500;
 }
-
-#Top-header-left  a.user-register {
+#Top-header-right {
+  margin-top: 12px;
+}
+#Top-header-right  a.user-register {
   text-decoration: none;
   margin: 13px;
   color: black;
   opacity: 0.3;
 }
 
-#Top-header-left  a.user-register.active {
+#Top-header-right  a.user-register.active {
   color: black;
   opacity: 1;
 }
 
-#Top-header-left  a.user-register:hover {
+#Top-header-right  a.user-register:hover {
   opacity: 1;
   color: black;
 }

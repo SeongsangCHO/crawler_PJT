@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 import "./css/Header.css";
-import { logoImage } from "./public/logo-image.svg";
+import { ReactComponent as logoImage } from "./public/logoimage.svg";
+import LogoImage from "./public/logoimage.svg";
 
 function Jumbotron() {
   return <div id="jumbotron">Jumbotron</div>;
@@ -46,10 +47,11 @@ function Header() {
   return (
     <div className="header-wrapper">
       <div id="Top-header">
-        <logoImage />
-        <div id="Logo">다링</div>
-        <img src={logoImage} alt="React Logo" />
-        <div id="Top-header-left">
+        <div id="left-header-section">
+          <img id="LogoImage" src={LogoImage} alt="React Logo" />
+          <div id="Logo">다링</div>
+        </div>
+        <div id="Top-header-right">
           <NavLink className="user-register" to={"/register"}>
             register
           </NavLink>
