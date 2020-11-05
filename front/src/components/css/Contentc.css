@@ -13,3 +13,34 @@
 #nav-item a.active {
   background-color: #006E3F;
 }
+
+.text-wrapper{
+  height: 250px;
+  text-align: center;
+  background-color: #FFEEEA;
+}
+
+.title{
+  font-size: 25px;
+  padding-top: 40px;
+}
+.subtitle{
+
+}
+.add-button{
+  width:100%;
+  background-color: #DF7861;
+  color: #ffffff;
+  border-radius: 9px;
+  margin-bottom: 10px;
+}
+
+#category-wrapper div{
+  display: flex;
+  justify-items: center;
+}
+
+#category-wrapper .nav-item-card{
+}
+#category-wrapper div div{
+}

@@ -541,7 +541,6 @@ const dummy =
     ],
   };
 const CategoryWrapper = styled.div`
-  border: 1px solid black;
   padding: 5px;
   flex: 1;
   @media (max-width: 768px) {
@@ -725,8 +724,11 @@ function CategoryTab({ obj }) {
     });
   };
   return (
-    <CategoryWrapper>
-      <Nav variant="pills" className="flex-sm-column">
+    <CategoryWrapper id="category-wrapper">
+      <button className="add-button" onClick={() => setModalShow(true)}>
+        카테고리 추가
+      </button>
+      <Nav variant="pills" className="flex-sm-column nav-wrapper">
         {obj?.category?.map((cate, idx) => (
           <Nav.Item className="nav-item-card">
             {Object.keys(cate) != "null" ? (
@@ -743,7 +745,6 @@ function CategoryTab({ obj }) {
           </Nav.Item>
         ))}
       </Nav>
-      <button onClick={() => setModalShow(true)}>추가하기</button>
       <AddCategory show={modalShow} onHide={() => setModalShow(false)} />
     </CategoryWrapper>
   );
@@ -828,8 +829,8 @@ function CrawlingCard({ obj }) {
                   <div>{naverElement.title}</div>
                 </TitleLink>
                 <div>
-                <PriceSpan>{naverElement.price}</PriceSpan>
-              </div>
+                  <PriceSpan>{naverElement.price}</PriceSpan>
+                </div>
               </BadgeDiv>
             </CrawlListCard>
           ))}
@@ -885,7 +886,7 @@ function ProductCard({ element }) {
           </CardDetail>
         </Nav.Item>
       ) : (
-        <div>링크추가하세요</div>
+        <div>링크추가</div>
       )}
     </ProductCardWrapper>
   );
@@ -905,11 +906,11 @@ function CardTab({ obj }) {
         <Nav variant="pills" className="flex-column">
           <Tab.Content style={{ display: "flex" }}>
             <CardTabLeftSection>
+              <button className="add-button" onClick={() => setModalShow(true)}>링크추가하기</button>
               <CardWrapper>
                 {obj[Object.keys(obj)]?.map((element) => (
                   <ProductCard element={element} />
                 ))}
-                <button onClick={() => setModalShow(true)}>링크추가하기</button>
                 <AddLink show={modalShow} onHide={() => setModalShow(false)} />
               </CardWrapper>
             </CardTabLeftSection>
@@ -981,16 +982,17 @@ function Contentc() {
   //여기서 데이터를 가져와서 props로 전달?
   return (
     <div className="content-wrapper">
+      <div className="text-wrapper">
+        <div className="title">나만의 링크를 저장하세요</div>
+        <br />
+        <div className="subtitle">ㅇㅅㅇ;</div>
+      </div>
       <Tab.Container id="left-tabs" defaultActiveKey="All">
         <ContentWrapper>
           <CategoryTab obj={linkData} />
           <LinkCardSection obj={linkData} />
         </ContentWrapper>
       </Tab.Container>
-
-      <NavLink className="navbar-brand" to={"/login"}>
-        login
-      </NavLink>
     </div>
   );
 }

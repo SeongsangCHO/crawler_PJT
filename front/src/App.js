@@ -9,7 +9,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-
+import Home from "./components/Home";
 function App() {
 
   return (
@@ -17,6 +17,7 @@ function App() {
       <Switch>
         <div className="App">
           <Header />
+          <Route exact path={"/"} component={Home} />
           <Route exact path={"/mylink"} component={Contentc} />
           <Route exact path={"/register"} component={Register} />
           <Route exact path={"/login"} component={Login} />

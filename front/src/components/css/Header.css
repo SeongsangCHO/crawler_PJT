@@ -49,7 +49,7 @@
 
 #NavBarWrapper ul {
   box-shadow: inset 0px -4px rgba(0, 0, 0, 0.64);
-  background-color: rgba(122, 209, 71, 0.99);
+  background-color: #DA6950;
   width: 100%;
   height: 100%;
   padding: 0;
@@ -96,3 +96,19 @@
   text-decoration: none;
 }
 
+#jumbotron-section{
+  display:flex;
+  justify-content: center;
+  background-color: #FFEEEA;
+}
+#jumbotron-section span{
+  margin-top: 163px;
+  flex:1;
+  font-size: 30px;
+  font-weight: 600;
+}
+#jumbotron-section svg{
+  flex:2;
+  margin-top: 35px;
+  margin-right: 24px;
+}
