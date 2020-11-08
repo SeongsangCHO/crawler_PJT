@@ -838,6 +838,7 @@ function CrawlingCard({ obj }) {
                   NAVER
                 </Badge>
                 <TitleLink target="_blank" href={naverElement.link}>
+                  <ProductImage src={naverElement.imgsrc} />
                   <div>{naverElement.title}</div>
                 </TitleLink>
                 <div>

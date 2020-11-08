@@ -14,30 +14,19 @@ function delay(time) {
 
 const pageDown = async (page) => {
   try {
-    let previousHeight = 0;
-    let currentScroll = 0;
-    console.log("전체 높이 " + previousHeight);
-
-    // setInterval(async function () {
-    //   await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
-    //   currentScroll += 300;
-    //   if (currentScroll >= scrollHeight)
-    //     clearInterval(this);
-    // }, 100);
-
     async function imageLoading(currentScroll, previousHeight) {
       const interval = setInterval(async function () {
         previousHeight = await page.evaluate(`document.body.scrollHeight`);
-        currentScroll += 250;
+        currentScroll += 50;
+
         await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
 
         if (currentScroll >= previousHeight) {
-          await clearInterval(interval);
+          clearInterval(interval);
         }
-      }, 100);
+      }, 50);
     }
-
-    await imageLoading(currentScroll, previousHeight);
+    await imageLoading(0, 0);
   } catch (error) {
     console.error(error);
   }
@@ -57,10 +46,13 @@ const naverCrawler = async (searchTitle, linkId) => {
   let start = await new Date().getTime();
   let productData = [];
 
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({
+    headless: false,
+  });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );
+
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({
     "accept-charset": "euc-kr", //한글 깨지는 문제를 해결해보려고 charset을 바꿔봤는데 해결안됨
@@ -76,17 +68,21 @@ const naverCrawler = async (searchTitle, linkId) => {
     else request.continue();
   });
 
-  //시간제한 없애기
-  await page.setDefaultNavigationTimeout(0);
   await page.goto(
     `https://search.shopping.naver.com/search/all?frm=NVSHATC&origQuery=top&pagingIndex=1&pagingSize=40&productSet=total&query=${searchTitle}&sort=rel&timestamp=&viewType=list
     `,
     { waitUntil: "networkidle2" }
   );
-  //맨 밑으로 스크롤링
-  await pageDown(page);
-  console.log("after pageDown");
 
+  //맨 밑으로 스크롤링
+  try {
+    //런타임 도중 page를 꺼버려서 에러가 발생하는 건가
+    //pageDown이 끝나지도 않았는데 밑으로 넘어가네..?
+    await pageDown(page);
+    console.log("after pageDown");
+  } catch (error) {
+    console.error(error);
+  }
   //검색결과가 없다면 2 리턴
   try {
     //특정 검색어 했을때 못찾는 에러가 발생함.
@@ -94,7 +90,6 @@ const naverCrawler = async (searchTitle, linkId) => {
     const isSearchResult = await page.$eval(`#powerlink-div`, (element) => {
       return element.childNodes.length;
     });
-    console.log(isSearchResult);
 
     if (isSearchResult && isSearchResult != 0) {
       //검색결과가 있을 때 수행해야 하는 `부분
@@ -129,12 +124,9 @@ const naverCrawler = async (searchTitle, linkId) => {
             { waitUntil: "networkidle2" }
           );
           //페이지 맨 밑 스크롤
-          await pageDown(page);
         }
         //광고 지우기
         for (let idx = 0; idx < LIST_SIZE; idx++) {
-          console.log(idx);
-
           await page.waitForSelector(
             `.list_basis > div > div:nth-child(${idx + 1}) img`
           );
@@ -150,10 +142,10 @@ const naverCrawler = async (searchTitle, linkId) => {
         let productAmountPerPage = await page.evaluate(() => {
           return document.querySelectorAll(`.list_basis > div > div`).length;
         });
-        console.log(productAmountPerPage);
 
         for (let idx = 1; idx <= productAmountPerPage; idx++) {
           let productObj = {};
+
           try {
             productObj["priority"] = priority++;
             productObj["title"] = await page.$eval(
@@ -199,7 +191,6 @@ const naverCrawler = async (searchTitle, linkId) => {
       }
     } else {
       console.log("검색 결과가 없어요");
-
       await page.close(); // 페이지 닫기
       await browser.close(); // 브라우저 닫기
       return NO_SEARCH_DATA;
@@ -207,9 +198,22 @@ const naverCrawler = async (searchTitle, linkId) => {
   } catch (error) {
     console.error(error);
   }
-  if (dataInsert(productData, linkId) == FAILURE) return FAILURE;
-  await page.close(); // 페이지 닫기
-  await browser.close(); // 브라우저 닫기
+
+  if (dataInsert(productData, linkId) == FAILURE) {
+    await page.close(); // 페이지 닫기
+    await browser.close(); // 브라우저 닫기
+    return FAILURE;
+  }
+  console.log("브라우저닫는게 에러지?");
+
+  try {
+    //페이지 탐색 완료시
+    await page.close(); // 페이지 닫기
+    await browser.close(); // 브라우저 닫기
+    console.log("여기지?");
+  } catch (error) {
+    console.error(error);
+  }
   let end = await new Date().getTime();
   console.log("네이버 크롤러 time :" + (end - start) / 1000);
   return SUCCESS;
