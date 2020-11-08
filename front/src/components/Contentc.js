@@ -791,7 +791,7 @@ const ProductImage = styled.img`
 
 function CrawlingCard({ obj }) {
   return (
-    <CrawlingCardWrapper>
+    <CrawlingCardWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, id) => (
         <Tab.Pane
           eventKey={element.title}
@@ -936,7 +936,7 @@ function CardTab({ obj }) {
               </CardWrapper>
             </CardTabLeftSection>
 
-            <CardTabRightSection>
+            <CardTabRightSection id="card-tab-right-section">
               {linkDataIsCalled == true ? (
                 <CrawlingCard obj={obj} />
               ) : (

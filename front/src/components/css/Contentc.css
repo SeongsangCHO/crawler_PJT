@@ -1,4 +1,12 @@
-.crawling-wrapper {
+#crawl-card-wrapper > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+  #crawl-card-wrapper > div {
+    grid-template-columns: 1fr;
+  }
 }
 .direction {
 }
@@ -10,67 +18,63 @@
   text-align: center;
   font-size: 14px;
   color: #df7861;
-  background-color: #FFEEEA;
+  background-color: #ffeeea;
 }
 
 #nav-item a.active {
-  background-color: #DF7861;
-  color: #FFFFFF;
-
+  background-color: #df7861;
+  color: #ffffff;
 }
 
-.text-wrapper{
+.text-wrapper {
   height: 250px;
   text-align: center;
-  background-color: #FFEEEA;
+  background-color: #ffeeea;
 }
 
-.title{
+.title {
   font-size: 25px;
   padding-top: 40px;
 }
-.subtitle{
-
+.subtitle {
 }
-.add-button{
-  width:100%;
-  background-color: #FFEEEA;
-  color: #DF7861;
+.add-button {
+  width: 100%;
+  background-color: #ffeeea;
+  color: #df7861;
   border-radius: 9px;
   margin-bottom: 10px;
 }
 
-.add-button :hover{
-  background-color: #DF7861;
+.add-button :hover {
+  background-color: #df7861;
   color: #ffffff;
-
 }
 
-#category-wrapper div{
+#category-wrapper div {
   display: flex;
   justify-items: center;
 }
 
-#category-wrapper .nav-item-card{
+#category-wrapper .nav-item-card {
 }
-#category-wrapper div div{
+#category-wrapper div div {
 }
 
-#category-wrapper a{
+#category-wrapper a {
   margin: 3px;
   width: 100%;
   text-align: center;
   font-size: 12px;
-  background-color: #FFEEEA;
-  color: #DF7861;
-
+  background-color: #ffeeea;
+  color: #df7861;
 }
 
-#category-wrapper a.active{
+#category-wrapper a.active {
   margin: 3px;
   width: 100%;
   text-align: center;
   font-size: 12px;
-  background-color: #DF7861;
+  background-color: #df7861;
   color: #ffffff;
 }
