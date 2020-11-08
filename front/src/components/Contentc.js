@@ -779,10 +779,16 @@ const BadgeDiv = styled.div``;
 const TitleLink = styled.a`
   dispaly: block;
   font-size: 13px;
+  text-align: center;
 `;
 const PriceSpan = styled.span`
   font-size: 14px;
 `;
+const ProductImage = styled.img`
+  width: 100%;
+  height: 50%;
+`;
+
 function CrawlingCard({ obj }) {
   return (
     <CrawlingCardWrapper>
@@ -815,6 +821,7 @@ function CrawlingCard({ obj }) {
                 </Badge>
               </BadgeDiv>
               <TitleLink target="_blank" href={coupangElement.link}>
+                <ProductImage src={coupangElement.imgsrc} />
                 {coupangElement.title}
               </TitleLink>
               <div>
@@ -848,7 +855,7 @@ const PriceDetail = styled.div`
 `;
 
 const InfoDetail = styled.div`
-font-size:10px;
+  font-size: 10px;
 `;
 const LinkDetail = styled.a``;
 const CardDetail = styled.div`

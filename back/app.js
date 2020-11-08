@@ -173,7 +173,8 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   crawl.title as crawlTitle,
   crawl.price as crawlPrice,
   crawl.source as crawlSource,
-  crawl.link as crawlLink
+  crawl.link as crawlLink,
+  crawl.imgsrc as crawlImgSrc
  from users
  LEFT join categories on users.id = categories.users_id
  LEFT  join links on categories.id = links.categories_id
@@ -207,9 +208,11 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
           //   categoryMap.get(element.category).length - 1
           // ]);
           let timeSource = new Date(element.registerTime);
-          let KST = timeSource.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"}).split(' ')[0];          
+          let KST = timeSource
+            .toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })
+            .split(" ")[0];
           console.log(KST);
-          
+
           categoryMap.get(element.category).push({
             title: element.linkTitle,
             link: element.link,
@@ -226,6 +229,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
             title: element.crawlTitle,
             price: element.crawlPrice,
             link: element.crawlLink,
+            imgsrc: element.crawlImgSrc,
           };
           // console.log(tmp);
 
