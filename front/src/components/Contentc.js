@@ -786,7 +786,6 @@ const PriceSpan = styled.span`
 function CrawlingCard({ obj }) {
   return (
     <CrawlingCardWrapper>
-      <span> 상품 알아보기 </span>
       {obj[Object.keys(obj)]?.map((element, id) => (
         <Tab.Pane
           eventKey={element.title}
@@ -844,12 +843,16 @@ function CrawlingCard({ obj }) {
   );
 }
 
-const PriceDetail = styled.div``;
+const PriceDetail = styled.div`
+  font-size: 14px;
+`;
 
-const InfoDetail = styled.div``;
+const InfoDetail = styled.div`
+font-size:10px;
+`;
 const LinkDetail = styled.a``;
 const CardDetail = styled.div`
-
+  margin: 3px 0px 0px 3px;
 `;
 function ProductCard({ element }) {
   const dispatch = useDispatch();
@@ -863,7 +866,6 @@ function ProductCard({ element }) {
     // 크롤러 무한요청을 막기위해 크롤링데이터가 있을때
     // 시간데이터도 넣어서 현재시간으로부터 하루정도? 지났으면 크롤링을 수행
     // 없으면 이미 데이터가 있는 것이므로 그대로 두면됨
-
     // dispatch({
     //   type: "RUN_CRAWLER_REQUEST",
     //   currentLinkTitle : e.currentTarget.innerHTML,
@@ -883,11 +885,11 @@ function ProductCard({ element }) {
           </Nav.Link>
           <CardDetail>
             <PriceDetail>{element.price}원에 구매</PriceDetail>
+            <InfoDetail>{element.info}</InfoDetail>
+            <RegisterDetail>{element.date}</RegisterDetail>
             <LinkDetail target="_blank" href={element.link}>
               링크
             </LinkDetail>
-            <InfoDetail>{element.info}</InfoDetail>
-            <div>{element.date}</div>
           </CardDetail>
         </Nav.Item>
       ) : (
@@ -896,7 +898,9 @@ function ProductCard({ element }) {
     </ProductCardWrapper>
   );
 }
-
+const RegisterDetail = styled.div`
+  font-size: 10px;
+`;
 const CardTabWrapper = styled.div``;
 function CardTab({ obj }) {
   const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled);
