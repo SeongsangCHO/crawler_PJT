@@ -110,7 +110,6 @@ const ssgCrawler = async (searchTitle, linkId) => {
           ] = await page.$eval(`#idProductImg li:nth-child(${idx}) img`,
            (element) => element.getAttribute('src')
           );
-          console.log(productObj.imgsrc);
           
           productData.push(productObj);
         }

@@ -13,19 +13,44 @@ function delay(time) {
 }
 
 const pageDown = async (page) => {
-  const scrollHeight = "document.body.scrollHeight";
-  let previousHeight = await page.evaluate(scrollHeight);
-  await page.evaluate(`window.scrollTo(0, ${scrollHeight})`);
-  await delay(5000);
   try {
-    //한번에 맨 밑으로 내려갔을때, 무한 스크롤에 한번 걸리는 경우가 없을때
-    //에러가 생기는데, 음
-    await page.waitForFunction(`${scrollHeight} > ${previousHeight}`, {
-      timeout: 2000,
-    });
+    let previousHeight = 0;
+    let currentScroll = 0;
+    console.log("전체 높이 " + previousHeight);
+
+    // setInterval(async function () {
+    //   await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
+    //   currentScroll += 300;
+    //   if (currentScroll >= scrollHeight)
+    //     clearInterval(this);
+    // }, 100);
+
+    async function imageLoading(currentScroll, previousHeight) {
+      const interval = setInterval(async function () {
+        previousHeight = await page.evaluate(`document.body.scrollHeight`);
+        currentScroll += 250;
+        await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
+
+        if (currentScroll >= previousHeight) {
+          await clearInterval(interval);
+        }
+      }, 100);
+    }
+
+    await imageLoading(currentScroll, previousHeight);
   } catch (error) {
     console.error(error);
   }
+  // await delay(5000);
+  // try {
+  //   //한번에 맨 밑으로 내려갔을때, 무한 스크롤에 한번 걸리는 경우가 없을때
+  //   //에러가 생기는데, 음
+  //   await page.waitForFunction(`${scrollHeight} > ${previousHeight}`, {
+  //     timeout: 2000,
+  //   });
+  // } catch (error) {
+  //   console.error(error);
+  // }
 };
 
 const naverCrawler = async (searchTitle, linkId) => {
@@ -60,6 +85,7 @@ const naverCrawler = async (searchTitle, linkId) => {
   );
   //맨 밑으로 스크롤링
   await pageDown(page);
+  console.log("after pageDown");
 
   //검색결과가 없다면 2 리턴
   try {
@@ -108,7 +134,7 @@ const naverCrawler = async (searchTitle, linkId) => {
         //광고 지우기
         for (let idx = 0; idx < LIST_SIZE; idx++) {
           console.log(idx);
-          
+
           await page.waitForSelector(
             `.list_basis > div > div:nth-child(${idx + 1}) img`
           );
@@ -198,8 +224,8 @@ function dataInsert(crawlerData, linkId) {
       db.query(
         //insert time, update time 넣기, now()
         `
-      INSERT INTO crawl(links_id, title, price, priority, source, link)
-      VALUES(?, ?, ?, ?, ?, ?)
+      INSERT INTO crawl(links_id, title, price, priority, source, link,imgsrc)
+      VALUES(?, ?, ?, ?, ?, ?,?)
       `,
         [
           linkId,
