@@ -65,12 +65,9 @@ const naverCrawler = async (searchTitle, linkId) => {
   try {
     //특정 검색어 했을때 못찾는 에러가 발생함.
 
-    const isSearchResult = await page.$eval(
-      `#powerlink-div`,
-      (element) => {
-        return element.childNodes.length;
-      }
-    );
+    const isSearchResult = await page.$eval(`#powerlink-div`, (element) => {
+      return element.childNodes.length;
+    });
     console.log(isSearchResult);
 
     if (isSearchResult && isSearchResult != 0) {
@@ -110,6 +107,11 @@ const naverCrawler = async (searchTitle, linkId) => {
         }
         //광고 지우기
         for (let idx = 0; idx < LIST_SIZE; idx++) {
+          console.log(idx);
+          
+          await page.waitForSelector(
+            `.list_basis > div > div:nth-child(${idx + 1}) img`
+          );
           await page.evaluate(() => {
             let adCard = document.querySelector("li.ad");
             if (adCard) {
@@ -137,9 +139,12 @@ const naverCrawler = async (searchTitle, linkId) => {
             productObj["price"] = await page.$eval(
               `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div:nth-child(2) strong`,
               (element) => {
-                return element.innerText.includes('최저') ?
-                  element.innerText.slice(2, element.innerText.indexOf('원') + 1)
-                : element.innerText || "";
+                return element.innerText.includes("최저")
+                  ? element.innerText.slice(
+                      2,
+                      element.innerText.indexOf("원") + 1
+                    )
+                  : element.innerText || "";
               }
             );
             productObj["link"] = await page.$eval(
@@ -148,10 +153,12 @@ const naverCrawler = async (searchTitle, linkId) => {
                 return element.href || "";
               }
             );
-            productObj["imgsrc"] = await page.$eval(
+            productObj[
+              "imgsrc"
+            ] = await page.$eval(
               `.list_basis > div > div:nth-child(${idx}) img`,
-              (element) => element.getAttribute('src')
-            )
+              (element) => element.getAttribute("src")
+            );
             if (productObj.title && productObj.price && productObj.link)
               productData.push(productObj);
             //존재하지않으면 우선순위 증가하지 않도록 --
@@ -174,8 +181,7 @@ const naverCrawler = async (searchTitle, linkId) => {
   } catch (error) {
     console.error(error);
   }
-  if (dataInsert(productData, linkId) == FAILURE)
-    return FAILURE;
+  if (dataInsert(productData, linkId) == FAILURE) return FAILURE;
   await page.close(); // 페이지 닫기
   await browser.close(); // 브라우저 닫기
   let end = await new Date().getTime();
@@ -183,33 +189,35 @@ const naverCrawler = async (searchTitle, linkId) => {
   return SUCCESS;
 };
 
-function dataInsert(crawlerData, linkId){
-  crawlerData.filter((obj) =>{
-    return obj.priority <= 3;
-  })
-  .forEach((filtered)=>{
-    db.query(
-      //insert time, update time 넣기, now()
-      `
+function dataInsert(crawlerData, linkId) {
+  crawlerData
+    .filter((obj) => {
+      return obj.priority <= 3;
+    })
+    .forEach((filtered) => {
+      db.query(
+        //insert time, update time 넣기, now()
+        `
       INSERT INTO crawl(links_id, title, price, priority, source, link)
       VALUES(?, ?, ?, ?, ?, ?)
       `,
-      [
-        linkId,
-        filtered.title,
-        filtered.price,
-        filtered.priority,
-        "naver",
-        filtered.link,
-        filtered.imgsrc,
-      ],
-      function (error, result){
-        if (error){
-          console.error(error);
-          return FAILURE;
+        [
+          linkId,
+          filtered.title,
+          filtered.price,
+          filtered.priority,
+          "naver",
+          filtered.link,
+          filtered.imgsrc,
+        ],
+        function (error, result) {
+          if (error) {
+            console.error(error);
+            return FAILURE;
+          }
         }
-      });
-  });
+      );
+    });
   return SUCCESS;
 }
 
