@@ -564,7 +564,7 @@ const CardWrapper = styled.div`
 `;
 const CardTabLeftSection = styled.div`
   border: 1px solid black;
-
+  padding: 5px;
   flex: 2;
 `;
 
@@ -580,6 +580,7 @@ const CrawlingCardWrapper = styled.div`
   height: 100%;
 `;
 const ContentWrapper = styled.div`
+  margin-top: 10px;
   display: flex;
   @media (max-width: 768px) {
     flex-direction: column;
@@ -591,6 +592,8 @@ const LinkCardSectionWrapper = styled.div`
 const ProductCardWrapper = styled.div`
   min-height: 150px;
   height: 100%;
+  border-radius: 4px;
+  border: 1px solid gray;
 `;
 
 function AddCategory(props) {
@@ -728,6 +731,7 @@ function CategoryTab({ obj }) {
       <button className="add-button" onClick={() => setModalShow(true)}>
         카테고리 추가
       </button>
+      <hr />
       <Nav variant="pills" className="flex-sm-column nav-wrapper">
         {obj?.category?.map((cate, idx) => (
           <Nav.Item className="nav-item-card">
@@ -844,8 +848,9 @@ const PriceDetail = styled.div``;
 
 const InfoDetail = styled.div``;
 const LinkDetail = styled.a``;
-const CardDetail = styled.div``;
+const CardDetail = styled.div`
 
+`;
 function ProductCard({ element }) {
   const dispatch = useDispatch();
   const handleCardClick = (e) => {
@@ -858,7 +863,6 @@ function ProductCard({ element }) {
     // 크롤러 무한요청을 막기위해 크롤링데이터가 있을때
     // 시간데이터도 넣어서 현재시간으로부터 하루정도? 지났으면 크롤링을 수행
     // 없으면 이미 데이터가 있는 것이므로 그대로 두면됨
-    console.log(e.currentTarget.innerHTML);
 
     // dispatch({
     //   type: "RUN_CRAWLER_REQUEST",
@@ -878,11 +882,11 @@ function ProductCard({ element }) {
             {element.title}
           </Nav.Link>
           <CardDetail>
-            <PriceDetail>가격: {element.price}</PriceDetail>
+            <PriceDetail>{element.price}원에 구매</PriceDetail>
             <LinkDetail target="_blank" href={element.link}>
               링크
             </LinkDetail>
-            <InfoDetail>메모: {element.info}</InfoDetail>
+            <InfoDetail>{element.info}</InfoDetail>
             <div>{element.date}</div>
           </CardDetail>
         </Nav.Item>
@@ -910,6 +914,7 @@ function CardTab({ obj }) {
               <button className="add-button" onClick={() => setModalShow(true)}>
                 링크추가하기
               </button>
+              <hr />
               <CardWrapper>
                 {obj[Object.keys(obj)]?.map((element) => (
                   <ProductCard element={element} />

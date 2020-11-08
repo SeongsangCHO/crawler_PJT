@@ -7,11 +7,16 @@
 }
 
 #nav-item a {
-  background-color: #ffffff;
+  text-align: center;
+  font-size: 5px;
+  color: #df7861;
+  background-color: #FFEEEA;
 }
 
 #nav-item a.active {
-  background-color: #006E3F;
+  background-color: #DF7861;
+  color: #FFFFFF;
+
 }
 
 .text-wrapper{
@@ -29,10 +34,16 @@
 }
 .add-button{
   width:100%;
-  background-color: #DF7861;
-  color: #ffffff;
+  background-color: #FFEEEA;
+  color: #DF7861;
   border-radius: 9px;
   margin-bottom: 10px;
+}
+
+.add-button :hover{
+  background-color: #DF7861;
+  color: #ffffff;
+
 }
 
 #category-wrapper div{
@@ -43,4 +54,23 @@
 #category-wrapper .nav-item-card{
 }
 #category-wrapper div div{
+}
+
+#category-wrapper a{
+  margin: 3px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  background-color: #FFEEEA;
+  color: #DF7861;
+
+}
+
+#category-wrapper a.active{
+  margin: 3px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  background-color: #DF7861;
+  color: #ffffff;
 }
