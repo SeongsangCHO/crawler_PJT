@@ -149,6 +149,9 @@ const coupangCrawler = async (searchText, linkId) => {
               return element.href || "";
             }
           );
+          productObj["imgsrc"] = await page.$eval(`#productList li:nth-child(${idx}) img`, (element) => {
+            return element.getAttribute("src");
+          });
         } catch (error) {
           console.error(error);
         }
@@ -186,8 +189,8 @@ function dataInsert(crawlerData, linkId) {
     .forEach((filterd) => {
       db.query(
         `
-      INSERT INTO crawl(links_id, title, price, priority, source, link)
-      VALUES(?, ?, ?, ?, ?, ?)
+      INSERT INTO crawl(links_id, title, price, priority, source, link, imgsrc)
+      VALUES(?, ?, ?, ?, ?, ?, ?)
     `,
         [
           linkId,
@@ -196,6 +199,7 @@ function dataInsert(crawlerData, linkId) {
           filterd.priority,
           "coupang",
           filterd.link,
+          filterd.imgsrc
         ],
         function (error, result) {
           if (error) {
