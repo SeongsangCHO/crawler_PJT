@@ -169,7 +169,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
   let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
-  links.link as link,
+  links.link as link,links.registerTime as registerTime,
   crawl.title as crawlTitle,
   crawl.price as crawlPrice,
   crawl.source as crawlSource,
@@ -206,12 +206,16 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
           // console.log("in",categoryMap.get(element.category)[
           //   categoryMap.get(element.category).length - 1
           // ]);
-
+          let timeSource = new Date(element.registerTime);
+          let KST = timeSource.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"}).split(' ')[0];          
+          console.log(KST);
+          
           categoryMap.get(element.category).push({
             title: element.linkTitle,
             link: element.link,
             price: element.linkPrice,
             info: element.linkInfo,
+            date: KST,
             ssg: [],
             coupang: [],
             naver: [],

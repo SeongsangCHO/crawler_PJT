@@ -883,10 +883,11 @@ function ProductCard({ element }) {
               링크
             </LinkDetail>
             <InfoDetail>메모: {element.info}</InfoDetail>
+            <div>{element.date}</div>
           </CardDetail>
         </Nav.Item>
       ) : (
-        <div>링크추가</div>
+        <div>자주사는 물품을 등록해주세요</div>
       )}
     </ProductCardWrapper>
   );
@@ -906,7 +907,9 @@ function CardTab({ obj }) {
         <Nav variant="pills" className="flex-column">
           <Tab.Content style={{ display: "flex" }}>
             <CardTabLeftSection>
-              <button className="add-button" onClick={() => setModalShow(true)}>링크추가하기</button>
+              <button className="add-button" onClick={() => setModalShow(true)}>
+                링크추가하기
+              </button>
               <CardWrapper>
                 {obj[Object.keys(obj)]?.map((element) => (
                   <ProductCard element={element} />
