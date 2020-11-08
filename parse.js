@@ -525,8 +525,5 @@ const dummy =
     },
   ];
 
-  dummy.map((obj) =>
-  {
-    console.log(obj.data);
-    
-  })
+  let test = "//:abcd";
+console.log(test.slice(2));

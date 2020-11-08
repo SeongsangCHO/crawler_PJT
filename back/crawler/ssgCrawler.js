@@ -24,9 +24,10 @@ const ssgCrawler = async (searchTitle, linkId) => {
   });
   //이미지,폰트,스타일시트 로딩 블락, 속도향상
   await page.setRequestInterception(true);
+  //image를 안불러와서 image src를 받을 수 없었음?
   page.on("request", (request) => {
     if (
-      request.resourceType() === "image" ||
+      // request.resourceType() === "image" ||
       request.resourceType() === "font" ||
       request.resourceType() == "stylesheet"
     )
@@ -104,6 +105,13 @@ const ssgCrawler = async (searchTitle, linkId) => {
             `#idProductImg li:nth-child(${idx}) div.title a`,
             (element) => element.href
           );
+          productObj[
+            "imgsrc"
+          ] = await page.$eval(`#idProductImg li:nth-child(${idx}) img`,
+           (element) => element.getAttribute('src')
+          );
+          console.log(productObj.imgsrc);
+          
           productData.push(productObj);
         }
       }
@@ -135,8 +143,8 @@ function dataInsert(crawlerData, linkId) {
     .forEach((filterd) => {
       db.query(
         `
-    INSERT INTO crawl(links_id, title, price,  priority, source, link)
-    VALUES(?, ?, ?, ?, ?, ? )`,
+    INSERT INTO crawl(links_id, title, price,  priority, source, link,imgsrc)
+    VALUES(?, ?, ?, ?, ?, ?,? )`,
         [
           linkId,
           filterd.title,
@@ -144,6 +152,7 @@ function dataInsert(crawlerData, linkId) {
           filterd.priority,
           "ssg",
           filterd.link,
+          filterd.imgsrc,
         ],
         function (error, result) {
           if (error) {

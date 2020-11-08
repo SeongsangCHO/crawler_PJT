@@ -806,6 +806,8 @@ function CrawlingCard({ obj }) {
                 </SsgBadge>
               </BadgeDiv>
               <TitleLink target="_blank" href={ssgElement.link}>
+                <ProductImage src={ssgElement.imgsrc} />
+
                 {ssgElement.title}
               </TitleLink>
               <div>
