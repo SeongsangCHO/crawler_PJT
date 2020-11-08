@@ -44,7 +44,6 @@ const naverCrawler = async (searchTitle, linkId) => {
   await page.setRequestInterception(true);
   page.on("request", (request) => {
     if (
-      request.resourceType() === "image" ||
       request.resourceType() === "font"
       // request.resourceType() === "stylesheet"
     )
@@ -149,6 +148,10 @@ const naverCrawler = async (searchTitle, linkId) => {
                 return element.href || "";
               }
             );
+            productObj["imgsrc"] = await page.$eval(
+              `.list_basis > div > div:nth-child(${idx}) img`,
+              (element) => element.getAttribute('src')
+            )
             if (productObj.title && productObj.price && productObj.link)
               productData.push(productObj);
             //존재하지않으면 우선순위 증가하지 않도록 --
@@ -198,6 +201,7 @@ function dataInsert(crawlerData, linkId){
         filtered.priority,
         "naver",
         filtered.link,
+        filtered.imgsrc,
       ],
       function (error, result){
         if (error){
