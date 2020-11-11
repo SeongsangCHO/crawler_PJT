@@ -2,21 +2,23 @@
 }
 
 #Top-header {
-  margin: 20px 0px 20px 40px;
+  margin: 20px 0px 0px 40px;
   display: flex;
   justify-content: space-between;
 }
 
-#left-header-section{
+#left-header-section {
   width: 300px;
 }
 
-#LogoImage{
+#LogoImage {
   width: 50px;
+  height: 67px;
   margin-right: 16px;
 }
 
-#Logo {
+#left-header-section #Logo {
+  color: #000;
   display: inline-block;
   font-family: HangeulNuri-Bold;
   font-size: 30px;
@@ -25,19 +27,19 @@
 #Top-header-right {
   margin-top: 12px;
 }
-#Top-header-right  a.user-register {
+#Top-header-right a.user-register {
   text-decoration: none;
   margin: 13px;
   color: black;
   opacity: 0.3;
 }
 
-#Top-header-right  a.user-register.active {
+#Top-header-right a.user-register.active {
   color: black;
   opacity: 1;
 }
 
-#Top-header-right  a.user-register:hover {
+#Top-header-right a.user-register:hover {
   opacity: 1;
   color: black;
 }
@@ -48,8 +50,8 @@
 }
 
 #NavBarWrapper ul {
-  box-shadow: inset 0px -4px rgba(0, 0, 0, 0.64);
-  background-color: #DA6950;
+  box-shadow: inset 0px -4px rgba(0, 0, 0, 0.3);
+  background-color: #da6950;
   width: 100%;
   height: 100%;
   padding: 0;
@@ -71,44 +73,50 @@
   background-color: rgba(122, 209, 71, 0.64);
 }
 
-#nav-bar-ul{
+#nav-bar-ul {
   width: 100%;
   height: 100%;
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
 }
-#nav-bar-ul  a.nav-item {
+#nav-bar-ul a.nav-item {
   color: #fff;
   cursor: pointer;
   text-decoration: none;
 }
-
-#nav-bar-ul  a.nav-item.active {
+#nav-bar-ul #nav-item-home {
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+#nav-bar-ul a.nav-item.active {
   color: #000;
   cursor: pointer;
   text-decoration: none;
 }
 
-#nav-bar-ul  a.nav-item:hover {
+#nav-bar-ul a.nav-item:hover {
   color: #000;
   opacity: 0.5;
   cursor: pointer;
   text-decoration: none;
 }
 
-#jumbotron-section{
-  display:flex;
+#jumbotron-section {
+  display: flex;
+  width: 100%;
   justify-content: center;
-  background-color: #FFEEEA;
+  background-color: #ffeeea;
 }
-#jumbotron-section span{
+#jumbotron-section span {
   margin-top: 163px;
-  flex:1;
+  flex: 1;
   font-size: 30px;
   font-weight: 600;
 }
-#jumbotron-section svg{
-  flex:2;
+#jumbotron-section svg {
+  flex: 2;
   margin-top: 35px;
   margin-right: 24px;
+  height: 400px;
 }

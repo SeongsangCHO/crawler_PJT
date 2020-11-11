@@ -701,7 +701,6 @@ function AddLink(props) {
         <ModalWrapper>
           <form onSubmit={handleAddLink}>
             <input type="hidden" placeholder={currentCategory}></input>
-
             <input name="title" type="text" placeholder="제목 입력"></input>
             <input name="price" type="text" placeholder="가격 입력"></input>
             <input name="link" type="text" placeholder="링크 입력"></input>
@@ -784,7 +783,7 @@ const PriceSpan = styled.span`
   font-size: 14px;
 `;
 const ProductImage = styled.img`
-
+  border-radius:13px;
   width: 100%;
   height: auto;
 `;

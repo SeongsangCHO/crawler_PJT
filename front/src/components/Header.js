@@ -19,23 +19,13 @@ function NavBar() {
     <NavBarWrapper id="NavBarWrapper">
       <ul id="nav-bar-ul">
         <li>
-          <NavLink to={"/"} className="nav-item">
+          <NavLink to={"/"} id="nav-item-home" className="nav-item">
             Home
           </NavLink>
         </li>
         <li>
-          <NavLink to={"/hmoe"} className="nav-item">
-            ㅋ
-          </NavLink>
-        </li>{" "}
-        <li>
           <NavLink to={"/mylink"} className="nav-item">
             mylink
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to={"/bv"} className="nav-item">
-            할인정보확인
           </NavLink>
         </li>
       </ul>
@@ -44,15 +34,17 @@ function NavBar() {
 }
 
 function Header() {
-  const isLogined = useSelector((state) => state.loginReducer.isLogined);
-  const userNickName = useSelector((state) => state.loginReducer.user_nickname);
+  const isLogined = useSelector(state => state.loginReducer.isLogined);
+  const userNickName = useSelector(state => state.loginReducer.user_nickname);
   return (
     <div className="header-wrapper">
       <div id="Top-header">
         <div id="left-header-section">
-          <Logo id="LogoImage" width="50" height="50" />
-          {/* <img id="LogoImage" src={LogoImage} alt="React Logo" /> */}
-          <div id="Logo">다링</div>
+          <NavLink to={"/"}>
+            <Logo id="LogoImage" width="100px" height="50px" />
+            {/* <img id="LogoImage" src={LogoImage} alt="React Logo" /> */}
+            <div id="Logo">다링</div>
+          </NavLink>
         </div>
         <div id="Top-header-right">
           <NavLink className="user-register" to={"/register"}>

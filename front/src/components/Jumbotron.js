@@ -1,6 +1,7 @@
 import React from "react";
 
-import { ReactComponent as JumbotronImage } from "./public/jumbotron.svg";
+import { ReactComponent as JumbotronImage } from "./public/JumbotronImage.svg";
+// import { ReactComponent as JumbotronImage } from "./public/jumbotron.svg";
 import "./css/Header.css";
 
 function Jumbotron() {
