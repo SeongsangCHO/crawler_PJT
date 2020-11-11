@@ -615,7 +615,6 @@ function AddCategory(props) {
       isAdded: false,
     });
     //[추측][비동기처리해서] 그냥 될떄도있고 안될때도있네 => submit로 페이지 리로딩이 되기때문.
-    alert("카테고리 추가 완료");
     props.onHide();
     //그럼 추가가 완료된 이후에는 모달창을 종료해야하는데?
     //props로 전달된 onHide호출해서 창내림
@@ -785,8 +784,9 @@ const PriceSpan = styled.span`
   font-size: 14px;
 `;
 const ProductImage = styled.img`
+
   width: 100%;
-  height: 50%;
+  height: auto;
 `;
 
 function CrawlingCard({ obj }) {
