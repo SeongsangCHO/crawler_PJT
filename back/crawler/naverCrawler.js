@@ -12,42 +12,44 @@ function delay(time) {
   });
 }
 
-const pageDown = async (page) => {
-  try {
-    async function imageLoading(currentScroll, previousHeight) {
-      const interval = setInterval(async function () {
-        previousHeight = await page.evaluate(`document.body.scrollHeight`);
-        currentScroll += 50;
-
-        await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
-
-        if (currentScroll >= previousHeight) {
-          clearInterval(interval);
-        }
-      }, 50);
-    }
-    await imageLoading(0, 0);
-  } catch (error) {
-    console.error(error);
+async function infiniteScroll(page) {
+  let previousHeight = await page.evaluate(`document.body.scrollHeight`);
+  let currentScroll = 0;
+  while (currentScroll <= previousHeight) {
+    currentScroll += 50;
+    previousHeight = await page.evaluate(`document.body.scrollHeight`);
+    await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
+    delay(50);
   }
-  // await delay(5000);
-  // try {
-  //   //한번에 맨 밑으로 내려갔을때, 무한 스크롤에 한번 걸리는 경우가 없을때
-  //   //에러가 생기는데, 음
-  //   await page.waitForFunction(`${scrollHeight} > ${previousHeight}`, {
-  //     timeout: 2000,
-  //   });
-  // } catch (error) {
-  //   console.error(error);
-  // }
-};
+  return (1);
+}
+
+// const pageDown = async page => {
+// async function imageLoading(currentScroll, previousHeight) {
+//   const interval = setInterval(async function () {
+//     previousHeight = await page.evaluate(`document.body.scrollHeight`);
+//     currentScroll += 50;
+
+//     await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
+//     console.log("페이지 다운")
+//     if (currentScroll >= previousHeight) {
+//       clearInterval(interval);
+//       return (1);
+//     }
+//   }, 50);
+// }
+// await imageLoading(0, 0).then((value) => {
+//   console.log("이미지 로딩 end" + value)
+// });
+// return (1);
+// };
 
 const naverCrawler = async (searchTitle, linkId) => {
   let start = await new Date().getTime();
   let productData = [];
 
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: false
   });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
@@ -55,11 +57,11 @@ const naverCrawler = async (searchTitle, linkId) => {
 
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({
-    "accept-charset": "euc-kr", //한글 깨지는 문제를 해결해보려고 charset을 바꿔봤는데 해결안됨
+    "accept-charset": "euc-kr" //한글 깨지는 문제를 해결해보려고 charset을 바꿔봤는데 해결안됨
   });
   //이미지,폰트,스타일시트 로딩 블락, 속도향상
   await page.setRequestInterception(true);
-  page.on("request", (request) => {
+  page.on("request", request => {
     if (
       request.resourceType() === "font"
       // request.resourceType() === "stylesheet"
@@ -73,21 +75,19 @@ const naverCrawler = async (searchTitle, linkId) => {
     `,
     { waitUntil: "networkidle2" }
   );
-
+  const scrollResult = await infiniteScroll(page);
+  console.log("스크롤 결과:" +scrollResult);
   //맨 밑으로 스크롤링
-  try {
-    //런타임 도중 page를 꺼버려서 에러가 발생하는 건가
-    //pageDown이 끝나지도 않았는데 밑으로 넘어가네..?
-    await pageDown(page);
-    console.log("after pageDown");
-  } catch (error) {
-    console.error(error);
-  }
+  // await pageDown(page).then(value => {
+  //   console.log("await return " + value);
+  // });
+  console.log("after pageDown");
+
   //검색결과가 없다면 2 리턴
   try {
     //특정 검색어 했을때 못찾는 에러가 발생함.
 
-    const isSearchResult = await page.$eval(`#powerlink-div`, (element) => {
+    const isSearchResult = await page.$eval(`#powerlink-div`, element => {
       return element.childNodes.length;
     });
 
@@ -127,6 +127,7 @@ const naverCrawler = async (searchTitle, linkId) => {
         }
         //광고 지우기
         for (let idx = 0; idx < LIST_SIZE; idx++) {
+          console.log("페이지다운 이 끝나고 실행되는 부분");
           await page.waitForSelector(
             `.list_basis > div > div:nth-child(${idx + 1}) img`
           );
@@ -150,13 +151,13 @@ const naverCrawler = async (searchTitle, linkId) => {
             productObj["priority"] = priority++;
             productObj["title"] = await page.$eval(
               `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div a`,
-              (element) => {
+              element => {
                 return element.innerText || "";
               }
             );
             productObj["price"] = await page.$eval(
               `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div:nth-child(2) strong`,
-              (element) => {
+              element => {
                 return element.innerText.includes("최저")
                   ? element.innerText.slice(
                       2,
@@ -167,7 +168,7 @@ const naverCrawler = async (searchTitle, linkId) => {
             );
             productObj["link"] = await page.$eval(
               `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div:nth-child(1) a`,
-              (element) => {
+              element => {
                 return element.href || "";
               }
             );
@@ -175,7 +176,7 @@ const naverCrawler = async (searchTitle, linkId) => {
               "imgsrc"
             ] = await page.$eval(
               `.list_basis > div > div:nth-child(${idx}) img`,
-              (element) => element.getAttribute("src")
+              element => element.getAttribute("src")
             );
             if (productObj.title && productObj.price && productObj.link)
               productData.push(productObj);
@@ -221,10 +222,10 @@ const naverCrawler = async (searchTitle, linkId) => {
 
 function dataInsert(crawlerData, linkId) {
   crawlerData
-    .filter((obj) => {
+    .filter(obj => {
       return obj.priority <= 3;
     })
-    .forEach((filtered) => {
+    .forEach(filtered => {
       db.query(
         //insert time, update time 넣기, now()
         `
@@ -238,7 +239,7 @@ function dataInsert(crawlerData, linkId) {
           filtered.priority,
           "naver",
           filtered.link,
-          filtered.imgsrc,
+          filtered.imgsrc
         ],
         function (error, result) {
           if (error) {

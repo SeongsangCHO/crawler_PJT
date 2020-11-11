@@ -209,8 +209,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
           // ]);
           let timeSource = new Date(element.registerTime);
           let KST = timeSource
-            .toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })
-            .split(" ")[0];
+          .toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
 
           categoryMap.get(element.category).push({
             title: element.linkTitle,
