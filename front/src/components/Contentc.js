@@ -548,7 +548,6 @@ const CategoryWrapper = styled.div`
   }
 `;
 const CardWrapper = styled.div`
-  border: 1px solid black;
   display: grid;
   padding: 5px;
   grid-row-gap: 5px;
@@ -563,19 +562,20 @@ const CardWrapper = styled.div`
   }
 `;
 const CardTabLeftSection = styled.div`
-  border: 1px solid black;
   padding: 5px;
   flex: 2;
 `;
 
 const CardTabRightSection = styled.div`
-  border: 1px solid black;
+  border: 0.5px solid gray;
+  border-radius:5px;
   flex-wrap: nowrap;
   flex: 1;
 `;
 
 const CrawlingCardWrapper = styled.div`
-  border: 1px solid black;
+  border: .1px solid gray;
+  border-radius:5px;
   padding: 5px;
   height: 100%;
 `;
@@ -732,7 +732,7 @@ function CategoryTab({ obj }) {
       <hr />
       <Nav variant="pills" className="flex-sm-column nav-wrapper">
         {obj?.category?.map((cate, idx) => (
-          <Nav.Item className="nav-item-card">
+          <Nav.Item className="nav-item-card" key={idx}>
             {Object.keys(cate) != "null" ? (
               <Nav.Link
                 value={Object.keys(cate)}
@@ -791,14 +791,14 @@ const ProductImage = styled.img`
 function CrawlingCard({ obj }) {
   return (
     <CrawlingCardWrapper id="crawl-card-wrapper">
-      {obj[Object.keys(obj)]?.map((element, id) => (
+      {obj[Object.keys(obj)]?.map((element, idx) => (
         <Tab.Pane
           eventKey={element.title}
           key={element.title}
           unmountOnExit="true"
         >
-          {element.ssg.map((ssgElement) => (
-            <CrawlListCard>
+          {element.ssg.map((ssgElement, idx) => (
+            <CrawlListCard key={ssgElement.title}>
               <BadgeDiv>
                 <SsgBadge pill variant="warning">
                   SSG
@@ -815,7 +815,7 @@ function CrawlingCard({ obj }) {
             </CrawlListCard>
           ))}
           {element.coupang.map((coupangElement) => (
-            <CrawlListCard>
+            <CrawlListCard key={coupangElement.title}>
               <BadgeDiv>
                 <Badge pill variant="primary">
                   COUPANG
@@ -831,7 +831,7 @@ function CrawlingCard({ obj }) {
             </CrawlListCard>
           ))}
           {element.naver.map((naverElement) => (
-            <CrawlListCard>
+            <CrawlListCard key={naverElement.title}>
               <BadgeDiv>
                 <Badge pill variant="success">
                   NAVER
@@ -953,9 +953,9 @@ function CardTab({ obj }) {
 function LinkCardSection({ obj }) {
   return (
     <LinkCardSectionWrapper>
-      <Tab.Content defaultActiveKey="0">
+      <Tab.Content>
         {obj?.category?.map((cate, idx) => (
-          <Tab.Pane eventKey={Object.keys(cate)} key={idx} unmountOnExit="true">
+          <Tab.Pane eventKey={Object.keys(cate)} key={idx} unmountOnExit={true}>
             <CardTab obj={cate} />
           </Tab.Pane>
         ))}
@@ -1008,7 +1008,7 @@ function Contentc() {
         <br />
         <div className="subtitle">ㅇㅅㅇ;</div>
       </div>
-      <Tab.Container id="left-tabs" defaultActiveKey="All">
+      <Tab.Container id="left-tabs" defaultactiveKey="All">
         <ContentWrapper>
           <CategoryTab obj={linkData} />
           <LinkCardSection obj={linkData} />

@@ -7,8 +7,8 @@ function Home() {
   return (
     <div id="home-wrapper">
       <div id="jumbotron-section">
-        <JumbotronImage />
-        <span>save link, save time</span>
+        <JumbotronImage id="jumbotron" />
+        <span id="jumbotron-sentence">save link, save time</span>
       </div>
       <MainContent/>
     </div>
