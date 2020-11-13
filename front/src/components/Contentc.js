@@ -792,6 +792,7 @@ const ProductImage = styled.img`
 `;
 
 function CrawlingCard({ obj }) {
+
   return (
     <CrawlingCardWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, idx) => (
@@ -871,13 +872,9 @@ const FormTitle = styled.span`
 `;
 function ProductCard({ element }) {
   const dispatch = useDispatch();
-  const isReloaded = useSelector(state => state.reloadReducer.isReloaded);
-  const linkTitle = useSelector(state => state.reloadReducer.linkTitle);
+  const linkTitle = useSelector(state => state.reloadReducer.isReloaded);
+  
 
-  useEffect(() => {
-    //dispatch수행해서 리랜더링될 때 , axios로 api호출
-
-  }, [isReloaded]); //linkData가 서버에서 받아오는 데이터 
   const handleCardClick = e => {
     //여기서 innerHTML해서 제목데이터를 상태로 관리하고,
     // link card의 제목을 클릭할 때마다, 상태값으로 관리
@@ -941,7 +938,7 @@ const RegisterDetail = styled.div`
 `;
 const CardTabWrapper = styled.div``;
 function CardTab({ obj }) {
-  const isCrawled = useSelector(state => state.runCrawlerReducer.isCrawled);
+
   const linkDataIsCalled = useSelector(
     state => state.linkDataApiCallReducer.isCalled
   );
@@ -1005,6 +1002,14 @@ function Contentc() {
   const currentCategory = useSelector(
     state => state.addCategoryReducer.category
   );
+  const isReloaded = useSelector(state => state.reloadReducer.isReloaded);
+  const linkTitle = useSelector(state => state.reloadReducer.linkTitle);
+  useEffect(() => {
+    console.log(isReloaded);
+    console.log(linkTitle);
+    //dispatch수행해서 리랜더링될 때 , axios로 api호출
+
+  }, []); //linkData가 서버에서 받아오는 데이터 
   useEffect(() => {
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
@@ -1012,7 +1017,7 @@ function Contentc() {
       data: {},
       isCalled: false
     });
-  }, [currentCategory, currentLink, currentTitle, currentLinkTitle]); //linkData가 서버에서 받아오는 데이터
+  }, [currentCategory, currentLink, currentTitle, currentLinkTitle,isReloaded,linkTitle]); //linkData가 서버에서 받아오는 데이터
   //뭘로 progress를 띄우지, 크롤러 success가 아직 안됬음,
   //requst보낼때마다 false로 던지고, 성공하면 true로 반환하게.
 

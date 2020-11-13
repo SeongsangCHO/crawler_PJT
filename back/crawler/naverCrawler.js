@@ -19,7 +19,7 @@ async function infiniteScroll(page) {
     currentScroll += 50;
     previousHeight = await page.evaluate(`document.body.scrollHeight`);
     await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
-    delay(50);
+    delay(200);
   }
   return (1);
 }

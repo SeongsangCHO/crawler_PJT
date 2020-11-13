@@ -265,7 +265,6 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   )`;
   db.query(findLinkId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
-
     // ssgCrawler(searchText, dbResult[0].id).then((result) => {
     //   //끝나면 리턴받긴하네
     //   //크롤러들의 수행이 끝나면 성공값을 리턴해야함.
@@ -299,9 +298,18 @@ app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
   )`;
   db.query(linkCardId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
+    db.query(`delete from crawl where links_id = ${dbResult[0].id}`, (error, result)=>{
+      const crawlers = [
+        ssgCrawler(title, dbResult[0].id),
+        coupangCrawler(title, dbResult[0].id),
+        naverCrawler(title, dbResult[0].id),
+      ];
+      Promise.all(crawlers).then((result) => {
+        console.log(result);
+        return res.status(200).json({ message: "성공" });
+      });
+    });
   });
-  //reload요청, userId에 해당하는 크롤링데이터 삭제, 새로운 데이터 insert
-  return res.status(200).json({ message: "성공" });
 });
 
 
