@@ -1,13 +1,11 @@
-import { push } from "react-router-redux";
 import {
   all,
   fork,
   call,
   put,
-  takeEvery,
   takeLatest,
-  delay,
 } from "redux-saga/effects";
+
 import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,

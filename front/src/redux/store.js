@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 // 여기서 부터 미들웨어/데브툴 관련 임포트
 import { composeWithDevTools } from "redux-devtools-extension";
-import logger from "redux-logger";
+import {logger} from "redux-logger";
 import registerReducer from "./reducers/registerReducer";
 import signUpReducer from "./SignUp/reducer";
 import doubleCheckReducer from "./DoubleCheck/reducer";
@@ -21,7 +21,7 @@ const initialState = {
 };
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
-  const middlewares = [logger, sagaMiddleware]; //thunk (비동기작업을 돕는 라이브러리)를 넣음
+  const middlewares = [sagaMiddleware]; //thunk (비동기작업을 돕는 라이브러리)를 넣음
   //배포용과 개발용의 미들웨어 차이를 두기 위함
   const enhancer =
     process.env.NODE_ENV === "production"
@@ -42,7 +42,7 @@ const configureStore = () => {
       reloadReducer,
     }),
     initialState,
-    enhancer
+    applyMiddleware(sagaMiddleware, logger),
   );
   sagaMiddleware.run(rootSaga);
   return store;
