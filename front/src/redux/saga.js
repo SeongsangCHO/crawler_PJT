@@ -33,6 +33,10 @@ import {
   RUN_CRAWLER_REQUEST,
   RUN_CRAWLER_SUCCESS,
   RUN_CRAWLER_FAILURE,
+  RELOAD_REQUEST,
+  RELOAD_SUCCESS,
+  RELOAD_FAILURE,
+
 } from "./actions/registerAction";
 
 import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
@@ -45,7 +49,9 @@ const loginURL = "http://localhost/login";
 const addCategoryURL = "http://localhost/addcategory";
 const linkDataApiCallURL = "http://localhost/api/mylink";
 const addLinkURL = "http://localhost/addlink";
-const crawlURL = "http://localhost/crawler"
+const crawlURL = "http://localhost/crawler";
+const reloadURL = "http://localhost/reload";
+
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
 
 // *_REQUEST 비동기 요청
@@ -294,6 +300,31 @@ function* watchRunCrawler() {
   yield takeLatest(RUN_CRAWLER_REQUEST, runCrawler);
 }
 
+function reloadCrawlerAPI(linkTitle){
+  //여기까지 잘 전달되는데..
+ //객체형태로 전달해주어야하는군,.
+  return axios.post(reloadURL, {linkTitle} ,{
+    withCredentials: true,
+  });
+}
+
+function* reloadCrawler(action){
+  try{
+    const result = yield call(reloadCrawlerAPI, action.linkTitle);
+    if (result.status ==200){
+      yield put ({type: RELOAD_SUCCESS, isReloaded: true, linkTitle: action.linkTitle});
+    }
+  }catch(error){
+    console.error(error);
+    yield put ({type: RELOAD_FAILURE, isReloaded:false});
+  }
+}
+
+function* watchReloading(){
+  console.log("watch reloading");
+  yield takeLatest(RELOAD_REQUEST, reloadCrawler);
+}
+
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
   yield all([
@@ -305,5 +336,6 @@ export default function* rootSaga() {
     fork(watchGetCategory),
     fork(watchAddLink),
     fork(watchRunCrawler),
+    fork(watchReloading),
   ]);
 }

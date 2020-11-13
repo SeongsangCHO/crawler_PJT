@@ -288,6 +288,23 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   });
 });
 
+
+app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  const title = req.body.linkTitle;
+  const userId = res.locals.userNickname;
+  const linkCardId = `select id from links where users_id =
+  (select id from users where nickname = '${userId}'
+  and title ='${title}'
+  )`;
+  db.query(linkCardId, (dbErr, dbResult) => {
+    console.log("findID : ", dbResult[0].id);
+  });
+  //reload요청, userId에 해당하는 크롤링데이터 삭제, 새로운 데이터 insert
+  return res.status(200).json({ message: "성공" });
+});
+
+
 app.get("/coupang", (req, res) => {
   let status = "쿠팡크롤러";
   coupangCrawler();

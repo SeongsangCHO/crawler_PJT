@@ -13,6 +13,7 @@ import createSagaMiddleware from "redux-saga";
 import currentCategoryReducer from './CurrentCategory/reducer';
 import addLinkReducer from './AddLink/reducer';
 import runCrawlerReducer from './RunCrawler/reducer';
+import reloadReducer from './ReloadCrawl/reducer';
 
 import rootSaga from "./saga";
 const initialState = {
@@ -38,6 +39,7 @@ const configureStore = () => {
       currentCategoryReducer,
       addLinkReducer,
       runCrawlerReducer,
+      reloadReducer,
     }),
     initialState,
     enhancer

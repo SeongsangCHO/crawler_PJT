@@ -14,6 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Badge from "react-bootstrap/Badge";
+import { ReactComponent as Redo } from "./public/redo.svg";
+import { ReactComponent as AddLinkImage } from "./public/addLink.svg";
+
 const dummy =
   //사용자가 추가할 category
   {
@@ -29,53 +32,53 @@ const dummy =
               {
                 크롤링제목: "쓱 생수크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 생수크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 생수크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
           },
           {
             title: "탄산수",
@@ -86,53 +89,53 @@ const dummy =
               {
                 크롤링제목: "쓱 탄산수크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 탄산수크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 탄산수크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
           },
           {
             title: "1",
@@ -143,53 +146,53 @@ const dummy =
               {
                 크롤링제목: "쓱 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
           },
           {
             title: "2",
@@ -200,53 +203,53 @@ const dummy =
               {
                 크롤링제목: "쓱 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
           },
           {
             title: "3",
@@ -257,53 +260,53 @@ const dummy =
               {
                 크롤링제목: "쓱 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
           },
           {
             title: "4",
@@ -314,53 +317,53 @@ const dummy =
               {
                 크롤링제목: "쓱 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
           },
           {
             title: "5",
@@ -371,55 +374,55 @@ const dummy =
               {
                 크롤링제목: "쓱 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
-          },
-        ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
+          }
+        ]
       },
       {
         옷: [
@@ -432,53 +435,53 @@ const dummy =
               {
                 크롤링제목: "쓱 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
           },
           {
             title: "자켓",
@@ -488,57 +491,57 @@ const dummy =
               {
                 크롤링제목: "쓱 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "쓱 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             coupang: [
               {
                 크롤링제목: "coupang 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "coupang 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
+                크롤링가격: "생수 크롤링가격"
+              }
             ],
             naver: [
               {
                 크롤링제목: "naver 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 2 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
+                크롤링가격: "생수 크롤링가격"
               },
               {
                 크롤링제목: "naver 3 크롤링제목",
                 크롤링링크: "생수 크롤링 링크",
-                크롤링가격: "생수 크롤링가격",
-              },
-            ],
-          },
-        ],
-      },
-    ],
+                크롤링가격: "생수 크롤링가격"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   };
 const CategoryWrapper = styled.div`
   padding: 5px;
@@ -568,14 +571,14 @@ const CardTabLeftSection = styled.div`
 
 const CardTabRightSection = styled.div`
   border: 0.5px solid gray;
-  border-radius:5px;
+  border-radius: 5px;
   flex-wrap: nowrap;
   flex: 1;
 `;
 
 const CrawlingCardWrapper = styled.div`
-  border: .1px solid gray;
-  border-radius:5px;
+  border: 0.1px solid gray;
+  border-radius: 5px;
   padding: 5px;
   height: 100%;
 `;
@@ -598,21 +601,21 @@ const ProductCardWrapper = styled.div`
 
 function AddCategory(props) {
   const categoryStatus = useSelector(
-    (state) => state.addCategoryReducer.category
+    state => state.addCategoryReducer.category
   );
   useEffect(() => {}, []);
   const [categoryData, setCategoryData] = useState("");
   const dispatch = useDispatch();
-  const handleSetCategory = (e) => {
+  const handleSetCategory = e => {
     setCategoryData(e.target.value);
   };
-  const handleAddCategory = (e) => {
+  const handleAddCategory = e => {
     //페이지리로딩 방지를 위해서 넣어주어야해.
     e.preventDefault();
     dispatch({
       type: "ADD_CATEGORY_REQUEST",
       category: categoryData,
-      isAdded: false,
+      isAdded: false
     });
     //[추측][비동기처리해서] 그냥 될떄도있고 안될때도있네 => submit로 페이지 리로딩이 되기때문.
     props.onHide();
@@ -657,10 +660,10 @@ function AddLink(props) {
   // Custom hook으로 onChange하는 거 다 묶어야겠다.
   const dispatch = useDispatch();
   const currentCategory = useSelector(
-    (state) => state.currentCategoryReducer.currentCategory
+    state => state.currentCategoryReducer.currentCategory
   );
 
-  const handleAddLink = (e) => {
+  const handleAddLink = e => {
     const formData = e.target;
 
     e.preventDefault();
@@ -673,14 +676,14 @@ function AddLink(props) {
         price: formData.price.value,
         link: formData.link.value,
         info: formData.info.value,
-        currentCategory: currentCategory,
-      },
+        currentCategory: currentCategory
+      }
     });
 
     dispatch({
       type: "RUN_CRAWLER_REQUEST",
       currentLinkTitle: formData.title.value,
-      isCrawled: false,
+      isCrawled: false
     });
 
     props.onHide();
@@ -715,13 +718,13 @@ function AddLink(props) {
 function CategoryTab({ obj }) {
   const dispatch = useDispatch();
   const [modalShow, setModalShow] = useState(false);
-  const handleCateClick = (e) => {
+  const handleCateClick = e => {
     //현재 클릭되었을 때 innerHTML로 값을 얻을 수 있음
     //클릭된 값을 saga로 던져주면서 링크카드에서 useSelector로 가져오면 되겠다.
     //여기서 dispatch 수행해서 카테고리 상태값 지정, default는 없게하면 될듯 or 초기페이지 설정? => 언제하냐
     dispatch({
       type: "GET_CATEGORY_REQUEST",
-      currentCategory: e.currentTarget.innerHTML,
+      currentCategory: e.currentTarget.innerHTML
     });
   };
   return (
@@ -783,7 +786,7 @@ const PriceSpan = styled.span`
   font-size: 14px;
 `;
 const ProductImage = styled.img`
-  border-radius:13px;
+  border-radius: 13px;
   width: 100%;
   height: auto;
 `;
@@ -814,7 +817,7 @@ function CrawlingCard({ obj }) {
               </div>
             </CrawlListCard>
           ))}
-          {element.coupang.map((coupangElement) => (
+          {element.coupang.map(coupangElement => (
             <CrawlListCard key={coupangElement.title}>
               <BadgeDiv>
                 <Badge pill variant="primary">
@@ -830,7 +833,7 @@ function CrawlingCard({ obj }) {
               </div>
             </CrawlListCard>
           ))}
-          {element.naver.map((naverElement) => (
+          {element.naver.map(naverElement => (
             <CrawlListCard key={naverElement.title}>
               <BadgeDiv>
                 <Badge pill variant="success">
@@ -863,9 +866,19 @@ const LinkDetail = styled.a``;
 const CardDetail = styled.div`
   margin: 3px 0px 0px 3px;
 `;
+const FormTitle = styled.span`
+  display:none;
+`;
 function ProductCard({ element }) {
   const dispatch = useDispatch();
-  const handleCardClick = (e) => {
+  const isReloaded = useSelector(state => state.reloadReducer.isReloaded);
+  const linkTitle = useSelector(state => state.reloadReducer.linkTitle);
+
+  useEffect(() => {
+    //dispatch수행해서 리랜더링될 때 , axios로 api호출
+
+  }, [isReloaded]); //linkData가 서버에서 받아오는 데이터 
+  const handleCardClick = e => {
     //여기서 innerHTML해서 제목데이터를 상태로 관리하고,
     // link card의 제목을 클릭할 때마다, 상태값으로 관리
     // 상태값이 변경될 때마다 dispatch로 호출
@@ -879,6 +892,16 @@ function ProductCard({ element }) {
     //   type: "RUN_CRAWLER_REQUEST",
     //   currentLinkTitle : e.currentTarget.innerHTML,
     // });
+  };
+  const handleReload = e => {
+    e.preventDefault();
+    
+    // console.log(e.currentTarget.firstChild.innerText); //현재 item 타이틀
+    dispatch({
+      type: "RELOAD_REQUEST",
+      isReloaded: false,
+      linkTitle: e.currentTarget.firstChild.innerText,
+    });
   };
   return (
     <ProductCardWrapper>
@@ -899,6 +922,12 @@ function ProductCard({ element }) {
             <LinkDetail target="_blank" href={element.link}>
               링크
             </LinkDetail>
+            <form onSubmit={handleReload}>
+              <FormTitle>{element.title}</FormTitle>
+              <button className="redo-button" type="submit">
+                <Redo className="redo-image" />
+              </button>
+            </form>
           </CardDetail>
         </Nav.Item>
       ) : (
@@ -912,9 +941,9 @@ const RegisterDetail = styled.div`
 `;
 const CardTabWrapper = styled.div``;
 function CardTab({ obj }) {
-  const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled);
+  const isCrawled = useSelector(state => state.runCrawlerReducer.isCrawled);
   const linkDataIsCalled = useSelector(
-    (state) => state.linkDataApiCallReducer.isCalled
+    state => state.linkDataApiCallReducer.isCalled
   );
 
   const [modalShow, setModalShow] = useState(false);
@@ -925,11 +954,11 @@ function CardTab({ obj }) {
           <Tab.Content style={{ display: "flex" }}>
             <CardTabLeftSection>
               <button className="add-button" onClick={() => setModalShow(true)}>
-                링크추가하기
+                <AddLinkImage id="AddLinkImage" />
               </button>
               <hr />
               <CardWrapper>
-                {obj[Object.keys(obj)]?.map((element) => (
+                {obj[Object.keys(obj)]?.map(element => (
                   <ProductCard element={element} />
                 ))}
                 <AddLink show={modalShow} onHide={() => setModalShow(false)} />
@@ -967,21 +996,21 @@ function LinkCardSection({ obj }) {
 function Contentc() {
   const dispatch = useDispatch();
   const currentLinkTitle = useSelector(
-    (state) => state.runCrawlerReducer.currentLinkTitle
+    state => state.runCrawlerReducer.currentLinkTitle
   );
 
-  const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
-  const currentLink = useSelector((state) => state.addLinkReducer.data.link);
-  const currentTitle = useSelector((state) => state.addLinkReducer.data.title);
+  const linkData = useSelector(state => state.linkDataApiCallReducer.data);
+  const currentLink = useSelector(state => state.addLinkReducer.data.link);
+  const currentTitle = useSelector(state => state.addLinkReducer.data.title);
   const currentCategory = useSelector(
-    (state) => state.addCategoryReducer.category
+    state => state.addCategoryReducer.category
   );
   useEffect(() => {
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
       type: "LINK_DATA_REQUEST",
       data: {},
-      isCalled: false,
+      isCalled: false
     });
   }, [currentCategory, currentLink, currentTitle, currentLinkTitle]); //linkData가 서버에서 받아오는 데이터
   //뭘로 progress를 띄우지, 크롤러 success가 아직 안됬음,

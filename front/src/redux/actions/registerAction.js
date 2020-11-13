@@ -31,6 +31,10 @@ export const RUN_CRAWLER_REQUEST = "RUN_CRAWLER_REQUEST";
 export const RUN_CRAWLER_SUCCESS = "RUN_CRAWLER_SUCCESS";
 export const RUN_CRAWLER_FAILURE = "RUN_CRAWLER_FAILURE";
 
+export const RELOAD_REQUEST = "RELOAD_REQUEST";
+export const RELOAD_SUCCESS = "RELOAD_SUCCESS";
+export const RELOAD_FAILURE = "RELOAD_FAILURE";
+
 export function registerRequest(data) {
   console.log("액션 생성함수");
   console.log(data);
