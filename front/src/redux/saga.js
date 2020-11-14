@@ -44,13 +44,13 @@ import loginSaga from "../redux/Login/saga.js";
 
 import axios from "axios";
 
-const registerURL = "http://localhost/register";
-const loginURL = "http://localhost/login";
-const addCategoryURL = "http://localhost/addcategory";
-const linkDataApiCallURL = "http://localhost/api/mylink";
-const addLinkURL = "http://localhost/addlink";
-const crawlURL = "http://localhost/crawler";
-const reloadURL = "http://localhost/reload";
+const registerURL = "http://addyour.link:5000/register";
+const loginURL = "http://addyour.link:5000/login";
+const addCategoryURL = "http://addyour.link:5000/addcategory";
+const linkDataApiCallURL = "http://addyour.link:5000/mylink";
+const addLinkURL = "http://addyour.link:5000/addlink";
+const crawlURL = "http://addyour.link:5000/crawler";
+const reloadURL = "http://addyour.link:5000/reload";
 
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
 
@@ -115,7 +115,7 @@ function* loginRequst(action) {
   try {
     console.log("loginRequest in saga");
     const result = yield call(loginAPI, action.data);
-    console.log(result.status);
+	localStorage.setItem('user', result.data.token);	    
     if (result.status == 200) {
       yield put({ type: LOGIN_SUCCESS,user_nickname:action.data.user_nickname, isLogined: true });
       alert("로그인 성공");
@@ -165,7 +165,7 @@ function* watchAddCategory() {
   yield takeLatest(ADD_CATEGORY_REQUEST, addCategory);
 }
 
-const doubleCheckURL = "http://localhost/doublecheck";
+const doubleCheckURL = "http://addyour.link:5000/doublecheck";
 
 function doubleCheckAPI(nickNameData) {
   console.log("doubleCheckAPI in saga");
@@ -205,7 +205,7 @@ function* watchNickNameDoubleCheck() {
 function getLinkDataAPI() {
   console.log("getLinkDataAPI in saga");
 
-  return axios.get(linkDataApiCallURL, {
+  return axios.post(linkDataApiCallURL, {
     withCredentials: true,
   });
 }

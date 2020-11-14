@@ -42,7 +42,7 @@ function Register() {
     if (isLogined == true)
     {
       console.log("로그인 성공");
-      history.push("/");
+      history.push("/mylink");
     }
   },[isLogined])
   const handleNickName = (e) => {

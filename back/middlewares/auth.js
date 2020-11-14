@@ -6,7 +6,7 @@ require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY;
 
 exports.createToken = async function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
 
   try {
     //front에서 보낸요청과 db에서 꺼낸 데이터가 일치하는지 확인하고
@@ -31,25 +31,28 @@ exports.createToken = async function (req, res, next) {
               },
               "piTeam",
               {
-                expiresIn: "30m",
-              }
+                expiresIn: '30m',
+              },
             );
-            console.log(token);
-            res.cookie("user", token);
-            res.status(200).json({
+            console.log("token is "+token);
+            res.cookie("user", token, {
+		SameSite:'None',
+		Secure:true,
+		});
+            console.log("토큰발행성공");
+            return res.status(200).json({
               result: "ok",
               token,
             });
-            console.log("토큰발행성공");
           } else {
             console.log("비밀번호달라");
             
-            return res.status(400).json({ error: "비밀번호가 달라요" });
+            return res.status(404).json({ error: "비밀번호가 달라요" });
           }
         });
       }
       else{
-        return res.status(400).json({ error: "그런 닉네임은 없어요" });
+        return res.status(404).json({ error: "그런 닉네임은 없어요" });
 
       }
     });

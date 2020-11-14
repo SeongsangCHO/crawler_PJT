@@ -5,7 +5,7 @@ let coupangCrawler = require("./crawler/coupangCrawler");
 let multi = require("./crawler/multi");
 let cluster = require("./crawler/cluster");
 var cors = require("cors");
-const accecptURL = "http:/localhost:3000";
+const accecptURL = "http://addyour.link:3000";
 let db = require("./config/db_config");
 const bcrypt = require("bcrypt");
 const loginAuth = require("./middlewares/auth");
@@ -18,13 +18,15 @@ require("dotenv").config();
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://addyour.link:3000",
     credentials: true,
   })
 );
+const session =  require("cookie-session");
 app.use(cookieParser());
 
-const port = process.env.PORT || 80;
+
+const port = process.env.PORT || 5000;
 let testAPIRouter = require("./routes/testAPI");
 const { start } = require("repl");
 const naverCrawler = require("./crawler/naverCrawler");
@@ -53,13 +55,12 @@ app.get("/api", (req, res) => {
 
 app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
-  console.log("double check post request 받음");
   console.log(req.body.user_nickname);
   let sql = `select * from users where nickname = '${req.body.user_nickname}'`;
   //setHeader를 이미 선언하면, body를 다 작성했다는 의미
   //그리고나서 res.status로 상태코드를 지정하면 에러가 발생할 것
   //
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   db.query(sql, (error, result) => {
     console.log(result);
     if (result == "") {
@@ -78,7 +79,7 @@ app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
 //가입버튼 클릭시 - 가입요청을 받는 부분
 app.post("/register", cors(accecptURL), (req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   console.log(req.body);
   try {
     bcrypt.hash(
@@ -106,7 +107,7 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
   // res.render("../views/userRegister", {user_data: req.body});
 });
 //클릭시 처리를 어떻게 해야할까
-//https://stackoverflow.com/questions/55647287/how-to-send-request-on-click-react-hooks-way
+//httpss://stackoverflow.com/questions/55647287/how-to-send-request-on-click-react-hooks-way
 
 //클릭데이터를 서버에 전달해야하는뎀.
 
@@ -121,7 +122,7 @@ app.post(
 );
 
 app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
 
   console.log("현재 로그인된 사용자 아이디: " + res.locals.userNickname);
   console.log("전달받은 카테고리 명 : " + req.body.category);
@@ -145,7 +146,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
 });
 
 app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   console.log("server addlink call");
   const { title, price, link, info, currentCategory } = req.body;
 
@@ -165,9 +166,8 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
 //링크박스의 제목을 기반으로 크롤러 수행
 //크롤러 데이터를 db에 저장함
 //
-app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
+app.post("/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
   links.link as link,links.registerTime as registerTime,
   crawl.title as crawlTitle,
@@ -180,7 +180,8 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
  LEFT  join links on categories.id = links.categories_id
  LEFT  join crawl on links.id = crawl.links_id
  where users.nickname = '${res.locals.userNickname}';`;
-  console.log(res.locals.userNickname);
+  
+console.log("loginId is : " + res.locals.userNickname);
 
   let mylinkData = {
     category: [],
@@ -251,7 +252,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
 });
 
 app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   let searchText = req.body.currentLinkTitle;
   let status = "쓱 ,쿠팡 크롤러";
 
@@ -289,7 +290,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
 
 
 app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   const title = req.body.linkTitle;
   const userId = res.locals.userNickname;
   const linkCardId = `select id from links where users_id =
