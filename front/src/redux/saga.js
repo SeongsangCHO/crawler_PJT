@@ -44,13 +44,13 @@ import loginSaga from "../redux/Login/saga.js";
 
 import axios from "axios";
 
-const registerURL = "http://addyour.link:5000/register";
-const loginURL = "http://addyour.link:5000/login";
-const addCategoryURL = "http://addyour.link:5000/addcategory";
-const linkDataApiCallURL = "http://addyour.link:5000/mylink";
-const addLinkURL = "http://addyour.link:5000/addlink";
-const crawlURL = "http://addyour.link:5000/crawler";
-const reloadURL = "http://addyour.link:5000/reload";
+const registerURL = "http://34.64.171.138:5000/register";
+const loginURL = "http://34.64.171.138:5000/login";
+const addCategoryURL = "http://34.64.171.138:5000/addcategory";
+const linkDataApiCallURL = "http://34.64.171.138:5000/mylink";
+const addLinkURL = "http://34.64.171.138:5000/addlink";
+const crawlURL = "http://34.64.171.138:5000/crawler";
+const reloadURL = "http://34.64.171.138:5000/reload";
 
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
 
@@ -134,9 +134,10 @@ function* watchLogin() {
 function addCategoryAPI(category) {
   console.log("addCategoryAPI in saga");
 
+  const cookie = localStorage.getItem("user");
   return axios.post(
     addCategoryURL,
-    { category },
+    { category , token:cookie},
     {
       withCredentials: true,
     }
@@ -165,7 +166,7 @@ function* watchAddCategory() {
   yield takeLatest(ADD_CATEGORY_REQUEST, addCategory);
 }
 
-const doubleCheckURL = "http://addyour.link:5000/doublecheck";
+const doubleCheckURL = "http://34.64.171.138:5000/doublecheck";
 
 function doubleCheckAPI(nickNameData) {
   console.log("doubleCheckAPI in saga");
@@ -206,7 +207,7 @@ function getLinkDataAPI() {
   console.log("getLinkDataAPI in saga");
 	const cookie = localStorage.getItem("user");
 	console.log(cookie);
-  return axios.post(linkDataApiCallURL, cookie,{
+  return axios.post(linkDataApiCallURL, {token: cookie},{
     withCredentials: true,
   });
 }
@@ -253,7 +254,8 @@ function* watchGetCategory() {
 function addLinkAPI(linkData) {
   console.log("call addLinkAPI");
 
-  return axios.post(addLinkURL, linkData, {
+  const cookie = localStorage.getItem("user");
+  return axios.post(addLinkURL,{token:cookie, linkData}, {
     withCredentials: true,
   });
 }
@@ -278,7 +280,8 @@ function* watchAddLink() {
 function runCrawlerAPI(currentLinkTitle){
   //여기까지 잘 전달되는데..
  //객체형태로 전달해주어야하는군,.
-  return axios.post(crawlURL, {currentLinkTitle} ,{
+  const cookie = localStorage.getItem("user");
+  return axios.post(crawlURL, {token: cookie, currentLinkTitle} ,{
     withCredentials: true,
   });
 }
@@ -304,7 +307,8 @@ function* watchRunCrawler() {
 function reloadCrawlerAPI(linkTitle){
   //여기까지 잘 전달되는데..
  //객체형태로 전달해주어야하는군,.
-  return axios.post(reloadURL, {linkTitle} ,{
+  const cookie = localStorage.getItem("user");
+  return axios.post(reloadURL,{token:cookie,linkTitle} ,{
     withCredentials: true,
   });
 }
