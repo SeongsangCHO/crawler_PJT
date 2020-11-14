@@ -27,30 +27,28 @@ exports.createToken = async function (req, res, next) {
           if (hash) {
             const token = jwt.sign(
               {
-                nickname: req.body.user_nickname,
+                nickname: req.body.user_nickname
               },
               "piTeam",
               {
-                expiresIn: "30m",
+                expiresIn: "30m"
               }
             );
             console.log(token);
             res.cookie("user", token);
             res.status(200).json({
               result: "ok",
-              token,
+              token
             });
             console.log("토큰발행성공");
           } else {
             console.log("비밀번호달라");
-            
+
             return res.status(400).json({ error: "비밀번호가 달라요" });
           }
         });
-      }
-      else{
+      } else {
         return res.status(400).json({ error: "그런 닉네임은 없어요" });
-
       }
     });
   } catch (error) {
