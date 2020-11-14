@@ -4,17 +4,18 @@ const verifyToken = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Credentials",'true');
   try {
     console.log("토큰 확인");
-    const clientToken = req.cookies.user;
+	console.log(req.body.token);
+    const clientToken = req.body.token;
     const decoded = jwt.verify(clientToken, "piTeam");
     if (decoded) {
       res.locals.userNickname = decoded.nickname;
 	next();
     } else {
-	console.error(err.response);
+	console.error(err);
       res.status(401).json({ error: "unauthorized" });
     }
   } catch (err) {
-	console.error(err.response);
+	console.error(err);
     res.status(401).json({ error: "token expired" });
   }
 };

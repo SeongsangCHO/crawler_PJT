@@ -122,9 +122,9 @@ app.post(
 
 app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
-
+	console.log(req.body);
   console.log("현재 로그인된 사용자 아이디: " + res.locals.userNickname);
-  console.log("전달받은 카테고리 명 : " + req.body.category);
+  console.log("전달받은 카테고리 명 : " + req.category);
   //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
   //front에서 전달받은 category명을 테이블에 삽입함
   //카테고리 id도 외래키 userId로 얻을 수 있음
@@ -146,8 +146,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
 
 app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
-  console.log("server addlink call");
-  const { title, price, link, info, currentCategory } = req.body;
+  const { title, price, link, info, currentCategory } = req.body.linkData
 
   let sql = `insert into links (title, price, link, info, categories_id, users_id) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
   and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
@@ -253,18 +252,18 @@ console.log("loginId is : " + res.locals.userNickname);
 app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   let searchText = req.body.currentLinkTitle;
+	console.log(searchText);
   let status = "쓱 ,쿠팡 크롤러";
-	console.log("res userNAme is"+ res.locals.userNickname);
+	console.log("crawler : res userName is "+ res.locals.userNickname);
   //0 : 실패
   //1 : 성공
   //2 : 검색결과 없음
-
   let findLinkId = `select id from links where users_id =
   (select id from users where nickname = '${res.locals.userNickname}'
   and title ='${searchText}'
   )`;
   db.query(findLinkId, (dbErr, dbResult) => {
-    console.log("findID : ", dbResult[0].id);
+    console.log("findID : ", dbResult[0])
     // ssgCrawler(searchText, dbResult[0].id).then((result) => {
     //   //끝나면 리턴받긴하네
     //   //크롤러들의 수행이 끝나면 성공값을 리턴해야함.
