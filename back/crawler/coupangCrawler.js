@@ -11,7 +11,7 @@ const coupangCrawler = async (searchText, linkId) => {
   let start = await new Date().getTime();
   // 페이지당 보여줄 프로덕츠 수
   //Common part start//
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'] });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );

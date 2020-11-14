@@ -14,7 +14,7 @@ const ssgCrawler = async (searchTitle, linkId) => {
   let start = await new Date().getTime();
   //배포시 headless true로 설정해야함.
   //에러핸들링 추가해야함., 블록스코프에 맞춰서
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'] });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );

@@ -19,7 +19,7 @@ async function infiniteScroll(page) {
     currentScroll += 50;
     previousHeight = await page.evaluate(`document.body.scrollHeight`);
     await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
-    delay(200);
+    delay(1000);
   }
   return (1);
 }
@@ -49,7 +49,8 @@ const naverCrawler = async (searchTitle, linkId) => {
   let productData = [];
 
   const browser = await puppeteer.launch({
-    headless: true
+    headless: true,
+    args:['--no-sandbox'],
   });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
