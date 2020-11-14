@@ -114,7 +114,8 @@ function* loginRequst(action) {
   try {
     console.log("loginRequest in saga");
     const result = yield call(loginAPI, action.data);
-    console.log(result.status);
+    console.log(result.data.token);
+    localStorage.setItem('user',result.data.token);
     if (result.status == 200) {
       yield put({ type: LOGIN_SUCCESS,user_nickname:action.data.user_nickname, isLogined: true });
       alert("로그인 성공");
