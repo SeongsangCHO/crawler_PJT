@@ -25,7 +25,6 @@ app.use(
 const session =  require("cookie-session");
 app.use(cookieParser());
 
-
 const port = process.env.PORT || 5000;
 let testAPIRouter = require("./routes/testAPI");
 const { start } = require("repl");
@@ -255,7 +254,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   let searchText = req.body.currentLinkTitle;
   let status = "쓱 ,쿠팡 크롤러";
-
+	console.log("res userNAme is"+ res.locals.userNickname);
   //0 : 실패
   //1 : 성공
   //2 : 검색결과 없음

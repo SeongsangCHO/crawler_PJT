@@ -204,8 +204,9 @@ function* watchNickNameDoubleCheck() {
 
 function getLinkDataAPI() {
   console.log("getLinkDataAPI in saga");
-
-  return axios.post(linkDataApiCallURL, {
+	const cookie = localStorage.getItem("user");
+	console.log(cookie);
+  return axios.post(linkDataApiCallURL, cookie,{
     withCredentials: true,
   });
 }

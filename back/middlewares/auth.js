@@ -7,6 +7,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 exports.createToken = async function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   try {
     //front에서 보낸요청과 db에서 꺼낸 데이터가 일치하는지 확인하고
