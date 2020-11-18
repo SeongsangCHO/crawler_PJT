@@ -254,7 +254,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   let searchText = req.body.currentLinkTitle;
 	console.log("crawler : res userName is "+ res.locals.userNickname);
-	console.log("crawler : req req.body is "+ req.body);
+	console.log(req.body);
   //0 : 실패
   //1 : 성공
   //2 : 검색결과 없음
