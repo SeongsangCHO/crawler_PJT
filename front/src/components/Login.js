@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
+import "./css/Login.css";
+
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -28,7 +30,9 @@ const PasswordInput = styled.input`
   margin-bottom: 15px;
 `;
 const SubmitButton = styled.button`
-  background-color: lavender;
+  background-color: #E05B3D;
+  border-radius:10px;
+  color:#fff;
 `;
 function Register() {
   const dispatch = useDispatch();
@@ -79,7 +83,6 @@ function Register() {
   return (
     <LoginFormWrapper>
       <form onSubmit={handleSubmit}>
-        <div>로그인 페이지</div>
         <div>
           <label>닉네임</label>
         </div>
@@ -99,10 +102,10 @@ function Register() {
           type="password"
           placeholder="비밀번호"
         ></PasswordInput>{" "}
-        <div>
-          <SubmitButton onClick={handleLogin}>
+        <div className ="button-wrapper">
+          <button  className="login-button"onClick={handleLogin}>
             로그인
-          </SubmitButton>
+          </button>
           <Link to={"/register"}>가입하기</Link>
         </div>
       </form>

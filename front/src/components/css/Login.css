@@ -1,0 +1,29 @@
+.login-button{
+	color: #E05B3D;
+	border-radius: 10px;
+	background-color: #fff;
+}
+.login-button:hover{
+	color: #fff;
+	background-color: #E05B3D;
+}
+
+.button-wrapper{
+	display: flex;
+	justify-content: space-around;
+}
+.button-wrapper > a{
+	text-decoration: none;
+	color: #E05B3D;
+	border-radius: 10px;
+}
+
+.button-wrapper > a:hover{
+	text-decoration: none;
+	color: #fff;
+	background-color: #E05B3D;;
+}
+.button-wrapper > a{
+	text-decoration: none;
+	color: #E05B3D;
+}

@@ -3,6 +3,7 @@ import Header from "./Header";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import "./css/Register.css"
 import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -129,10 +130,10 @@ function Register() {
           type="text"
           placeholder="닉네임입력"
         ></NickInput>
-        <DoubleCheck onClick={getNickName} type="button">
+        <button className="register-button"onClick={getNickName} type="button">
           {" "}
           닉네임 중복체크{" "}
-        </DoubleCheck>
+        </button>
         <div>
           <label>패스워드</label>
         </div>
@@ -159,9 +160,9 @@ function Register() {
         )}
         <div>
           {isDouble == true ? (
-            <RegisterButton type="submit" required>
+            <button className="register-button" type="submit" required>
               가입
-            </RegisterButton>
+            </button>
           ) : (
             <label> 닉네임 중복체크를 확인해주세요.</label>
           )}
