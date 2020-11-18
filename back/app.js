@@ -83,7 +83,7 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
   try {
     bcrypt.hash(
       req.body.user_password,
-      HASH_ROUND,
+      process.env.HASH_ROUND,
       (bcryptError, hashPassword) => {
         let sql = `insert into users (nickname, password) values(?, ?)`;
         db.query(
