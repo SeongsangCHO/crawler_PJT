@@ -52,7 +52,7 @@ mostly javascript
 
 - 구매한 상품의 정보들을 입력합니다. 제목기반으로 크롤링이 수행됩니다.
   - 가격과 링크는 구매했던 곳 기준으로 작성합니다. 추후 가격비교, 재구매할 때 사용할 수 있습니다.
-- <img src="/Users/secho/Library/Application Support/typora-user-images/image-20201118131832932.png" alt="image-20201118131832932" style="zoom:33%;" />
+- <img src="https://images.velog.io/images/secho/post/0e97314c-e5a2-4c0d-8eb4-81c4953868ec/image.png" style="zoom:33%;" />
 
 - 링크 추가 완료 후 6 ~ 8초 (서버 성능에 따라 좌우됨)정도 후 크롤링작업이 완료되며 ssg, naver, coupang사이트에서 각 제품 1 ~ 3위까지 가격, 이미지, 링크들을 제공합니다.
 - <img src="https://images.velog.io/images/secho/post/513ad1cf-31c9-4413-86cb-4f9c39f258b9/image.png" style="zoom:25%;" />
@@ -71,4 +71,3 @@ mostly javascript
 - dotenv로 정보관리하기
 
 - nosql?
-
