@@ -124,7 +124,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
 	console.log(req.body);
   console.log("현재 로그인된 사용자 아이디: " + res.locals.userNickname);
-  console.log("전달받은 카테고리 명 : " + req.category);
+  console.log("전달받은 카테고리 명 : " + req.body.category);
   //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
   //front에서 전달받은 category명을 테이블에 삽입함
   //카테고리 id도 외래키 userId로 얻을 수 있음
