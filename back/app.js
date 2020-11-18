@@ -263,7 +263,6 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   and title ='${searchText}'
   )`;
   db.query(findLinkId, (dbErr, dbResult) => {
-    console.log("findID : ", dbResult[0].id)
     const crawlers = [
       ssgCrawler(searchText, dbResult[0].id),
       coupangCrawler(searchText, dbResult[0].id),
