@@ -16,8 +16,6 @@ const linkDataApiCallReducer = (state = initialState, action) => {
       return { ...state ,isCalled:false};
     }
     case LINK_DATA_SUCCESS: {
-      console.log(action.data);
-      
       return { ...state,  data: {...action.data} ,isCalled:true};
     }
     case LINK_DATA_FAILURE: {
