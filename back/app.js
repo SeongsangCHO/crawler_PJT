@@ -147,12 +147,13 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
 app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   const { title, price, link, info, currentCategory } = req.body.linkData
-
+  console.log(title, price, link, info, currentCategory);
   let sql = `insert into links (title, price, link, info, categories_id, users_id) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
   and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
   (select id from users where nickname = '${res.locals.userNickname}'))`;
 
   db.query(sql, [title, price, link, info], (dbError, result) => {
+    console.log(result);
     if (dbError) throw dbError;
   });
   return res.status(200).json({ message: "링크 추가 SUCCESS" });
@@ -252,9 +253,8 @@ console.log("loginId is : " + res.locals.userNickname);
 app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://addyour.link:3000");
   let searchText = req.body.currentLinkTitle;
-	console.log(searchText);
-  let status = "쓱 ,쿠팡 크롤러";
 	console.log("crawler : res userName is "+ res.locals.userNickname);
+	console.log("crawler : req req.body is "+ req.body);
   //0 : 실패
   //1 : 성공
   //2 : 검색결과 없음
@@ -263,6 +263,8 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   and title ='${searchText}'
   )`;
   db.query(findLinkId, (dbErr, dbResult) => {
+    console.log("267");
+    console.log(dbResult);
     const crawlers = [
       ssgCrawler(searchText, dbResult[0].id),
       coupangCrawler(searchText, dbResult[0].id),
