@@ -15,7 +15,6 @@ const HASH_ROUND = 10;
 const { verifyToken } = require("./middlewares/verify");
 var cookieParser = require("cookie-parser");
 require("dotenv").config();
-dotenv.config({ path: path.join(__dirname, './.env') })
 const app = express();
 app.use(
   cors({

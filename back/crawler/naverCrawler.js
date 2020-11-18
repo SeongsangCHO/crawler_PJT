@@ -57,12 +57,10 @@ const naverCrawler = async (searchTitle, linkId) => {
     { waitUntil: "networkidle2" }
   );
   const scrollResult = await infiniteScroll(page);
-  console.log("스크롤 결과:" +scrollResult);
   //맨 밑으로 스크롤링
   // await pageDown(page).then(value => {
   //   console.log("await return " + value);
   // });
-  console.log("after pageDown");
 
   //검색결과가 없다면 2 리턴
   try {
@@ -92,12 +90,7 @@ const naverCrawler = async (searchTitle, linkId) => {
 
       //전체페이지가 크롤링할 페이지 수 보다 적을경우 검색페이지를 최대 페이지만큼 하도록 지정
       if (totalPages - CRAWL_PAGES < 0) lastPageNumber = totalPages;
-
-      console.log(lastPageNumber);
-
       for (let pageNumber = 1; pageNumber <= lastPageNumber; pageNumber++) {
-        console.log("지맘대로여");
-
         if (pageNumber != 1) {
           await page.goto(
             `https://search.shopping.naver.com/search/all?frm=NVSHATC&origQuery=%EB%AC%BC&pagingIndex=${pageNumber}&pagingSize=40&productSet=total&query=%EB%AC%BC&sort=rel&timestamp=&viewType=list`,

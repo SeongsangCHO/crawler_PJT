@@ -66,7 +66,7 @@ const coupangCrawler = async (searchText, linkId) => {
           .replace(/,/gi, "");
       }
     );
-    console.log("total Products : ", totalProducts);
+    // console.log("total Products : ", totalProducts);
     lastPageNumber = Math.ceil(totalProducts / LIST_SIZE);
     if (+totalProducts === 0) {
       //검색결과가 없음
@@ -89,7 +89,7 @@ const coupangCrawler = async (searchText, linkId) => {
   }
   // lastPage넘버 set end//
 
-  console.log("lastPageNumber: ", lastPageNumber);
+  // console.log("lastPageNumber: ", lastPageNumber);
   //document.querySelector(`#searchOptionForm > div.search-header   strong`)
   //.innerText.slice(1, document.querySelector(`#searchOptionForm > div.search-header strong`).innerText.length - 1).replace(/,/gi ,"");
 
