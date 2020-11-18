@@ -24,26 +24,6 @@ async function infiniteScroll(page) {
   return (1);
 }
 
-// const pageDown = async page => {
-// async function imageLoading(currentScroll, previousHeight) {
-//   const interval = setInterval(async function () {
-//     previousHeight = await page.evaluate(`document.body.scrollHeight`);
-//     currentScroll += 50;
-
-//     await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
-//     console.log("페이지 다운")
-//     if (currentScroll >= previousHeight) {
-//       clearInterval(interval);
-//       return (1);
-//     }
-//   }, 50);
-// }
-// await imageLoading(0, 0).then((value) => {
-//   console.log("이미지 로딩 end" + value)
-// });
-// return (1);
-// };
-
 const naverCrawler = async (searchTitle, linkId) => {
   let start = await new Date().getTime();
   let productData = [];
@@ -128,7 +108,6 @@ const naverCrawler = async (searchTitle, linkId) => {
         }
         //광고 지우기
         for (let idx = 0; idx < LIST_SIZE; idx++) {
-          console.log("페이지다운 이 끝나고 실행되는 부분");
           await page.waitForSelector(
             `.list_basis > div > div:nth-child(${idx + 1}) img`
           );
@@ -206,13 +185,11 @@ const naverCrawler = async (searchTitle, linkId) => {
     await browser.close(); // 브라우저 닫기
     return FAILURE;
   }
-  console.log("브라우저닫는게 에러지?");
 
   try {
     //페이지 탐색 완료시
     await page.close(); // 페이지 닫기
     await browser.close(); // 브라우저 닫기
-    console.log("여기지?");
   } catch (error) {
     console.error(error);
   }

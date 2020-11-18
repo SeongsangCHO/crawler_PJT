@@ -264,16 +264,6 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   )`;
   db.query(findLinkId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0])
-    // ssgCrawler(searchText, dbResult[0].id).then((result) => {
-    //   //끝나면 리턴받긴하네
-    //   //크롤러들의 수행이 끝나면 성공값을 리턴해야함.
-
-    //   console.log(result);
-    // });
-    // coupangCrawler(searchText, dbResult[0].id).then((result) => {
-    //   console.log(result);
-    //   return res.status(200).json({ message: "성공?" });
-    // });
     const crawlers = [
       ssgCrawler(searchText, dbResult[0].id),
       coupangCrawler(searchText, dbResult[0].id),
