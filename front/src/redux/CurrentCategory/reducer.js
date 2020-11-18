@@ -15,15 +15,12 @@ const currentCategoryReducer = (state = initialState, action) => {
 
   switch (action?.type) {
     case GET_CATEGORY_REQUEST: {
-      console.log("GET 카테고리 REQUEST_리듀서");
       return { ...state };
     }
     case GET_CATEGORY_SUCCESS: {
-      console.log("GET 카테고리 SUCCESS_리듀서");
       return { ...state, currentCategory: action.currentCategory};
     }
     case GET_CATEGORY_FAILURE: {
-      console.log("GET 카테고리 FAILURE_리듀서");
       return { ...state};
     }
     

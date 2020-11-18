@@ -63,7 +63,6 @@ const reloadURL = "http://34.64.171.138:5000/reload";
 // }
 
 function signUpAPI(signUpData) {
-  console.log("signUpAPI in saga");
   return axios.post(registerURL, signUpData, {
     withCredentials: true,
   });
@@ -71,7 +70,6 @@ function signUpAPI(signUpData) {
 
 function* signUp(action) {
   try {
-    console.log("signUp in saga");
     const result = yield call(signUpAPI, action.data);
     // yield put(registerSuccess(action.data)); //액션호출안해두되남.
     //signUpAPI 를 호출하고 돌아오는 데이터도 받는다.
@@ -83,11 +81,9 @@ function* signUp(action) {
 
     //post요청이 성공했을 때
     //history에 uri는 변경이되는데 컴포넌트가 안바뀌네
-    console.log(result.status);
 
     if (result.status === 200) {
       yield put({ type: SIGN_UP_SUCCESS, data: action.data });
-      console.log("가입데이터 요청완료");
       alert("가입성공");
     }
   } catch (err) {
@@ -99,12 +95,10 @@ function* signUp(action) {
 
 //액션 type - SIGN_UP_REQUEST가 들어올떄까지 기다림
 function* watchSignUp() {
-  console.log("watch Sign UP");
   yield takeLatest(SIGN_UP_REQUEST, signUp); //리듀서 감지
 }
 
 function loginAPI(loginData) {
-  console.log("loginAPI in saga");
 
   return axios.post(loginURL, loginData, {
     withCredentials: true,
@@ -113,7 +107,6 @@ function loginAPI(loginData) {
 
 function* loginRequst(action) {
   try {
-    console.log("loginRequest in saga");
     const result = yield call(loginAPI, action.data);
 	localStorage.setItem('user', result.data.token);	    
     if (result.status == 200) {
@@ -127,12 +120,10 @@ function* loginRequst(action) {
   }
 }
 function* watchLogin() {
-  console.log("watch Login");
   yield takeLatest(LOGIN_REQUEST, loginRequst);
 }
 
 function addCategoryAPI(category) {
-  console.log("addCategoryAPI in saga");
 
   const cookie = localStorage.getItem("user");
   return axios.post(
@@ -146,8 +137,6 @@ function addCategoryAPI(category) {
 
 function* addCategory(action) {
   try {
-    console.log("addCategory in saga");
-    console.log(action.category);
     const result = yield call(addCategoryAPI, action.category);
 
     if (result.status == 200) {
@@ -162,14 +151,12 @@ function* addCategory(action) {
 }
 
 function* watchAddCategory() {
-  console.log("watch AddCategory");
   yield takeLatest(ADD_CATEGORY_REQUEST, addCategory);
 }
 
 const doubleCheckURL = "http://34.64.171.138:5000/doublecheck";
 
 function doubleCheckAPI(nickNameData) {
-  console.log("doubleCheckAPI in saga");
 
   return axios.post(doubleCheckURL, nickNameData, {
     withCredentials: true,
@@ -178,7 +165,6 @@ function doubleCheckAPI(nickNameData) {
 
 function* nickNameDoubleCheck(action) {
   try {
-    console.log("getNickName in saga");
     const result = yield call(doubleCheckAPI, action.data);
     if (result.status === 200) {
       yield put({
@@ -197,16 +183,13 @@ function* nickNameDoubleCheck(action) {
 }
 
 function* watchNickNameDoubleCheck() {
-  console.log("watch getNickName from server");
   //서버로 post로 닉네임 던진다음, select로 중복체크함
   //없으면 200상태코드 반환, 있으면 4xx에러 반환. failure에서 console.찍기
   yield takeLatest(NICK_DOUBLE_CHECK_REQUEST, nickNameDoubleCheck);
 }
 
 function getLinkDataAPI() {
-  console.log("getLinkDataAPI in saga");
 	const cookie = localStorage.getItem("user");
-	console.log(cookie);
   return axios.post(linkDataApiCallURL, {token: cookie},{
     withCredentials: true,
   });
@@ -214,7 +197,6 @@ function getLinkDataAPI() {
 
 function* getLinkData(action) {
   try {
-    console.log("getlinkData");
     const result = yield call(getLinkDataAPI, action.data);
     if (result.status == 200) {
       yield put({ type: LINK_DATA_SUCCESS, data: result.data ,isCalled:true});
@@ -227,7 +209,6 @@ function* getLinkData(action) {
 }
 
 function* watchGetLinkData() {
-  console.log("watch CallLinkDataApi from server");
   yield takeLatest(LINK_DATA_REQUEST, getLinkData);
 }
 
@@ -247,12 +228,10 @@ function* getCategory(action) {
 }
 
 function* watchGetCategory() {
-  console.log("watch getCategory");
   yield takeLatest(GET_CATEGORY_REQUEST, getCategory);
 }
 
 function addLinkAPI(linkData) {
-  console.log("call addLinkAPI");
 
   const cookie = localStorage.getItem("user");
   return axios.post(addLinkURL,{token:cookie, linkData}, {
@@ -273,7 +252,6 @@ function* addLink(action) {
 }
 
 function* watchAddLink() {
-  console.log("watch AddLink");
   yield takeLatest(ADD_LINK_REQUEST, addLink);
 }
 
@@ -289,7 +267,6 @@ function runCrawlerAPI(currentLinkTitle){
 function* runCrawler(action) {
   try {
     const result = yield call(runCrawlerAPI, action.currentLinkTitle);
-    console.log(result);
     if (result.status == 200){
       yield put({type: RUN_CRAWLER_SUCCESS, currentLinkTitle: action.currentLinkTitle});
     }
@@ -300,7 +277,6 @@ function* runCrawler(action) {
 }
 
 function* watchRunCrawler() {
-  console.log("watch Crawler");
   yield takeLatest(RUN_CRAWLER_REQUEST, runCrawler);
 }
 
@@ -326,7 +302,6 @@ function* reloadCrawler(action){
 }
 
 function* watchReloading(){
-  console.log("watch reloading");
   yield takeLatest(RELOAD_REQUEST, reloadCrawler);
 }
 

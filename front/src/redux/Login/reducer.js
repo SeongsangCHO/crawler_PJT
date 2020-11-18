@@ -18,15 +18,12 @@ const loginReducer = (state = initialState, action) => {
 
   switch (action?.type) {
     case LOGIN_REQUEST: {
-      console.log("로그인 REQUEST_리듀서");
       return { ...state };
     }
     case LOGIN_SUCCESS: {
-      console.log("로그인 SUCCESS_리듀서");
       return { ...state,user_nickname: action.user_nickname,  isLogined: action.isLogined };
     }
     case LOGIN_FAILURE: {
-      console.log("로그인 FAILURE_리듀서");
       return { ...state, isLogined: action.isLogined };
     }
     default:

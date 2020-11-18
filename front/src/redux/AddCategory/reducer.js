@@ -15,15 +15,12 @@ const addCategoryReducer = (state = initialState, action) => {
 
   switch (action?.type) {
     case ADD_CATEGORY_REQUEST: {
-      console.log("add카테고리 REQUEST_리듀서");
       return { ...state };
     }
     case ADD_CATEGORY_SUCCESS: {
-      console.log("add카테고리 SUCCESS_리듀서");
       return { ...state, category: action.category};
     }
     case ADD_CATEGORY_FAILURE: {
-      console.log("add카테고리 FAILURE_리듀서");
       return { ...state, data: {}};
     }
     

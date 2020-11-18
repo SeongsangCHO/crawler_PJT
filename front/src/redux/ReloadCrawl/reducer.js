@@ -15,15 +15,12 @@ import {
   
 	switch (action?.type) {
 	  case RELOAD_REQUEST: {
-		console.log("리로딩 REQUEST_리듀서");
 		return { ...state };
 	  }
 	  case RELOAD_SUCCESS: {
-		console.log("리로딩 SUCCESS_리듀서");
 		return { ...state, isReloaded : action.isReloaded, linkTitle: action.linkTitle};
 	  }
 	  case RELOAD_FAILURE: {
-		console.log("리로딩 FAILURE_리듀서");
 		return { ...state, isReloaded: action.isReloade, linkTitle: '' };
 	  }
 	  default:

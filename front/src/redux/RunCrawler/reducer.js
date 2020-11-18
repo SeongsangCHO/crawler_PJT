@@ -18,15 +18,12 @@ const runCrawlerReducer = (state = initialState, action) => {
 
   switch (action?.type) {
     case RUN_CRAWLER_REQUEST: {
-      console.log("크롤러 REQUEST_리듀서");
       return { ...state ,isCrawled:false};
     }
     case RUN_CRAWLER_SUCCESS: {
-      console.log("크롤러 SUCCESS_리듀서");
       return { ...state,  currentLinkTitle: action.currentLinkTitle,isCrawled:true };
     }
     case RUN_CRAWLER_FAILURE: {
-      console.log("크롤러 FAILURE_리듀서");
       return { ...state};
     }
     default:
