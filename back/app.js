@@ -265,6 +265,8 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   db.query(findLinkId, (dbErr, dbResult) => {
     console.log("267");
     console.log(dbResult);
+    if (dbResult == null)
+      return res.status(400).json({ message : "실패"});
     const crawlers = [
       ssgCrawler(searchText, dbResult[0].id),
       coupangCrawler(searchText, dbResult[0].id),
