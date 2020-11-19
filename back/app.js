@@ -313,22 +313,7 @@ app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
 });
 
 
-app.get("/coupang", (req, res) => {
-  let status = "쿠팡크롤러";
-  coupangCrawler();
-  res.send(status);
-});
-app.get("/multi", (req, res) => {
-  let status = "멀티플 크롤러";
-  naverCrawler("물", 19);
-  res.send(status);
-});
 
-app.get("/cluster", (req, res) => {
-  let status = "클러스터 크롤러";
-  cluster();
-  res.send(status);
-});
 app.listen(port, () => {
   console.log(`server is listening at localhost:${port}`);
 });
