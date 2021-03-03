@@ -1,15 +1,16 @@
 const puppeteer = require("puppeteer");
 let db = require("../config/db_config");
-let iconv = require("iconv-lite");
+const pageSet = require("./pageSetting");
+
 const CRAWL_PAGES = 1;
+const NO_SEARCH_DATA = 2;
+const SUCCESS = 1;
+const FAILURE = 0;
 
 //품목기반으로 검색한 크롤링을 해야하는데,
 //크롤링에 인자전달하는 방법
 //db에서 select한 결과를 갖고 크롤링을 해야할듯
-const ssgCrawler = async (searchTitle, linkId) => {
-  const NO_SEARCH_DATA = 2;
-  const SUCCESS = 1;
-  const FAILURE = 0;
+const ssgCrawler = async (searchText, linkId) => {
 
   let start = await new Date().getTime();
   //배포시 headless true로 설정해야함.
@@ -19,27 +20,11 @@ const ssgCrawler = async (searchTitle, linkId) => {
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );
   const page = await browser.newPage();
-  await page.setExtraHTTPHeaders({
-    "accept-charset": "euc-kr", //한글 깨지는 문제를 해결해보려고 charset을 바꿔봤는데 해결안됨
-  });
-  //이미지,폰트,스타일시트 로딩 블락, 속도향상
-  await page.setRequestInterception(true);
-  //image를 안불러와서 image src를 받을 수 없었음?
-  page.on("request", (request) => {
-    if (
-      // request.resourceType() === "image" ||
-      request.resourceType() === "font" ||
-      request.resourceType() == "stylesheet"
-    )
-      request.abort();
-    else request.continue();
-  });
+  await pageSet.pageInit(page);
 
-  //시간제한 없애기
-  await page.setDefaultNavigationTimeout(0);
   //동시에 여러 페이지 newPage로 띄워서  promise.all로 각각 페이지를 모듈로 나눠서 크롤링실행해야겠다.
   await page.goto(
-    `http://www.ssg.com/search.ssg?target=all&query=${searchTitle}&page=1`,
+    `http://www.ssg.com/search.ssg?target=all&query=${searchText}&page=1`,
     { waitUntil: "networkidle2" }
   );
 
@@ -84,7 +69,7 @@ const ssgCrawler = async (searchTitle, linkId) => {
       ) {
         if (pageNumber != 1) {
           await page.goto(
-            `http://www.ssg.com/search.ssg?target=all&query=${searchTitle}&page=${pageNumber}`,
+            `http://www.ssg.com/search.ssg?target=all&query=${searchText}&page=${pageNumber}`,
             { waitUntil: "networkidle2" }
           );
         }

@@ -8,6 +8,51 @@ const SUCCESS = 1;
 const FAILURE = 0;
 const LIST_SIZE = 72;
 
+//페이지당 광고 삭제
+const removeAd = async (page) => {
+  for (let i = 0; i < LIST_SIZE; i++) {
+    await page.evaluate(() => {
+      let badge = document.querySelector(".search-product__ad-badge");
+      if (badge) badge.remove();
+    });
+  }
+};
+
+//전체 상품갯수, 전체 페이지 숫자 구하기
+const getSearchRange = async (page) => {
+  let totalProducts = 0;
+  let lastPageNumber = 0;
+  try {
+    totalProducts = await page.$eval(
+      `
+    #searchOptionForm > div.search-header strong`,
+      (element) => {
+        return element.innerText
+          .slice(1, element.innerText.length - 1)
+          .replace(/,/gi, "");
+      }
+    );
+
+    lastPageNumber = Math.ceil(totalProducts / LIST_SIZE);
+    if (+totalProducts === 0) {
+      //검색결과가 없음
+      console.log("검색결과가 없습니다.");
+      await page.close(); // 페이지 닫기
+      await browser.close(); // 브라우저 닫기
+      return {
+        totalProducts: NO_SEARCH_DATA,
+        lastPageNumber: NO_SEARCH_DATA,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return {
+    totalProducts: totalProducts,
+    lastPageNumber: lastPageNumber,
+  };
+};
+
 const coupangCrawler = async (searchText, linkId) => {
   let start = await new Date().getTime();
 
@@ -21,35 +66,20 @@ const coupangCrawler = async (searchText, linkId) => {
     console.error("Unhandled Rejection at: Promise", p, "reason:", reason);
     browser.close();
   });
-  await pageSet.pageInit(searchText, page, LIST_SIZE);
+  await pageSet.pageInit(page);
+  await page.goto(
+    `https://www.coupang.com/np/search?q=${searchText}&channel=user&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=${LIST_SIZE}&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=1&rocketAll=false&searchIndexingToken=1=4&backgroundColor=`,
+    //page로 넘기면 검색가능
+    { waitUntil: "networkidle2" }
+  );
 
-  let lastPageNumber;
-  let totalProducts;
-  try {
-    totalProducts = await page.$eval(
-      `
-    #searchOptionForm > div.search-header strong`,
-      (element) => {
-        return element.innerText
-          .slice(1, element.innerText.length - 1)
-          .replace(/,/gi, "");
-      }
-    );
-    console.log("total Products : ", totalProducts);
-    lastPageNumber = Math.ceil(totalProducts / LIST_SIZE);
-    if (+totalProducts === 0) {
-      //검색결과가 없음
-      console.log("검색결과가 없습니다.");
-      await page.close(); // 페이지 닫기
-      await browser.close(); // 브라우저 닫기
-      return NO_SEARCH_DATA;
-    }
-  } catch (error) {
-    console.error(error);
-  }
+  // let lastPageNumber;
+  const searchRange = await getSearchRange(page);
+  let totalProducts = searchRange.totalProducts;
+  let lastPageNumber = searchRange.lastPageNumber;
+
   if (lastPageNumber >= 10) {
-    console.log(totalProducts);
-
+    //page가 10개 이상일 때 마지막 페이지 수를 구하기 위함.
     await page.waitForSelector("div.search-pagination a.btn-last.disabled");
     lastPageNumber = await page.$eval(
       "div.search-pagination a.btn-last.disabled",
@@ -63,38 +93,26 @@ const coupangCrawler = async (searchText, linkId) => {
   try {
     let priority = 1;
     //1 ~ 3페이지까지 크롤링
-    for (
-      let pageNumber = 1;
-      pageNumber <= lastPageNumber - (lastPageNumber - CRAWL_PAGES);
-      pageNumber++
-    ) {
+    for (let pageNumber = 1; pageNumber <= CRAWL_PAGES; pageNumber++) {
       if (pageNumber != 1) {
+        //CRAWL_PAGES만큼 페이지 이동
         await page.goto(
           `https://www.coupang.com/np/search?q=${searchText}&channel=user&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=72&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=${pageNumber}&rocketAll=false&searchIndexingToken=1=4&backgroundColor=`,
-          //page로 넘기면 검색가능
           { waitUntil: "networkidle2" }
         );
       }
-      for (let idx = 0; idx < LIST_SIZE; idx++) {
-        //페이지당 광고 삭제
-        await page.evaluate(() => {
-          let badge = document.querySelector(".search-product__ad-badge");
-          if (badge) badge.remove();
-        });
-      }
+
+      await removeAd(page);
       //페이지당 상품 갯수 => 페이지당 광고를 삭제하고나서 해당 페이지에 존재하는 상품갯수
       let productAmountPerPage = await page.evaluate(() => {
         return document.querySelectorAll(`#productList li`).length;
       });
-      //요소가 존재하는지 확인해야함- > 에러체크
 
       for (let idx = 1; idx <= productAmountPerPage; idx++) {
         let productObj = {};
         try {
           //우선순위, 제목, 가격, link 를 찾아서 추가해주는 part, TODO : unit-price도 추가해야할지 고민
           productObj["priority"] = priority++;
-          //광고를 지우고 그 idx로 selector이용하니 없는데 접근한다고해서
-          //exception 발생함.
           productObj["title"] = await page.$eval(
             `#productList li:nth-child(${idx}) div.name`,
             (element) => {
@@ -135,6 +153,7 @@ const coupangCrawler = async (searchText, linkId) => {
   } catch (error) {
     console.error(error);
   }
+
   await page.close(); // 페이지 닫기
   await browser.close(); // 브라우저 닫기
 
@@ -168,7 +187,7 @@ function dataInsert(crawlerData, linkId) {
           filterd.link,
           filterd.imgsrc,
         ],
-        function (error, result) {
+        function (error,) {
           if (error) {
             console.error(error);
             return FAILURE;

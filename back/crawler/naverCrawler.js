@@ -1,4 +1,6 @@
 const puppeteer = require("puppeteer");
+const pageSet = require("./pageSetting");
+
 let db = require("../config/db_config");
 const CRAWL_PAGES = 1;
 const NO_SEARCH_DATA = 2;
@@ -24,27 +26,9 @@ async function infiniteScroll(page) {
   return (1);
 }
 
-// const pageDown = async page => {
-// async function imageLoading(currentScroll, previousHeight) {
-//   const interval = setInterval(async function () {
-//     previousHeight = await page.evaluate(`document.body.scrollHeight`);
-//     currentScroll += 50;
 
-//     await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
-//     console.log("페이지 다운")
-//     if (currentScroll >= previousHeight) {
-//       clearInterval(interval);
-//       return (1);
-//     }
-//   }, 50);
-// }
-// await imageLoading(0, 0).then((value) => {
-//   console.log("이미지 로딩 end" + value)
-// });
-// return (1);
-// };
 
-const naverCrawler = async (searchTitle, linkId) => {
+const naverCrawler = async (searchText, linkId) => {
   let start = await new Date().getTime();
   let productData = [];
 
@@ -56,22 +40,24 @@ const naverCrawler = async (searchTitle, linkId) => {
   );
 
   const page = await browser.newPage();
-  await page.setExtraHTTPHeaders({
-    "accept-charset": "euc-kr" //한글 깨지는 문제를 해결해보려고 charset을 바꿔봤는데 해결안됨
-  });
-  //이미지,폰트,스타일시트 로딩 블락, 속도향상
-  await page.setRequestInterception(true);
-  page.on("request", request => {
-    if (
-      request.resourceType() === "font"
-      // request.resourceType() === "stylesheet"
-    )
-      request.abort();
-    else request.continue();
-  });
+  await pageSet.pageInit(page);
+
+  // await page.setExtraHTTPHeaders({
+  //   "accept-charset": "euc-kr" //한글 깨지는 문제를 해결해보려고 charset을 바꿔봤는데 해결안됨
+  // });
+  // //이미지,폰트,스타일시트 로딩 블락, 속도향상
+  // await page.setRequestInterception(true);
+  // page.on("request", request => {
+  //   if (
+  //     request.resourceType() === "font"
+  //     // request.resourceType() === "stylesheet"
+  //   )
+  //     request.abort();
+  //   else request.continue();
+  // });
 
   await page.goto(
-    `https://search.shopping.naver.com/search/all?frm=NVSHATC&origQuery=top&pagingIndex=1&pagingSize=40&productSet=total&query=${searchTitle}&sort=rel&timestamp=&viewType=list
+    `https://search.shopping.naver.com/search/all?frm=NVSHATC&origQuery=top&pagingIndex=1&pagingSize=40&productSet=total&query=${searchText}&sort=rel&timestamp=&viewType=list
     `,
     { waitUntil: "networkidle2" }
   );
