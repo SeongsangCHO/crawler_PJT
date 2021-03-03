@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import CategoryModal from './CategoryModal';
+import CategoryModal from './CategoryAddingModal';
 import Nav from "react-bootstrap/Nav";
 import "../css/Contentc.css";
 import { useDispatch } from "react-redux";
