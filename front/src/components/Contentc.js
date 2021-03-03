@@ -53,7 +53,7 @@ const CardTabRightSection = styled.div`
   flex: 1;
 `;
 
-const CrawlingCardWrapper = styled.div`
+const CrawledCardWrapper = styled.div`
   border: 0.1px solid gray;
   border-radius: 5px;
   padding: 5px;
@@ -159,7 +159,7 @@ const SsgBadge = styled.span`
   padding-left: 0.6em;
   border-radius: 10rem;
 `;
-const CrawlListCard = styled.div`
+const CrawledCardList = styled.div`
   border: 1px solid #000;
 `;
 const BadgeDiv = styled.div``;
@@ -177,68 +177,68 @@ const ProductImage = styled.img`
   height: auto;
 `;
 
-function CrawlingCard({ obj }) {
+
+const CrawledCard = ({crawledData}) => {
+  const {link, imgsrc, title, price} = crawledData;
+  return (
+    <>
+    <TitleLink target="_blank" href={link}>
+    <ProductImage src={imgsrc} />
+
+    {title}
+  </TitleLink>
+  <div>
+    <PriceSpan>{price}</PriceSpan>
+  </div>
+  </>
+  );
+}
+function CrawledCardSection({ obj }) {
 
   return (
-    <CrawlingCardWrapper id="crawl-card-wrapper">
+    <CrawledCardWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, idx) => (
         <Tab.Pane
           eventKey={element.title}
           key={element.title}
           unmountOnExit="true"
         >
+
           {element.ssg.map((ssgElement, idx) => (
-            <CrawlListCard key={ssgElement.title}>
+            <CrawledCardList key={ssgElement.title}>
               <BadgeDiv>
                 <SsgBadge pill variant="warning">
                   SSG
                 </SsgBadge>
               </BadgeDiv>
-              <TitleLink target="_blank" href={ssgElement.link}>
-                <ProductImage src={ssgElement.imgsrc} />
-
-                {ssgElement.title}
-              </TitleLink>
-              <div>
-                <PriceSpan>{ssgElement.price}</PriceSpan>
-              </div>
-            </CrawlListCard>
+              <CrawledCard crawledData={ssgElement}></CrawledCard>
+            </CrawledCardList>
           ))}
           {element.coupang.map(coupangElement => (
-            <CrawlListCard key={coupangElement.title}>
+            <CrawledCardList key={coupangElement.title}>
               <BadgeDiv>
                 <Badge pill variant="primary">
                   COUPANG
                 </Badge>
               </BadgeDiv>
-              <TitleLink target="_blank" href={coupangElement.link}>
-                <ProductImage src={coupangElement.imgsrc} />
-                {coupangElement.title}
-              </TitleLink>
-              <div>
-                <PriceSpan>{coupangElement.price}원</PriceSpan>
-              </div>
-            </CrawlListCard>
+              <CrawledCard crawledData={coupangElement}></CrawledCard>
+
+            </CrawledCardList>
           ))}
           {element.naver.map(naverElement => (
-            <CrawlListCard key={naverElement.title}>
+            <CrawledCardList key={naverElement.title}>
               <BadgeDiv>
                 <Badge pill variant="success">
                   NAVER
                 </Badge>
-                <TitleLink target="_blank" href={naverElement.link}>
-                  <ProductImage src={naverElement.imgsrc} />
-                  <div>{naverElement.title}</div>
-                </TitleLink>
-                <div>
-                  <PriceSpan>{naverElement.price}</PriceSpan>
-                </div>
+                <CrawledCard crawledData={naverElement}></CrawledCard>
+
               </BadgeDiv>
-            </CrawlListCard>
+            </CrawledCardList>
           ))}
         </Tab.Pane>
       ))}
-    </CrawlingCardWrapper>
+    </CrawledCardWrapper>
   );
 }
 
@@ -323,12 +323,14 @@ const RegisterDetail = styled.div`
   font-size: 10px;
 `;
 const CardTabWrapper = styled.div``;
+
+//카테고리에 해당하는 물품들 전부 로딩해와야함.
+
 function CardTab({ obj }) {
 
   const linkDataIsCalled = useSelector(
     state => state.linkDataApiCallReducer.isCalled
   );
-
   const [modalShow, setModalShow] = useState(false);
   return (
     <CardTabWrapper>
@@ -350,11 +352,13 @@ function CardTab({ obj }) {
 
             <CardTabRightSection id="card-tab-right-section">
               {linkDataIsCalled == true ? (
-                <CrawlingCard obj={obj} />
+                <CrawledCardSection obj={obj} />
               ) : (
                 <Spinner animation="border" variant="primary" />
               )}
+              
             </CardTabRightSection>
+
           </Tab.Content>
         </Nav>
       </Tab.Container>

@@ -41,6 +41,7 @@ const CategoryTab = ({ obj }) => {
                 eventKey={Object.keys(cate)}
               >
                 {Object.keys(cate)}
+                
               </Nav.Link>
             ) : (
               <Nav.Link>카테고리 추가하세요</Nav.Link>
