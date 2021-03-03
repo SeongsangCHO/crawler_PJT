@@ -1,6 +1,8 @@
 const puppeteer = require("puppeteer");
 let db = require("../config/db_config");
-const pageSet = require("./pageSetting");
+const pageSet = require("../config/pageSetting");
+const ssgUtils = require("../utils/ssgUtils");
+const ssgQuery = require("../query/ssgQuery");
 
 const CRAWL_PAGES = 1;
 const NO_SEARCH_DATA = 2;
@@ -29,27 +31,14 @@ const ssgCrawler = async (searchText, linkId) => {
   );
 
   const ulContentSelector = `#divProductImg > #idProductImg li`;
-  let productData = [];
-  let lastPageNumber;
-  const liLength = await page.evaluate((SELECTOR) => {
+
+  const productAmountPerPage = await page.evaluate((SELECTOR) => {
     //page당 아이템 갯수 출력 80개
     return document.querySelectorAll(SELECTOR).length;
   }, ulContentSelector);
-  if (liLength <= 0) {
-    //li 태그의 길이가 없다 == 검색결과 없을때 크롤링종료
-    console.log("ssg_ li length is zero");
-    await page.close(); // 페이지 닫기
-    await browser.close(); // 브라우저 닫기
-    return NO_SEARCH_DATA; // 검색결과 없을때
-  } else {
-    //마지막 페이지 번호를 구함
-    let totalProduct = await page.$eval(
-      `div#area_itemCount > .tx_ko`,
-      (element) => {
-        return element.innerText.replace(/,/gi, "").split(" ")[0];
-      }
-    );
-    lastPageNumber = Math.ceil(totalProduct / liLength);
+
+  let productData = [];
+  let lastPageNumber = await ssgUtils.getLastPageNumber(page, productAmountPerPage);
 
     //페이지가 10개이상일때 last버튼 찾도록 지정
     if (lastPageNumber >= 10) {
@@ -60,11 +49,10 @@ const ssgCrawler = async (searchText, linkId) => {
     }
 
     try {
-      let priority = 1;
       //첫페이지 ~ 3페이지까지 크롤링
       for (
         let pageNumber = 1;
-        pageNumber <= lastPageNumber - (lastPageNumber - CRAWL_PAGES);
+        pageNumber <= CRAWL_PAGES;
         pageNumber++
       ) {
         if (pageNumber != 1) {
@@ -73,93 +61,20 @@ const ssgCrawler = async (searchText, linkId) => {
             { waitUntil: "networkidle2" }
           );
         }
-        for (let idx = 1; idx <= liLength; idx++) {
-          let productObj = {};
-          productObj["priority"] = priority++;
-
-          productObj["title"] = await page.$eval(
-            `#idProductImg li:nth-child(${idx}) div.title a em.tx_ko`,
-            (element) => element.textContent
-          );
-
-          productObj["price"] = await page.$eval(
-            `#idProductImg li:nth-child(${idx}) em.ssg_price`,
-            (element) => element.textContent + "원"
-          );
-          productObj["link"] = await page.$eval(
-            `#idProductImg li:nth-child(${idx}) div.title a`,
-            (element) => element.href
-          );
-          productObj[
-            "imgsrc"
-          ] = await page.$eval(`#idProductImg li:nth-child(${idx}) img`,
-           (element) => element.getAttribute('src')
-          );
-          
-          productData.push(productObj);
-        }
+        productData = await ssgUtils.getProductData(page, productAmountPerPage);
       }
     } catch (error) {
       if (error) console.error(error);
     }
-  }
-
-  let end = await new Date().getTime();
-  console.log("쓱 크롤러 걸린시간 : " + (end - start) / 1000);
+  
+  console.log("쓱 크롤러 걸린시간 : " + (await new Date().getTime() - start) / 1000);
 
   await page.close(); // 페이지 닫기
   await browser.close(); // 브라우저 닫기
-  if (dataInsert(productData, linkId) === "SUCCESS") {
+  if (ssgQuery.dataInsert(productData, linkId) === SUCCESS) {
     return SUCCESS;
   }
   return FAILURE;
 };
-
-function dataInsert(crawlerData, linkId) {
-  //필터로 갯수 조절하면 될듯
-  //성공하면 return되도록
-  console.log("링크 아이디", linkId);
-
-  crawlerData
-    .filter((obj) => {
-      return obj.priority <= 3;
-    })
-    .forEach((filterd) => {
-      db.query(
-        `
-    INSERT INTO crawl(links_id, title, price,  priority, source, link,imgsrc)
-    VALUES(?, ?, ?, ?, ?, ?,? )`,
-        [
-          linkId,
-          filterd.title,
-          filterd.price,
-          filterd.priority,
-          "ssg",
-          filterd.link,
-          filterd.imgsrc,
-        ],
-        function (error, result) {
-          if (error) {
-            console.error(error);
-            return "FAILURE";
-          }
-        }
-      );
-    });
-  return "SUCCESS";
-
-  // crawlerData.forEach((obj) => {
-  //   db.query(
-  //     `INSERT INTO product(title, price, link, priority)
-  //   VALUES(?,?,?,?)`,
-  //     [obj.title, obj.price, obj.link, obj.priority],
-  //     function (error, result) {
-  //       if (error){ console.error(error);
-  //       return "FAILURE"}
-  //     }
-  //   );
-  // });
-  // return "SUCCESS";
-}
 
 module.exports = ssgCrawler;

@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
-const pageSet = require("./pageSetting");
+const pageSet = require("../config/pageSetting");
 const naverQuery = require("../query/naverQuery");
-const naverUtils = require("./naverUtils");
+const naverUtils = require("../utils/naverUtils");
 
 let db = require("../config/db_config");
 const CRAWL_PAGES = 1;

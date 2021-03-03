@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
-const pageSet = require("./pageSetting");
-const coupangUtils = require("./coupangUtils");
+const pageSet = require("../config/pageSetting");
+const coupangUtils = require("../utils/coupangUtils");
 const coupangQuery = require("../query/coupangQuery");
 let db = require("../config/db_config");
 
