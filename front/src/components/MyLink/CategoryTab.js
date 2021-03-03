@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-
+import styled from "styled-components";
+import CategoryModal from './CategoryModal';
 import Nav from "react-bootstrap/Nav";
-
 import "../css/Contentc.css";
 import { useDispatch } from "react-redux";
 
+const CategoryWrapper = styled.div`
+  padding: 5px;
+  flex: 1;
+  @media (max-width: 768px) {
+    flex-direction: row;
+  }
+`;
 
 const CategoryTab = ({ obj }) => {
   const dispatch = useDispatch();
@@ -41,7 +48,7 @@ const CategoryTab = ({ obj }) => {
           </Nav.Item>
         ))}
       </Nav>
-      <AddCategory show={modalShow} onHide={() => setModalShow(false)} />
+      <CategoryModal show={modalShow} onHide={() => setModalShow(false)}/>
     </CategoryWrapper>
   );
 }

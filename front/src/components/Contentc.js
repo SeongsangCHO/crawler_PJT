@@ -18,6 +18,7 @@ import { ReactComponent as Redo } from "./public/redo.svg";
 import { ReactComponent as AddLinkImage } from "./public/addLink.svg";
 import SectionTitle from './MyLink/SectionTitle';
 import CategoryModal from './MyLink/CategoryModal';
+import CategoryTab from './MyLink/CategoryTab';
 
 const CategoryWrapper = styled.div`
   padding: 5px;
@@ -75,60 +76,6 @@ const ProductCardWrapper = styled.div`
   border: 1px solid gray;
 `;
 
-
-
-function AddCategory(props) {
-  const categoryStatus = useSelector(
-    state => state.addCategoryReducer.category
-  );
-  useEffect(() => {}, []);
-  const [categoryData, setCategoryData] = useState("");
-  const dispatch = useDispatch();
-  const handleSetCategory = e => {
-    setCategoryData(e.target.value);
-  };
-  const handleAddCategory = e => {
-    //페이지리로딩 방지를 위해서 넣어주어야해.
-    e.preventDefault();
-    dispatch({
-      type: "ADD_CATEGORY_REQUEST",
-      category: categoryData,
-      isAdded: false
-    });
-    //[추측][비동기처리해서] 그냥 될떄도있고 안될때도있네 => submit로 페이지 리로딩이 되기때문.
-    props.onHide();
-    //그럼 추가가 완료된 이후에는 모달창을 종료해야하는데?
-    //props로 전달된 onHide호출해서 창내림
-  };
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          <h4>관리할 링크의 카테고리를 만드세요</h4>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div>
-          <form onSubmit={handleAddCategory}>
-            <input
-              onChange={handleSetCategory}
-              autoFocus
-              type="text"
-              placeholder="카테고리 입력"
-              required
-            ></input>
-            <button type="submit">저장하기</button>
-          </form>
-        </div>
-      </Modal.Body>
-    </Modal>
-  );
-}
 const ModalWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -191,46 +138,6 @@ function AddLink(props) {
         </ModalWrapper>
       </Modal.Body>
     </Modal>
-  );
-}
-function CategoryTab({ obj }) {
-  const dispatch = useDispatch();
-  const [modalShow, setModalShow] = useState(false);
-  const handleCateClick = e => {
-    //현재 클릭되었을 때 innerHTML로 값을 얻을 수 있음
-    //클릭된 값을 saga로 던져주면서 링크카드에서 useSelector로 가져오면 되겠다.
-    //여기서 dispatch 수행해서 카테고리 상태값 지정, default는 없게하면 될듯 or 초기페이지 설정? => 언제하냐
-    dispatch({
-      type: "GET_CATEGORY_REQUEST",
-      currentCategory: e.currentTarget.innerHTML
-    });
-  };
-  return (
-    <CategoryWrapper id="category-wrapper">
-      <button className="add-button" onClick={() => setModalShow(true)}>
-        카테고리 추가
-      </button>
-      <hr />
-      <Nav variant="pills" className="flex-sm-column nav-wrapper">
-        {obj?.category?.map((cate, idx) => (
-          <Nav.Item className="nav-item-card" key={idx}>
-            {Object.keys(cate) != "null" ? (
-              <Nav.Link
-                value={Object.keys(cate)}
-                onClick={handleCateClick}
-                eventKey={Object.keys(cate)}
-              >
-                {Object.keys(cate)}
-              </Nav.Link>
-            ) : (
-              <Nav.Link>카테고리 추가하세요</Nav.Link>
-            )}
-          </Nav.Item>
-        ))}
-      </Nav>
-      <CategoryModal show={modalShow} onHide={() => setModalShow(false)}/>
-      {/* <AddCategory show={modalShow} onHide={() => setModalShow(false)} /> */}
-    </CategoryWrapper>
   );
 }
 
