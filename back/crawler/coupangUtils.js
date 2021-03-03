@@ -87,6 +87,14 @@ const getSearchRange = async (page) => {
   } catch (error) {
     console.error(error);
   }
+  if (lastPageNumber >= 10) {
+    //page가 10개 이상일 때 마지막 페이지 수를 구하기 위함.
+    await page.waitForSelector("div.search-pagination a.btn-last.disabled");
+    lastPageNumber = await page.$eval(
+      "div.search-pagination a.btn-last.disabled",
+      (element) => element.textContent
+    );
+  }
   return {
     totalProducts: totalProducts,
     lastPageNumber: lastPageNumber,
