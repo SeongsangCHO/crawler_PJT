@@ -19,6 +19,7 @@ import { ReactComponent as AddLinkImage } from "./public/addLink.svg";
 import SectionTitle from './MyLink/SectionTitle';
 import CategoryModal from './MyLink/CategoryModal';
 import CategoryTab from './MyLink/CategoryTab';
+import ProductStoreSection from './MyLink/ProductStoreSection';
 
 const CategoryWrapper = styled.div`
   padding: 5px;
@@ -337,18 +338,8 @@ function CardTab({ obj }) {
       <Tab.Container>
         <Nav variant="pills" className="flex-column">
           <Tab.Content style={{ display: "flex" }}>
-            <CardTabLeftSection>
-              <button className="add-button" onClick={() => setModalShow(true)}>
-                <AddLinkImage id="AddLinkImage" />
-              </button>
-              <hr />
-              <CardWrapper>
-                {obj[Object.keys(obj)]?.map(element => (
-                  <ProductCard element={element} />
-                ))}
-                <AddLink show={modalShow} onHide={() => setModalShow(false)} />
-              </CardWrapper>
-            </CardTabLeftSection>
+            <ProductStoreSection obj={obj}>
+            </ProductStoreSection>
 
             <CardTabRightSection id="card-tab-right-section">
               {linkDataIsCalled == true ? (
