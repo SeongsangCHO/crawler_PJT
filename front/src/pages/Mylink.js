@@ -3,8 +3,11 @@ import SectionTitle from "../components/MyLink/SectionTitle";
 import styled from "styled-components";
 import Tab from "react-bootstrap/Tab";
 import CategoryTab from "../components/MyLink/CategoryTab";
-import ProductTab from '../components/MyLink/ProductTab';
+import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
+import Header from "components/Header";
+import Footer from "components/Footer";
+
 const ContentWrapper = styled.div`
   margin-top: 10px;
   display: flex;
@@ -49,13 +52,16 @@ const MyLink = () => {
   ]);
   return (
     <div className="content-wrapper">
-        <SectionTitle />
-        <Tab.Container id="left-tabs" defaultactiveKey="All">
-          <ContentWrapper>
-            <CategoryTab obj={linkData} />
-            <ProductTab obj={linkData} />
-          </ContentWrapper>
-        </Tab.Container>
+      <Header />
+
+      <SectionTitle />
+      <Tab.Container id="left-tabs" defaultactiveKey="All">
+        <ContentWrapper>
+          <CategoryTab obj={linkData} />
+          <ProductTab obj={linkData} />
+        </ContentWrapper>
+      </Tab.Container>
+      <Footer />
     </div>
   );
 };

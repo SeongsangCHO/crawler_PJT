@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Nav from "react-bootstrap/Nav";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ReactComponent as Redo } from "../public/redo.svg";
+import { ReactComponent as Redo } from "assets/redo.svg";
 
 
 

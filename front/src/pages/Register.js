@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
+import Header from "../components/Header";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -10,7 +10,6 @@ import {
   Switch,
   useHistory,
 } from "react-router-dom";
-import { withRouter } from "react-router";
 
 const RegisterWrapper = styled.div`
   width: 100%;
@@ -56,18 +55,18 @@ function Register() {
       console.log("submitting is true");
       //route하는 부분, post요청을 한 다음 해당 uri로 이동
       //로그인페이지로 이동시키면 될듯.
-      history.push("/");
+      history.push("/login");
     }
   }, [submitting, isDouble]); //컴포넌트 갱신 => form 작성 시 수행되야함 , 인자 [] 넣지않음.
 
   //비밀번호 인풋 셋팅
-  const handlePasswordInput = (e) => {
+  const onChangePassword = (e) => {
     setPassword(e.target.value);
     setSubmitting(false);
   };
 
   //비밀번호 더블체크  부분
-  const handlePasswordCheck = (e) => {
+  const onCheckPassword = (e) => {
     let doubleCheckValue = e.target.value;
     if (doubleCheckValue == "") {
       setPasswordCheck(false);
@@ -81,7 +80,7 @@ function Register() {
   };
 
   //form 제출버튼 클릭시 발생하는 이벤트
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
 
     if (passwordCheck == false && setPassword != "") {
@@ -98,11 +97,11 @@ function Register() {
     return setSubmitting(true);
   };
   //nickname 입력시 이벤트발생마다 set되는 부분
-  const handleNickName = (e) => {
+  const onChangeNickName = (e) => {
     setNickName(e.target.value);
     setSubmitting(false);
   };
-  const getNickName = (e) => {
+  const doubleCheckNickName = (e) => {
     if (nickName == "") {
       alert("닉네임 확인해주세요.");
       return;
@@ -118,18 +117,18 @@ function Register() {
   };
   return (
     <RegisterWrapper>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <div>
           <label>닉네임</label>
         </div>
         <NickInput
           required
-          onChange={handleNickName}
+          onChange={onChangeNickName}
           id="nick"
           type="text"
           placeholder="닉네임입력"
         ></NickInput>
-        <DoubleCheck onClick={getNickName} type="button">
+        <DoubleCheck onClick={doubleCheckNickName} type="button">
           {" "}
           닉네임 중복체크{" "}
         </DoubleCheck>
@@ -139,7 +138,7 @@ function Register() {
         <PasswordInput
           required
           type="password"
-          onChange={handlePasswordInput}
+          onChange={onChangePassword}
           placeholder="비밀번호"
         ></PasswordInput>{" "}
         <div>
@@ -147,8 +146,8 @@ function Register() {
         </div>
         <PasswordCheck
           required
-          onFocus={handlePasswordCheck}
-          onChange={handlePasswordCheck}
+          onFocus={onCheckPassword}
+          onChange={onCheckPassword}
           type="password"
           placeholder="비밀번호 확인"
         ></PasswordCheck>

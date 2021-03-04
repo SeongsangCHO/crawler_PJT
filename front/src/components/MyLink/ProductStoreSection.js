@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {useSelector } from "react-redux";
 import ProductAddingModal from "./ProductAddingModal";
-import { ReactComponent as AddLinkImage } from "../public/addLink.svg";
+import { ReactComponent as AddLinkImage } from "assets/addLink.svg";
 import ProductCard from './ProductCard';
 
 const ProductStoredList = styled.div`

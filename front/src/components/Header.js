@@ -3,10 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 import "./css/Header.css";
-import { ReactComponent as Logo } from "./public/logoimage.svg";
-import { ReactComponent as JumbotronImage } from "./public/jumbotron.svg";
-
-import LogoImage from "./public/logoimage.svg";
+import { ReactComponent as Logo } from "assets/logoimage.svg";
+import RegisterModal from 'components/RegisterModal';
 
 function Jumbotron() {
   return <div id="jumbotron">Jumbotron</div>;
@@ -33,11 +31,21 @@ function NavBar() {
   );
 }
 
+
+
 function Header() {
   const isLogined = useSelector(state => state.loginReducer.isLogined);
   const userNickName = useSelector(state => state.loginReducer.user_nickname);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  
+  const onOpenRegisterModal = () =>{
+    setIsRegisterModalOpen(true);
+  }
+
   return (
     <div className="header-wrapper">
+      {isRegisterModalOpen == true ? (<RegisterModal/>) : false}
+
       <div id="Top-header">
         <div id="left-header-section">
           <NavLink to={"/"}>
@@ -50,6 +58,7 @@ function Header() {
           <NavLink className="user-register" to={"/register"}>
             register
           </NavLink>
+          <button onClick={onOpenRegisterModal}>REGISTER</button>
           {!userNickName ? (
             <NavLink className="user-register" to={"/login"}>
               login

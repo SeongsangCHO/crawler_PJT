@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
+import Header from "../components/Header";
 import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -42,7 +42,7 @@ function Register() {
     if (isLogined == true)
     {
       console.log("로그인 성공");
-      history.push("/");
+      history.push("/mylink");
     }
   },[isLogined])
   const handleNickName = (e) => {
