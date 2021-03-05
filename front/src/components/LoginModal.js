@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import styles from "components/css/RegisterModal.module.css";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
-const RegisterModalWrapper = styled.div`
+const LoginModalWrapper = styled.div`
   position: absolute;
   width: 100vw;
   height: 100vh;
   z-index: 1;
   background: rgba(0, 0, 0, 0.5);
 `;
-const RegisterModalContent = styled.div`
+const LoginModalContent = styled.div`
   position: relative;
   top: 50%;
   left: 50%;
@@ -27,7 +26,7 @@ const RegisterModalContent = styled.div`
   }
 `;
 
-const RegisterForm = styled.form`
+const LoginForm = styled.form`
   display: flex;
   width: 100%;
   height: 100%;
@@ -57,12 +56,13 @@ const SubmitButton = styled.button`
 const Input = styled.input`
   margin-bottom: 15px;
 `;
-const CloseButton = styled.div`
+const CloseButton = styled.button`
   position: relative;
   display: inline-block;
   left: 100%;
   transform: translate(-100%, 0);
   padding: 5px 5px 0 0;
+  cursor: pointer;
   border: none;
   background-color: white;
   opacity: 0.7;
@@ -70,34 +70,29 @@ const CloseButton = styled.div`
     opacity: 1;
   }
 `;
-
-const LoginButton = styled.button`
+const RegisterButton = styled.button`
   border: 1px solid;
   margin-top: 5px;
 `;
-const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
-  const onCloseRegisterModal = (e) => {
-    console.log(e.currentTarget.id);
+const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
+  const onCloseLoginModal = (e) => {
     if (
-      e.target.id === "RegisterModalWrapper" ||
-      e.target.id === "CloseRegisterModal"
+      e.target.id === "LoginModalWrapper" ||
+      e.target.id === "CloseLoginModal"
     ) {
-      onToggleRegisterModal();
+      onToggleLoginModal();
     }
   };
-  const onMoveLoginModal = () =>{
-    onToggleRegisterModal();
+  const onMoveRegisterModal = () => {
     onToggleLoginModal();
-  }
+    onToggleRegisterModal();
+  };
   return (
-    <RegisterModalWrapper
-      id="RegisterModalWrapper"
-      onClick={onCloseRegisterModal}
-    >
-      <RegisterModalContent id="RegisterModalContent">
+    <LoginModalWrapper id="LoginModalWrapper" onClick={onCloseLoginModal}>
+      <LoginModalContent id="LoginModalContent">
         <CloseButton>
           <FontAwesomeIcon
-            id="CloseRegisterModal"
+            id="CloseLoginModal"
             size="2x"
             icon={faTimesCircle}
           />
@@ -105,22 +100,22 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
         <LogoWrapper id="LogoWrapper">
           <Logo />
         </LogoWrapper>
-        <RegisterForm>
-          <span>Create Account</span>
+        <LoginForm>
+          <span>Login</span>
           <InputTitle>Your Nickname</InputTitle>
           <Input type="text" placeholder="Nickname"></Input>
 
           <InputTitle>Password</InputTitle>
           <Input type="password" placeholder="Password"></Input>
-          <InputTitle>Check Password</InputTitle>
-          <Input type="password" placeholder="Check Password"></Input>
-          <SubmitButton type="submit">Register</SubmitButton>
 
-          <LoginButton onClick={onMoveLoginModal} type="button">Login</LoginButton>
-        </RegisterForm>
-      </RegisterModalContent>
-    </RegisterModalWrapper>
+          <SubmitButton type="submit">Login</SubmitButton>
+          <RegisterButton onClick={onMoveRegisterModal} type="button">
+            Register
+          </RegisterButton>
+        </LoginForm>
+      </LoginModalContent>
+    </LoginModalWrapper>
   );
 };
 
-export default RegisterModal;
+export default LoginModal;

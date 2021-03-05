@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 import "./css/Header.css";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
-import RegisterModal from 'components/RegisterModal';
+import RegisterModal from "components/RegisterModal";
+import LoginModal from "components/LoginModal";
 
 function Jumbotron() {
   return <div id="jumbotron">Jumbotron</div>;
@@ -31,21 +32,37 @@ function NavBar() {
   );
 }
 
-
-
 function Header() {
-  const isLogined = useSelector(state => state.loginReducer.isLogined);
-  const userNickName = useSelector(state => state.loginReducer.user_nickname);
+  const isLogined = useSelector((state) => state.loginReducer.isLogined);
+  const userNickName = useSelector((state) => state.loginReducer.user_nickname);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  
-  const onToggleRegisterModal = () =>{
-    setIsRegisterModalOpen(prev=> !prev);
-  }
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const onToggleRegisterModal = () => {
+    setIsRegisterModalOpen((prev) => !prev);
+  };
+  const onToggleLoginModal = () => {
+    setIsLoginModalOpen((prev) => !prev);
+  };
 
   return (
     <div className="header-wrapper">
-      {isRegisterModalOpen == true ? (<RegisterModal onToggleRegisterModal={onToggleRegisterModal}/>) : false}
-
+      {isRegisterModalOpen == true ? (
+        <RegisterModal
+          onToggleRegisterModal={onToggleRegisterModal}
+          onToggleLoginModal={onToggleLoginModal}
+        />
+      ) : (
+        false
+      )}
+      {isLoginModalOpen == true ? (
+        <LoginModal
+          onToggleRegisterModal={onToggleRegisterModal}
+          onToggleLoginModal={onToggleLoginModal}
+        />
+      ) : (
+        false
+      )}
       <div id="Top-header">
         <div id="left-header-section">
           <NavLink to={"/"}>
@@ -59,6 +76,7 @@ function Header() {
             register
           </NavLink>
           <button onClick={onToggleRegisterModal}>REGISTER</button>
+          <button onClick={onToggleLoginModal}>LOGIN</button>
           {!userNickName ? (
             <NavLink className="user-register" to={"/login"}>
               login
