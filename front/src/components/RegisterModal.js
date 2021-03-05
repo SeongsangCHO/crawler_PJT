@@ -71,11 +71,16 @@ const CloseButton = styled.button`
     opacity:1;
   }
 `;
-const RegisterModal = ({onOpenRegisterModal}) => {
+const RegisterModal = ({onToggleRegisterModal}) => {
+  const onCloseRegisterModal = (e) =>{
+    if (e.target.id === "RegisterModalWrapper" || e.currentTarget.id === "CloseButton"){
+      onToggleRegisterModal();
+    }
+  }
   return (
-    <RegisterModalWrapper>
+    <RegisterModalWrapper id="RegisterModalWrapper" onClick={onCloseRegisterModal}>
       <RegisterModalContent id="RegisterModalContent">
-        <CloseButton onClick={onOpenRegisterModal}>
+        <CloseButton id="CloseButton" onClick={onCloseRegisterModal}>
           <FontAwesomeIcon
             className="closeBtn"
             size="lg"

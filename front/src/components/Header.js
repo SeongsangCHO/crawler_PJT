@@ -38,13 +38,13 @@ function Header() {
   const userNickName = useSelector(state => state.loginReducer.user_nickname);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   
-  const onOpenRegisterModal = () =>{
+  const onToggleRegisterModal = () =>{
     setIsRegisterModalOpen(prev=> !prev);
   }
 
   return (
     <div className="header-wrapper">
-      {isRegisterModalOpen == true ? (<RegisterModal onOpenRegisterModal={onOpenRegisterModal}/>) : false}
+      {isRegisterModalOpen == true ? (<RegisterModal onToggleRegisterModal={onToggleRegisterModal}/>) : false}
 
       <div id="Top-header">
         <div id="left-header-section">
@@ -58,7 +58,7 @@ function Header() {
           <NavLink className="user-register" to={"/register"}>
             register
           </NavLink>
-          <button onClick={onOpenRegisterModal}>REGISTER</button>
+          <button onClick={onToggleRegisterModal}>REGISTER</button>
           {!userNickName ? (
             <NavLink className="user-register" to={"/login"}>
               login
