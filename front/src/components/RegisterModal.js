@@ -1,59 +1,98 @@
-import  React, {useState, useEffect}  from 'react';
-import styles from 'components/css/RegisterModal.module.css'
+import React, { useState, useEffect } from "react";
+import styles from "components/css/RegisterModal.module.css";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 const RegisterModalWrapper = styled.div`
-  position:fixed;
+  position: absolute;
   width: 100vw;
   height: 100vh;
-  z-index:1;
-  background:rgba(0,0,0,.5);
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
 `;
 const RegisterModalContent = styled.div`
-  position:relative;
-  top:50%;
-  left:50%;
+  position: relative;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color:white;
+  background-color: white;
   max-width: 50vw;
-  min-height: 50vh;
+  min-height: 480px;
+  border-radius: 5px;
+
+  @media (max-width: 576px) {
+    min-height: 60vh;
+  }
 `;
 
 const RegisterForm = styled.form`
-  display:flex;
-  width:100%;
+  display: flex;
+  width: 100%;
+  height: 100%;
   flex-direction: column;
-  padding: 5px;
+  padding: 15px;
+  @media (max-width: 576px) {
+    padding: 5px;
+  }
 `;
 
 const InputTitle = styled.span`
-  margin: 5px 0 5px 0;
+  margin: 0px 0 5px 0;
   font-size: 10px;
 `;
+const LogoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+`;
 
+const SubmitButton = styled.button`
+  border: 1px solid;
+`;
 
+const Input = styled.input`
+  margin-bottom: 15px;
+`;
+const CloseButtonWrapper = styled.div`
+position: relative;
+    display: inline-block;
+    left: 100%;
+    transform: translate(-100%,0);
+    padding: 5px 5px 0 0;
+}
+`;
 const RegisterModal = () => {
   return (
     <RegisterModalWrapper>
-      <Logo/>
-      <RegisterModalContent>
+      <RegisterModalContent id="RegisterModalContent">
+        <CloseButtonWrapper>
+          <FontAwesomeIcon
+            className="closeBtn"
+            size="lg"
+            icon={faTimesCircle}
+          />
+        </CloseButtonWrapper>
+        <LogoWrapper id="LogoWrapper">
+          <Logo />
+        </LogoWrapper>
         <RegisterForm>
+          <span>Create Account</span>
           <InputTitle>Your Nickname</InputTitle>
-          <input type="text" placeholder="Nickname"></input>
+          <Input type="text" placeholder="Nickname"></Input>
 
           <InputTitle>Password</InputTitle>
-          <input type="password" placeholder="Password"></input>
+          <Input type="password" placeholder="Password"></Input>
           <InputTitle>Check Password</InputTitle>
-          <input type="password" placeholder="Check Password"></input>
+          <Input type="password" placeholder="Check Password"></Input>
+          <SubmitButton type="submit">Register</SubmitButton>
         </RegisterForm>
       </RegisterModalContent>
     </RegisterModalWrapper>
   );
-}
-
+};
 
 export default RegisterModal;
