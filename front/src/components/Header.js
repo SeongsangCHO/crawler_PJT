@@ -39,12 +39,12 @@ function Header() {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   
   const onOpenRegisterModal = () =>{
-    setIsRegisterModalOpen(true);
+    setIsRegisterModalOpen(prev=> !prev);
   }
 
   return (
     <div className="header-wrapper">
-      {isRegisterModalOpen == true ? (<RegisterModal/>) : false}
+      {isRegisterModalOpen == true ? (<RegisterModal onOpenRegisterModal={onOpenRegisterModal}/>) : false}
 
       <div id="Top-header">
         <div id="left-header-section">

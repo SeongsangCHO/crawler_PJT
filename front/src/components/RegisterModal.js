@@ -57,25 +57,31 @@ const SubmitButton = styled.button`
 const Input = styled.input`
   margin-bottom: 15px;
 `;
-const CloseButtonWrapper = styled.div`
-position: relative;
-    display: inline-block;
-    left: 100%;
-    transform: translate(-100%,0);
-    padding: 5px 5px 0 0;
-}
+const CloseButton = styled.button`
+  position: relative;
+  display: inline-block;
+  left: 100%;
+  transform: translate(-100%, 0);
+  padding: 5px 5px 0 0;
+  cursor: pointer;
+  border:none;
+  background-color:white;
+  opacity:.7;
+  :hover{
+    opacity:1;
+  }
 `;
-const RegisterModal = () => {
+const RegisterModal = ({onOpenRegisterModal}) => {
   return (
     <RegisterModalWrapper>
       <RegisterModalContent id="RegisterModalContent">
-        <CloseButtonWrapper>
+        <CloseButton onClick={onOpenRegisterModal}>
           <FontAwesomeIcon
             className="closeBtn"
             size="lg"
             icon={faTimesCircle}
           />
-        </CloseButtonWrapper>
+        </CloseButton>
         <LogoWrapper id="LogoWrapper">
           <Logo />
         </LogoWrapper>
