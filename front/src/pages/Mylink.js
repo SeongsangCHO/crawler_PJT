@@ -52,8 +52,6 @@ const MyLink = () => {
   ]);
   return (
     <div className="content-wrapper">
-      <Header />
-
       <SectionTitle />
       <Tab.Container id="left-tabs" defaultactiveKey="All">
         <ContentWrapper>

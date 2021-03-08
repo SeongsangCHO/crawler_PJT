@@ -8,8 +8,7 @@ import {
 
 const initialState = {
   user_nickname: '',
-  isSigningUp: '',
-  isSignedUp: '',
+  isLogined: '',
 };
 
 //상태가 변화할 때 수행되는 함수
@@ -19,15 +18,16 @@ const loginReducer = (state = initialState, action) => {
   switch (action?.type) {
     case LOGIN_REQUEST: {
       console.log("로그인 REQUEST_리듀서");
-      return { ...state };
+      console.log(state)
+      return { ...state, isLogined: action.isLogined };
     }
     case LOGIN_SUCCESS: {
       console.log("로그인 SUCCESS_리듀서");
-      return { ...state,user_nickname: action.user_nickname,  isLogined: action.isLogined };
+      return { ...state,user_nickname: action.user_nickname,  isLogined: true };
     }
     case LOGIN_FAILURE: {
       console.log("로그인 FAILURE_리듀서");
-      return { ...state, isLogined: action.isLogined };
+      return { ...state, isLogined: false };
     }
     default:
       return state;

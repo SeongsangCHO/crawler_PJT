@@ -8,18 +8,19 @@ import Register2 from "./pages/Register2";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import MyLink from "./pages/MyLink";
+import NotificationContainer from "react-notifications/lib/NotificationContainer";
 
 function App() {
   return (
     <Router>
-      <div className="App">
+        <Header />
+        <NotificationContainer/>
         <Switch>
           <Route exact path={"/"} component={Home} />
           <Route exact path={"/mylink"} component={MyLink} />
           <Route exact path={"/register"} component={Register2} />
           <Route exact path={"/login"} component={Login} />
         </Switch>
-      </div>
     </Router>
   );
 }

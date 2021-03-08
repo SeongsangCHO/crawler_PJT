@@ -6,6 +6,8 @@ import "./css/Header.css";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
 import RegisterModal from "components/RegisterModal/RegisterModal";
 import LoginModal from "components/LoginModal/LoginModal";
+import CreateNotification from "./CreateNotification";
+import { NotificationContainer } from "react-notifications";
 
 function Jumbotron() {
   return <div id="jumbotron">Jumbotron</div>;
@@ -38,6 +40,16 @@ function Header() {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+  useEffect(() => {
+    if(isLogined === true){
+      CreateNotification("success")("로그인 성공");
+    } 
+    if(isLogined === false){
+      CreateNotification("error")("로그인 실패");
+    }
+  },[isLogined]);
+
+  //custom hooks로 뺴기
   const onToggleRegisterModal = () => {
     setIsRegisterModalOpen((prev) => !prev);
   };
@@ -66,13 +78,12 @@ function Header() {
       <div id="Top-header">
         <div id="left-header-section">
           <NavLink to={"/"}>
-            <Logo id="LogoImage" width="100px" height="50px" />
+            <Logo id="LogoImage" width="100px" height="50px" alt="LOGO"/>
             {/* <img id="LogoImage" src={LogoImage} alt="React Logo" /> */}
             <div id="Logo">다링</div>
           </NavLink>
         </div>
         <div id="Top-header-right">
-
           {!isLogined ? (
             <>
               <button onClick={onToggleLoginModal}>LOGIN</button>
@@ -84,6 +95,7 @@ function Header() {
         </div>
       </div>
       <NavBar />
+      <NotificationContainer />
     </div>
   );
 }

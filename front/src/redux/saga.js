@@ -1,11 +1,5 @@
-//%s/localhost/34.89..../g 
-import {
-  all,
-  fork,
-  call,
-  put,
-  takeLatest,
-} from "redux-saga/effects";
+//%s/localhost/34.89..../g
+import { all, fork, call, put, takeLatest } from "redux-saga/effects";
 
 import {
   SIGN_UP_REQUEST,
@@ -35,7 +29,6 @@ import {
   RELOAD_REQUEST,
   RELOAD_SUCCESS,
   RELOAD_FAILURE,
-
 } from "./actions/registerAction";
 
 import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
@@ -116,8 +109,11 @@ function* loginRequst(action) {
     const result = yield call(loginAPI, action.data);
     console.log(result.status);
     if (result.status == 200) {
-      yield put({ type: LOGIN_SUCCESS,user_nickname:action.data.user_nickname, isLogined: true });
-      alert("로그인 성공");
+      yield put({
+        type: LOGIN_SUCCESS,
+        user_nickname: action.data.user_nickname,
+        isLogined: true,
+      });
     }
   } catch (err) {
     yield put({ type: LOGIN_FAILURE, isLogined: false });
@@ -210,10 +206,10 @@ function* getLinkData(action) {
     console.log("getlinkData");
     const result = yield call(getLinkDataAPI, action.data);
     if (result.status == 200) {
-      yield put({ type: LINK_DATA_SUCCESS, data: result.data ,isCalled:true});
+      yield put({ type: LINK_DATA_SUCCESS, data: result.data, isCalled: true });
     }
   } catch (error) {
-    yield put({ type: LINK_DATA_FAILURE, err: error,isCalled:false });
+    yield put({ type: LINK_DATA_FAILURE, err: error, isCalled: false });
 
     console.error(error);
   }
@@ -269,24 +265,31 @@ function* watchAddLink() {
   yield takeLatest(ADD_LINK_REQUEST, addLink);
 }
 
-function runCrawlerAPI(currentLinkTitle){
+function runCrawlerAPI(currentLinkTitle) {
   //여기까지 잘 전달되는데..
- //객체형태로 전달해주어야하는군,.
-  return axios.post(crawlURL, {currentLinkTitle} ,{
-    withCredentials: true,
-  });
+  //객체형태로 전달해주어야하는군,.
+  return axios.post(
+    crawlURL,
+    { currentLinkTitle },
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 function* runCrawler(action) {
   try {
     const result = yield call(runCrawlerAPI, action.currentLinkTitle);
     console.log(result);
-    if (result.status == 200){
-      yield put({type: RUN_CRAWLER_SUCCESS, currentLinkTitle: action.currentLinkTitle});
+    if (result.status == 200) {
+      yield put({
+        type: RUN_CRAWLER_SUCCESS,
+        currentLinkTitle: action.currentLinkTitle,
+      });
     }
   } catch (error) {
     console.error(error);
-    yield put({type: RUN_CRAWLER_FAILURE});
+    yield put({ type: RUN_CRAWLER_FAILURE });
   }
 }
 
@@ -295,27 +298,35 @@ function* watchRunCrawler() {
   yield takeLatest(RUN_CRAWLER_REQUEST, runCrawler);
 }
 
-function reloadCrawlerAPI(linkTitle){
+function reloadCrawlerAPI(linkTitle) {
   //여기까지 잘 전달되는데..
- //객체형태로 전달해주어야하는군,.
-  return axios.post(reloadURL, {linkTitle} ,{
-    withCredentials: true,
-  });
+  //객체형태로 전달해주어야하는군,.
+  return axios.post(
+    reloadURL,
+    { linkTitle },
+    {
+      withCredentials: true,
+    }
+  );
 }
 
-function* reloadCrawler(action){
-  try{
+function* reloadCrawler(action) {
+  try {
     const result = yield call(reloadCrawlerAPI, action.linkTitle);
-    if (result.status ==200){
-      yield put ({type: RELOAD_SUCCESS, isReloaded: true, linkTitle: action.linkTitle});
+    if (result.status == 200) {
+      yield put({
+        type: RELOAD_SUCCESS,
+        isReloaded: true,
+        linkTitle: action.linkTitle,
+      });
     }
-  }catch(error){
+  } catch (error) {
     console.error(error);
-    yield put ({type: RELOAD_FAILURE, isReloaded:false});
+    yield put({ type: RELOAD_FAILURE, isReloaded: false });
   }
 }
 
-function* watchReloading(){
+function* watchReloading() {
   console.log("watch reloading");
   yield takeLatest(RELOAD_REQUEST, reloadCrawler);
 }

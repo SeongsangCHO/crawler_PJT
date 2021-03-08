@@ -6,7 +6,6 @@ import Header from 'components/Header';
 function Home() {
   return (
     <div id="home-wrapper">
-      <Header/>
       <div id="jumbotron-section">
         <JumbotronImage id="jumbotron" />
         <span id="jumbotron-sentence">Save link, Save time</span>

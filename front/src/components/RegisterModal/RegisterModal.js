@@ -146,7 +146,7 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
           user_password: password,
         },
       });
-      CreateNotification("success")();
+      CreateNotification("success")("가입 성공");
       setIsSignUp(true);
     }
   };
@@ -190,7 +190,6 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
           </LoginButton>
         </RegisterForm>
       </RegisterModalContent>
-      <NotificationContainer />
     </RegisterModalWrapper>
   );
 };

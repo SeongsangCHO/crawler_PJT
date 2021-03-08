@@ -77,7 +77,11 @@ const RegisterButton = styled.button`
   border: 1px solid;
   margin-top: 5px;
 `;
-const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
+const LoginModal = ({
+  handleLogined,
+  onToggleLoginModal,
+  onToggleRegisterModal,
+}) => {
   const dispatch = useDispatch();
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
@@ -97,24 +101,26 @@ const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
   };
   const onHandleNickName = (e) => {
     setNickName(e.target.value);
-    console.log(nickName);
-  }
+  };
   const onHandlePassword = (e) => {
     setPassword(e.target.value);
-    console.log(password);
-  }
+  };
   const onLogin = (e) => {
     e.preventDefault();
-    if(nickName === "" || password === ""){
-      return false;
+    if (nickName === "" || password === "") {
+      CreateNotification("error")("입력을 확인하세요.");
+      return;
+    } else {
+      dispatch({
+        type: "LOGIN_REQUEST",
+        data: {
+          user_nickname: nickName,
+          user_password: password,
+          isLogined: "REQUEST",
+        },
+      });
     }
-    dispatch({
-      type: "LOGIN_REQUEST",
-      data: {
-        user_nickname: nickName,
-        user_password: password,
-      }});
-  }
+  };
   return (
     <LoginModalWrapper id="LoginModalWrapper" onClick={onCloseLoginModal}>
       <LoginModalContent id="LoginModalContent">
@@ -125,16 +131,24 @@ const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
             icon={faTimesCircle}
           />
         </CloseButton>
-        <LogoWrapper id="LogoWrapper" >
+        <LogoWrapper id="LogoWrapper">
           <Logo />
         </LogoWrapper>
         <LoginForm onSubmit={onLogin}>
           <span>Login</span>
           <InputTitle>Your Nickname</InputTitle>
-          <Input onChange={onHandleNickName} type="text" placeholder="Nickname"></Input>
+          <Input
+            onChange={onHandleNickName}
+            type="text"
+            placeholder="Nickname"
+          ></Input>
 
           <InputTitle>Password</InputTitle>
-          <Input onChange={onHandlePassword}  type="password" placeholder="Password"></Input>
+          <Input
+            onChange={onHandlePassword}
+            type="password"
+            placeholder="Password"
+          ></Input>
 
           <SubmitButton type="submit">Login</SubmitButton>
           <RegisterButton onClick={onMoveRegisterModal} type="button">
@@ -142,9 +156,8 @@ const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
           </RegisterButton>
         </LoginForm>
       </LoginModalContent>
-      <NotificationContainer />
     </LoginModalWrapper>
   );
 };
 
-export default LoginModal;
+export default React.memo(LoginModal);
