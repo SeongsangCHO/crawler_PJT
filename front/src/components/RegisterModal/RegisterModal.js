@@ -12,6 +12,7 @@ import {
   NotificationContainer,
   NotificationManager,
 } from "react-notifications";
+import CreateNotification from 'components/CreateNotification';
 
 const RegisterModalWrapper = styled.div`
   position: absolute;
@@ -56,7 +57,9 @@ const LogoWrapper = styled.div`
 
 const SubmitButton = styled.button`
   border: 1px solid;
-  background-color: ${props => props.isDisabled ? 'black': 'white'};
+  background-color: ${(props) => (props.isDisabled ? "green" : "gray")};
+  transition: .5s;
+  color: white;
 `;
 
 const CloseButton = styled.div`
@@ -75,42 +78,22 @@ const CloseButton = styled.div`
 
 const LoginButton = styled.button`
   border: 1px solid;
+  background-color: ${(props) => (props.isSignUp ? "#2196F3" : "gray")};
+  color: white;
+  transition: .5s;
   margin-top: 5px;
 `;
 
-const createNotification = (type) => {
-  console.log("Notification call");
-  return (errorMsg) => {
-    switch (type) {
-      case "info":
-        NotificationManager.info("Info message");
-        break;
-      case "success":
-        NotificationManager.success("Success message", "Title here");
-        break;
-      case "warning":
-        NotificationManager.warning(
-          "Warning message",
-          "Close after 3000ms",
-          3000
-        );
-        break;
-      case "error":
-        NotificationManager.error(errorMsg, "", 4000, () => {});
-        break;
-    }
-  };
-};
 
 const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
   const dispatch = useDispatch();
   const [password, setPassword] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const [isMatchPassword, setIsMatchPassword] = useState(false);
   const isDoubleNickName = useSelector(
     (state) => state.doubleCheckReducer.isDouble
   );
-  const [registerDisable, setRegisterDisable] = useState(false);
   const userNickName = useSelector(
     (state) => state.doubleCheckReducer.data.user_nickname
   );
@@ -118,7 +101,9 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
   const handlePassword = (inputPassword) => {
     setPassword(inputPassword);
   };
-
+  const handleMatchPassword = (isMatch) => {
+    setIsMatchPassword(isMatch);
+  };
   const onCloseRegisterModal = (e) => {
     if (
       e.target.id === "RegisterModalWrapper" ||
@@ -131,22 +116,42 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
     onToggleRegisterModal();
     onToggleLoginModal();
   };
+  const signUpVaildCheck = () => {
+    if (
+      userNickName === undefined ||
+      userNickName === "" ||
+      password === "" ||
+      isDoubleNickName ||
+      !isMatchPassword
+    ) {
+      return true;
+    }
+    return false;
+  };
   const onSignUp = (e) => {
     e.preventDefault();
     //예외 핸들링
-    if (userNickName === undefined || userNickName === "" || password === "") {
+    if (signUpVaildCheck()) {
       let errorMsg;
-      if (userNickName === undefined) {
+      if (isDoubleNickName || userNickName === undefined) {
         errorMsg = "닉네임 중복";
       }
-      if (userNickName === "" || password === "") {
+      if (!isMatchPassword || userNickName === "" || password === "") {
         errorMsg = "닉네임 또는 비밀번호를 확인해주세요";
       }
-      createNotification("error")(errorMsg);
+      CreateNotification("error")(errorMsg);
       return;
     } else {
-    // 가입 실행
-
+      // 가입 실행
+      dispatch({
+        type: "SIGN_UP_REQUEST",
+        data: {
+          user_nickname: userNickName,
+          user_password: password,
+        },
+      });
+      CreateNotification("success")();
+      setIsSignUp(true);
     }
   };
 
@@ -172,13 +177,18 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
           <NickNameInput />
           <PasswordInput
             isMatchPassword={isMatchPassword}
-            setIsMatchPassword={setIsMatchPassword}
+            handleMatchPassword={handleMatchPassword}
             handlePassword={handlePassword}
           />
 
-          <SubmitButton isDisabled={isDoubleNickName && isMatchPassword} type="submit">Register</SubmitButton>
+          <SubmitButton
+            isDisabled={!signUpVaildCheck()}
+            type="submit"
+          >
+            Register
+          </SubmitButton>
 
-          <LoginButton onClick={onMoveLoginModal} type="button">
+          <LoginButton isSignUp={isSignUp} onClick={onMoveLoginModal} type="button">
             Login
           </LoginButton>
         </RegisterForm>

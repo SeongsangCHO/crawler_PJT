@@ -88,7 +88,6 @@ function* signUp(action) {
     if (result.status === 200) {
       yield put({ type: SIGN_UP_SUCCESS, data: action.data });
       console.log("가입데이터 요청완료");
-      alert("가입성공");
     }
   } catch (err) {
     console.log(err);

@@ -9,15 +9,15 @@ const InputTitle = styled.span`
   font-size: 10px;
 `;
 
-const PasswordInput = ({ isMatchPassword,handlePassword, setIsMatchPassword }) => {
+const PasswordInput = ({ isMatchPassword,handlePassword, handleMatchPassword }) => {
   const [firstPassword, setFirstPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState("");
   
   const onMatchPassword = (password,target) => {
     if (password === target){
-      setIsMatchPassword(true);
+      handleMatchPassword(true);
     } else {
-      setIsMatchPassword(false);
+      handleMatchPassword(false);
     }
   }
   
