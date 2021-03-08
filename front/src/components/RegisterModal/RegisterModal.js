@@ -5,6 +5,8 @@ import { ReactComponent as Logo } from "assets/logoimage.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
+import NickNameInput from "./NickNameInput";
+import PasswordInput from "./PasswordInput";
 
 const RegisterModalWrapper = styled.div`
   position: absolute;
@@ -39,10 +41,7 @@ const RegisterForm = styled.form`
   }
 `;
 
-const InputTitle = styled.span`
-  margin: 0px 0 5px 0;
-  font-size: 10px;
-`;
+
 const LogoWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -55,9 +54,7 @@ const SubmitButton = styled.button`
   border: 1px solid;
 `;
 
-const Input = styled.input`
-  margin-bottom: 15px;
-`;
+
 const CloseButton = styled.div`
   position: relative;
   display: inline-block;
@@ -78,9 +75,6 @@ const LoginButton = styled.button`
 `;
 const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
   const dispatch = useDispatch();
-  const isDouble = useSelector((state) => state.doubleCheckReducer.isDouble);
-  const [nickNameVaild, setNickNameVaild] = useState(false);
-  const [nickName, setNickName] = useState("");
 
   const onCloseRegisterModal = (e) => {
     console.log(e.currentTarget.id);
@@ -95,17 +89,7 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
     onToggleRegisterModal();
     onToggleLoginModal();
   };
-  const onNickNameDoubleCheck = (e) => {
-    console.log(e.target.value);
-    setNickName(e.target.value);
-    dispatch({
-      type: "NICK_DOUBLE_CHECK_REQUEST",
-      data: {
-        user_nickname: e.target.value,
-      },
-      isDouble: isDouble,
-    });
-  };
+
   return (
     <RegisterModalWrapper
       id="RegisterModalWrapper"
@@ -124,26 +108,9 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
         </LogoWrapper>
         <RegisterForm>
           <span>Create Account</span>
-          <InputTitle>Your Nickname</InputTitle>
-          {isDouble ? (
-            <span>닉네임 중복입니다</span>
-          ) : (
-            <span>사용가능한 닉네임입니다.</span>
-          )}
-          <Input
-            name="nickname"
-            onChange={onNickNameDoubleCheck}
-            type="text"
-            placeholder="Nickname"
-            maxlength="8"
-            value={nickName}
-          ></Input>
+          <NickNameInput/>
+          <PasswordInput/>
 
-          <InputTitle>Password</InputTitle>
-          <Input type="password" placeholder="Password"></Input>
-
-          <InputTitle>Check Password</InputTitle>
-          <Input type="password" placeholder="Check Password"></Input>
 
           <SubmitButton type="submit">Register</SubmitButton>
 

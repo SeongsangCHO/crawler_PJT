@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 import "./css/Header.css";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
-import RegisterModal from "components/RegisterModal";
+import RegisterModal from "components/RegisterModal/RegisterModal";
 import LoginModal from "components/LoginModal";
 
 function Jumbotron() {
