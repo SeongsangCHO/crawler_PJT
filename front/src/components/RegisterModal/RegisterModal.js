@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "components/css/RegisterModal.module.css";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
@@ -7,6 +7,11 @@ import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import NickNameInput from "./NickNameInput";
 import PasswordInput from "./PasswordInput";
+import "react-notifications/lib/notifications.css";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 
 const RegisterModalWrapper = styled.div`
   position: absolute;
@@ -41,7 +46,6 @@ const RegisterForm = styled.form`
   }
 `;
 
-
 const LogoWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -52,8 +56,8 @@ const LogoWrapper = styled.div`
 
 const SubmitButton = styled.button`
   border: 1px solid;
+  background-color: ${props => props.isDisabled ? 'black': 'white'};
 `;
-
 
 const CloseButton = styled.div`
   position: relative;
@@ -73,11 +77,49 @@ const LoginButton = styled.button`
   border: 1px solid;
   margin-top: 5px;
 `;
+
+const createNotification = (type) => {
+  console.log("Notification call");
+  return (errorMsg) => {
+    switch (type) {
+      case "info":
+        NotificationManager.info("Info message");
+        break;
+      case "success":
+        NotificationManager.success("Success message", "Title here");
+        break;
+      case "warning":
+        NotificationManager.warning(
+          "Warning message",
+          "Close after 3000ms",
+          3000
+        );
+        break;
+      case "error":
+        NotificationManager.error(errorMsg, "", 4000, () => {});
+        break;
+    }
+  };
+};
+
 const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
   const dispatch = useDispatch();
+  const [password, setPassword] = useState("");
+
+  const [isMatchPassword, setIsMatchPassword] = useState(false);
+  const isDoubleNickName = useSelector(
+    (state) => state.doubleCheckReducer.isDouble
+  );
+  const [registerDisable, setRegisterDisable] = useState(false);
+  const userNickName = useSelector(
+    (state) => state.doubleCheckReducer.data.user_nickname
+  );
+
+  const handlePassword = (inputPassword) => {
+    setPassword(inputPassword);
+  };
 
   const onCloseRegisterModal = (e) => {
-    console.log(e.currentTarget.id);
     if (
       e.target.id === "RegisterModalWrapper" ||
       e.target.id === "CloseRegisterModal"
@@ -89,13 +131,31 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
     onToggleRegisterModal();
     onToggleLoginModal();
   };
+  const onSignUp = (e) => {
+    e.preventDefault();
+    //예외 핸들링
+    if (userNickName === undefined || userNickName === "" || password === "") {
+      let errorMsg;
+      if (userNickName === undefined) {
+        errorMsg = "닉네임 중복";
+      }
+      if (userNickName === "" || password === "") {
+        errorMsg = "닉네임 또는 비밀번호를 확인해주세요";
+      }
+      createNotification("error")(errorMsg);
+      return;
+    } else {
+    // 가입 실행
+
+    }
+  };
 
   return (
     <RegisterModalWrapper
       id="RegisterModalWrapper"
       onClick={onCloseRegisterModal}
     >
-      <RegisterModalContent id="RegisterModalContent">
+      <RegisterModalContent id="RegisterModalContent" onSubmit={onSignUp}>
         <CloseButton>
           <FontAwesomeIcon
             id="CloseRegisterModal"
@@ -106,21 +166,26 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
         <LogoWrapper id="LogoWrapper">
           <Logo />
         </LogoWrapper>
+
         <RegisterForm>
           <span>Create Account</span>
-          <NickNameInput/>
-          <PasswordInput/>
+          <NickNameInput />
+          <PasswordInput
+            isMatchPassword={isMatchPassword}
+            setIsMatchPassword={setIsMatchPassword}
+            handlePassword={handlePassword}
+          />
 
-
-          <SubmitButton type="submit">Register</SubmitButton>
+          <SubmitButton isDisabled={isDoubleNickName && isMatchPassword} type="submit">Register</SubmitButton>
 
           <LoginButton onClick={onMoveLoginModal} type="button">
             Login
           </LoginButton>
         </RegisterForm>
       </RegisterModalContent>
+      <NotificationContainer />
     </RegisterModalWrapper>
   );
 };
 
-export default RegisterModal;
+export default React.memo(RegisterModal);

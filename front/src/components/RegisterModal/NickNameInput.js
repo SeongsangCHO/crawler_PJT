@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -33,9 +33,10 @@ const NickNameInput = () => {
       {isDouble ? (
         <span>닉네임 중복입니다</span>
       ) : nickName.length > 0 ? (
-        
         <span>사용가능한 닉네임입니다.</span>
-      ) : <span>사용하실 닉네입을 입력해주세요</span>}
+      ) : (
+        <span>사용하실 닉네입을 입력해주세요</span>
+      )}
       <Input
         name="nickname"
         onChange={onNickNameDoubleCheck}
@@ -48,4 +49,4 @@ const NickNameInput = () => {
   );
 };
 
-export default NickNameInput;
+export default React.memo(NickNameInput);
