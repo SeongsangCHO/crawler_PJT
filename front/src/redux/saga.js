@@ -42,8 +42,9 @@ import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
 import loginSaga from "../redux/Login/saga.js";
 
 import axios from "axios";
+const URL = `http://localhost:8080`;
 
-const registerURL = "http://localhost/register";
+const registerURL = `${URL}/register`;
 const loginURL = "http://localhost/login";
 const addCategoryURL = "http://localhost/addcategory";
 const linkDataApiCallURL = "http://localhost/api/mylink";
@@ -164,7 +165,7 @@ function* watchAddCategory() {
   yield takeLatest(ADD_CATEGORY_REQUEST, addCategory);
 }
 
-const doubleCheckURL = "http://localhost/doublecheck";
+const doubleCheckURL = `${URL}/doublecheck`;
 
 function doubleCheckAPI(nickNameData) {
   console.log("doubleCheckAPI in saga");
@@ -182,15 +183,12 @@ function* nickNameDoubleCheck(action) {
       yield put({
         type: NICK_DOUBLE_CHECK_SUCCESS,
         data: action.data,
-        isDouble: true,
+        isDouble: false,
       });
-
-      alert("사용하실 수 있는 닉네임입니다.");
     }
   } catch (err) {
     console.error(err);
-    yield put({ type: NICK_DOUBLE_CHECK_FAILURE, data: err, isDouble: false });
-    alert("닉네임이 이미 존재해요!");
+    yield put({ type: NICK_DOUBLE_CHECK_FAILURE, data: err, isDouble: true });
   }
 }
 

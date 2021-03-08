@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
 
 const RegisterModalWrapper = styled.div`
   position: absolute;
@@ -76,6 +77,11 @@ const LoginButton = styled.button`
   margin-top: 5px;
 `;
 const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
+  const dispatch = useDispatch();
+  const isDouble = useSelector((state) => state.doubleCheckReducer.isDouble);
+  const [nickNameVaild, setNickNameVaild] = useState(false);
+  const [nickName, setNickName] = useState("");
+
   const onCloseRegisterModal = (e) => {
     console.log(e.currentTarget.id);
     if (
@@ -85,10 +91,21 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
       onToggleRegisterModal();
     }
   };
-  const onMoveLoginModal = () =>{
+  const onMoveLoginModal = () => {
     onToggleRegisterModal();
     onToggleLoginModal();
-  }
+  };
+  const onNickNameDoubleCheck = (e) => {
+    console.log(e.target.value);
+    setNickName(e.target.value);
+    dispatch({
+      type: "NICK_DOUBLE_CHECK_REQUEST",
+      data: {
+        user_nickname: e.target.value,
+      },
+      isDouble: isDouble,
+    });
+  };
   return (
     <RegisterModalWrapper
       id="RegisterModalWrapper"
@@ -108,15 +125,31 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
         <RegisterForm>
           <span>Create Account</span>
           <InputTitle>Your Nickname</InputTitle>
-          <Input type="text" placeholder="Nickname"></Input>
+          {isDouble ? (
+            <span>닉네임 중복입니다</span>
+          ) : (
+            <span>사용가능한 닉네임입니다.</span>
+          )}
+          <Input
+            name="nickname"
+            onChange={onNickNameDoubleCheck}
+            type="text"
+            placeholder="Nickname"
+            maxlength="8"
+            value={nickName}
+          ></Input>
 
           <InputTitle>Password</InputTitle>
           <Input type="password" placeholder="Password"></Input>
+
           <InputTitle>Check Password</InputTitle>
           <Input type="password" placeholder="Check Password"></Input>
+
           <SubmitButton type="submit">Register</SubmitButton>
 
-          <LoginButton onClick={onMoveLoginModal} type="button">Login</LoginButton>
+          <LoginButton onClick={onMoveLoginModal} type="button">
+            Login
+          </LoginButton>
         </RegisterForm>
       </RegisterModalContent>
     </RegisterModalWrapper>

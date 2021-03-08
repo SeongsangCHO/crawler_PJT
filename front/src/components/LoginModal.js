@@ -83,6 +83,7 @@ const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
       onToggleLoginModal();
     }
   };
+  /* 해당 부분 개선해야함. 모달창 끼리 중복됨, 모달창 컴포넌트화해서 중복제거할것 */
   const onMoveRegisterModal = () => {
     onToggleLoginModal();
     onToggleRegisterModal();
