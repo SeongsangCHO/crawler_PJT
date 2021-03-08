@@ -45,7 +45,7 @@ import axios from "axios";
 const URL = `http://localhost:8080`;
 
 const registerURL = `${URL}/register`;
-const loginURL = "http://localhost/login";
+const loginURL = `${URL}/login`;
 const addCategoryURL = "http://localhost/addcategory";
 const linkDataApiCallURL = "http://localhost/api/mylink";
 const addLinkURL = "http://localhost/addlink";
@@ -120,7 +120,6 @@ function* loginRequst(action) {
       alert("로그인 성공");
     }
   } catch (err) {
-    alert("아이디 또는 비밀번호를 다시 확인해주세요");
     yield put({ type: LOGIN_FAILURE, isLogined: false });
     console.error(err);
   }

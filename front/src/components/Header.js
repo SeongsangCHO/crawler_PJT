@@ -5,7 +5,7 @@ import { NavLink, Link } from "react-router-dom";
 import "./css/Header.css";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
 import RegisterModal from "components/RegisterModal/RegisterModal";
-import LoginModal from "components/LoginModal";
+import LoginModal from "components/LoginModal/LoginModal";
 
 function Jumbotron() {
   return <div id="jumbotron">Jumbotron</div>;
@@ -55,7 +55,7 @@ function Header() {
       ) : (
         false
       )}
-      {isLoginModalOpen == true ? (
+      {isLoginModalOpen && !isLogined ? (
         <LoginModal
           onToggleRegisterModal={onToggleRegisterModal}
           onToggleLoginModal={onToggleLoginModal}
@@ -72,15 +72,12 @@ function Header() {
           </NavLink>
         </div>
         <div id="Top-header-right">
-          <NavLink className="user-register" to={"/register"}>
-            register
-          </NavLink>
-          <button onClick={onToggleRegisterModal}>REGISTER</button>
-          <button onClick={onToggleLoginModal}>LOGIN</button>
-          {!userNickName ? (
-            <NavLink className="user-register" to={"/login"}>
-              login
-            </NavLink>
+
+          {!isLogined ? (
+            <>
+              <button onClick={onToggleLoginModal}>LOGIN</button>
+              <button onClick={onToggleRegisterModal}>REGISTER</button>
+            </>
           ) : (
             <span>{userNickName}님 안녕하세요</span>
           )}

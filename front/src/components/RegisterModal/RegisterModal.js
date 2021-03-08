@@ -8,11 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import NickNameInput from "./NickNameInput";
 import PasswordInput from "./PasswordInput";
 import "react-notifications/lib/notifications.css";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import CreateNotification from 'components/CreateNotification';
+import { NotificationContainer } from "react-notifications";
+import CreateNotification from "components/CreateNotification";
 
 const RegisterModalWrapper = styled.div`
   position: absolute;
@@ -58,7 +55,7 @@ const LogoWrapper = styled.div`
 const SubmitButton = styled.button`
   border: 1px solid;
   background-color: ${(props) => (props.isDisabled ? "green" : "gray")};
-  transition: .5s;
+  transition: 0.5s;
   color: white;
 `;
 
@@ -80,10 +77,9 @@ const LoginButton = styled.button`
   border: 1px solid;
   background-color: ${(props) => (props.isSignUp ? "#2196F3" : "gray")};
   color: white;
-  transition: .5s;
+  transition: 0.5s;
   margin-top: 5px;
 `;
-
 
 const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
   const dispatch = useDispatch();
@@ -181,14 +177,15 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
             handlePassword={handlePassword}
           />
 
-          <SubmitButton
-            isDisabled={!signUpVaildCheck()}
-            type="submit"
-          >
+          <SubmitButton isDisabled={!signUpVaildCheck()} type="submit">
             Register
           </SubmitButton>
 
-          <LoginButton isSignUp={isSignUp} onClick={onMoveLoginModal} type="button">
+          <LoginButton
+            isSignUp={isSignUp}
+            onClick={onMoveLoginModal}
+            type="button"
+          >
             Login
           </LoginButton>
         </RegisterForm>

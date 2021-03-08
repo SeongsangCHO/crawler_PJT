@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { NotificationContainer } from "react-notifications";
+import CreateNotification from "components/CreateNotification";
 
 const LoginModalWrapper = styled.div`
   position: absolute;
@@ -75,6 +78,10 @@ const RegisterButton = styled.button`
   margin-top: 5px;
 `;
 const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
+  const dispatch = useDispatch();
+  const [nickName, setNickName] = useState("");
+  const [password, setPassword] = useState("");
+
   const onCloseLoginModal = (e) => {
     if (
       e.target.id === "LoginModalWrapper" ||
@@ -88,6 +95,26 @@ const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
     onToggleLoginModal();
     onToggleRegisterModal();
   };
+  const onHandleNickName = (e) => {
+    setNickName(e.target.value);
+    console.log(nickName);
+  }
+  const onHandlePassword = (e) => {
+    setPassword(e.target.value);
+    console.log(password);
+  }
+  const onLogin = (e) => {
+    e.preventDefault();
+    if(nickName === "" || password === ""){
+      return false;
+    }
+    dispatch({
+      type: "LOGIN_REQUEST",
+      data: {
+        user_nickname: nickName,
+        user_password: password,
+      }});
+  }
   return (
     <LoginModalWrapper id="LoginModalWrapper" onClick={onCloseLoginModal}>
       <LoginModalContent id="LoginModalContent">
@@ -98,16 +125,16 @@ const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
             icon={faTimesCircle}
           />
         </CloseButton>
-        <LogoWrapper id="LogoWrapper">
+        <LogoWrapper id="LogoWrapper" >
           <Logo />
         </LogoWrapper>
-        <LoginForm>
+        <LoginForm onSubmit={onLogin}>
           <span>Login</span>
           <InputTitle>Your Nickname</InputTitle>
-          <Input type="text" placeholder="Nickname"></Input>
+          <Input onChange={onHandleNickName} type="text" placeholder="Nickname"></Input>
 
           <InputTitle>Password</InputTitle>
-          <Input type="password" placeholder="Password"></Input>
+          <Input onChange={onHandlePassword}  type="password" placeholder="Password"></Input>
 
           <SubmitButton type="submit">Login</SubmitButton>
           <RegisterButton onClick={onMoveRegisterModal} type="button">
@@ -115,6 +142,7 @@ const LoginModal = ({ onToggleLoginModal, onToggleRegisterModal }) => {
           </RegisterButton>
         </LoginForm>
       </LoginModalContent>
+      <NotificationContainer />
     </LoginModalWrapper>
   );
 };
