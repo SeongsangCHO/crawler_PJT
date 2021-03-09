@@ -7,9 +7,6 @@ import ProductCard from './ProductCard';
 
 const ProductStoredList = styled.div`
   display: grid;
-  padding: 5px;
-  grid-row-gap: 5px;
-  grid-column-gap: 10px;
   grid-template-columns: 1fr 1fr 1fr;
 
   @media (max-width: 768px) {
@@ -22,7 +19,7 @@ const ProductStoredList = styled.div`
 
 const StoreSectionWrapper = styled.div`
   padding: 5px;
-  flex: 1;
+  flex: 1.3;
 `;
 
 
@@ -32,7 +29,7 @@ const ProductStoreSection = ({ obj }) => {
   );
   const [modalShow, setModalShow] = useState(false);
   return (
-    <StoreSectionWrapper>
+    <StoreSectionWrapper id="StoreSectionWrapper">
       <button className="add-button" onClick={() => setModalShow(true)}>
         검색 및 구매 상품 추가
         {/* <AddLinkImage id="AddLinkImage" /> */}

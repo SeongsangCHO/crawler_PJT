@@ -25,7 +25,7 @@ const  ProductAddingModal = (props) => {
       type: "ADD_LINK_REQUEST",
       data: {
         title: formData.title.value,
-        price: formData.price.value,
+        price: formData.price.value.toLocaleString(),
         link: formData.link.value,
         info: formData.info.value,
         currentCategory: currentCategory

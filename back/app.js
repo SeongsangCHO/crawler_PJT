@@ -150,7 +150,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
 app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log("server addlink call");
-  const { title, price, link, info, currentCategory } = req.body;
+  let { title, price, link, info, currentCategory } = req.body;
 
   let sql = `insert into links (title, price, link, info, categories_id, users_id) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
   and users_id = (select id from users where nickname = '${res.locals.userNickname}')),

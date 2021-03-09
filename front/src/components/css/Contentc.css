@@ -10,14 +10,24 @@
 }
 
 
-#nav-item a {
+#nav-item #nav-link{
   text-align: center;
   font-size: 14px;
   color: #df7861;
   background-color: #ffeeea;
+  text-decoration: none;
+  transition: .4s;
+}
+
+
+#nav-item a#nav-link:hover{
+  background-color: #df7861;
+  text-decoration: none;
+  color: #ffffff;
 }
 
 #nav-item a.active {
+  text-decoration: none;
   background-color: #df7861;
   color: #ffffff;
 }
@@ -33,7 +43,6 @@
   background-color: #ffeeea;
   color: #df7861;
   border-radius: 9px;
-  margin-bottom: 10px;
 }
 
 .add-button :hover {
@@ -46,7 +55,8 @@
   justify-items: center;
 }
 
-
+.redo-image{
+}
 
 #category-wrapper a {
   margin: 3px;

@@ -9,7 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-a.hover {
+a:hover {
   text-decoration: none;
 }
 code {
@@ -41,7 +41,4 @@ button {
   padding: 0;
   font-family: "paybooc-Bold";
   box-sizing: border-box;
-}
-
-div {
 }

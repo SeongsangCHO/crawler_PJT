@@ -34,6 +34,7 @@ const BadgeDiv = styled.div``;
 const TitleLink = styled.a`
   display: block;
   font-size: 13px;
+  min-height:135px;
 `;
 const PriceSpan = styled.span`
   font-size: 14px;

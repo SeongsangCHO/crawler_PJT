@@ -1,11 +1,9 @@
-import  React, {useState, useEffect}  from 'react';
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Nav from "react-bootstrap/Nav";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReactComponent as Redo } from "assets/redo.svg";
-
-
 
 const ProductCardWrapper = styled.div`
   min-height: 150px;
@@ -33,7 +31,56 @@ const RegisterDetail = styled.div`
   font-size: 10px;
 `;
 
+const CardButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const CardLink = styled.a`
+  background-color: #ffeeea;
+  color: #df7861;
+  text-align: center;
+  font-size: 14px;
+  width: 100%;
+  :link {
+    background-color: #ffeeea;
+    text-decoration: none;
+    color: #df7861;
+  }
+  :visited {
+    background-color: #ffeeea;
+    text-decoration: none;
+    color: #df7861;
+  }
+  :hover {
+    background-color: #df7861;
+    color: white;
+    text-decoration: none;
+  }
+  :active {
+    text-decoration: none;
+    background-color: #df7861;
+    color: white;
+  }
+`;
+const Button = styled.button`
+  cursor: pointer;
+  background-color: #ffeeea;
+  color: #df7861;
+  border: none;
+  outline: 0;
+  font-size: 14px;
+  width: 100%;
 
+  :hover {
+    background-color: #df7861;
+    color: white;
+  }
+`;
+const RedoForm = styled.form`
+  width: 100%;
+  ${Button} {
+  }
+`;
 
 function ProductCard({ element }) {
   const dispatch = useDispatch();
@@ -55,12 +102,12 @@ function ProductCard({ element }) {
     // });
   };
   const parseLink = (link) => {
-    if (~link.indexOf('https')){
+    if (~link.indexOf("https")) {
       return link;
     } else {
       return "https://" + link;
     }
-  }
+  };
   const handleReload = (e) => {
     e.preventDefault();
 
@@ -71,8 +118,9 @@ function ProductCard({ element }) {
       linkTitle: e.currentTarget.firstChild.innerText,
     });
   };
+
   return (
-    <ProductCardWrapper>
+    <ProductCardWrapper id="ProductCardWrapper">
       {element.title != null ? (
         <Nav.Item id="nav-item">
           <Nav.Link
@@ -84,18 +132,20 @@ function ProductCard({ element }) {
             {element.title}
           </Nav.Link>
           <CardDetail>
-            <PriceDetail>{element.price}원에 구매</PriceDetail>
+            <PriceDetail>{element.price}</PriceDetail>
             <InfoDetail>{element.info}</InfoDetail>
             <RegisterDetail>{element.date}</RegisterDetail>
-            <LinkDetail target="_blank" href={(parseLink(element.link))}>
-              링크
-            </LinkDetail>
-            <form onSubmit={handleReload}>
+            <CardButtonWrapper>
+              <CardLink target="_blank" href={parseLink(element.link)}>
+                링크
+              </CardLink>
+              <Button>수정</Button>
+              <Button>삭제</Button>
+            </CardButtonWrapper>
+            <RedoForm onSubmit={handleReload}>
               <FormTitle>{element.title}</FormTitle>
-              <button className="redo-button" type="submit">
-                <Redo className="redo-image" />
-              </button>
-            </form>
+              <Button type="submit">새로고침</Button>
+            </RedoForm>
           </CardDetail>
         </Nav.Item>
       ) : (
