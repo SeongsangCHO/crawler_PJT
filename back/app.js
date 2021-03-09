@@ -18,7 +18,7 @@ require("dotenv").config();
 const app = express();
 
 //raw로 작성된 query module화 해서 가져올 것.
-//URL 환경변수 처리 
+//URL 환경변수 처리
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -211,8 +211,9 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
           //   categoryMap.get(element.category).length - 1
           // ]);
           let timeSource = new Date(element.registerTime);
-          let KST = timeSource
-          .toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+          let KST = timeSource.toLocaleString("ko-KR", {
+            timeZone: "Asia/Seoul",
+          });
 
           categoryMap.get(element.category).push({
             title: element.linkTitle,
@@ -290,7 +291,6 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   });
 });
 
-
 app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const title = req.body.linkTitle;
@@ -301,21 +301,22 @@ app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
   )`;
   db.query(linkCardId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
-    db.query(`delete from crawl where links_id = ${dbResult[0].id}`, (error, result)=>{
-      const crawlers = [
-        ssgCrawler(title, dbResult[0].id),
-        coupangCrawler(title, dbResult[0].id),
-        naverCrawler(title, dbResult[0].id),
-      ];
-      Promise.all(crawlers).then((result) => {
-        console.log(result);
-        return res.status(200).json({ message: "성공" });
-      });
-    });
+    db.query(
+      `delete from crawl where links_id = ${dbResult[0].id}`,
+      (error, result) => {
+        const crawlers = [
+          ssgCrawler(title, dbResult[0].id),
+          coupangCrawler(title, dbResult[0].id),
+          naverCrawler(title, dbResult[0].id),
+        ];
+        Promise.all(crawlers).then((result) => {
+          console.log(result);
+          return res.status(200).json({ message: "성공" });
+        });
+      }
+    );
   });
 });
-
-
 
 app.listen(port, () => {
   console.log(`server is listening at localhost:${port}`);

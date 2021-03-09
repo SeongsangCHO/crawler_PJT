@@ -7,8 +7,7 @@ import Badge from "react-bootstrap/Badge";
 import CrawledCardSection from './CrawledCardSection';
 
 const ProductCrawledSectionWrapper = styled.div`
-  border: 0.5px solid gray;
-  border-radius: 5px;
+
   flex-wrap: nowrap;
   flex: 1;
 `;

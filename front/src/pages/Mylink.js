@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SectionTitle from "../components/MyLink/SectionTitle";
 import styled from "styled-components";
 import Tab from "react-bootstrap/Tab";
 import CategoryTab from "../components/MyLink/CategoryTab";
@@ -16,6 +15,26 @@ const ContentWrapper = styled.div`
   }
 `;
 
+const MyLinkSection = styled.div`
+`;
+const CarouselWrapper = styled.div`
+  height: 170px;
+  text-align: center;
+  background-color: #ffeeea;
+  @media (max-width: 576px){
+    display:none;
+  }
+`
+const Carousel = () => {
+  return (
+    <CarouselWrapper>
+      <div className="title">나만의 링크를 저장하세요</div>
+      <br />
+      <div className="subtitle">ㅇㅅㅇ;</div>
+    </CarouselWrapper>
+  );
+};
+
 const MyLink = () => {
   const dispatch = useDispatch();
   const currentLinkTitle = useSelector(
@@ -31,8 +50,7 @@ const MyLink = () => {
   const isReloaded = useSelector((state) => state.reloadReducer.isReloaded);
   const linkTitle = useSelector((state) => state.reloadReducer.linkTitle);
   useEffect(() => {
-    console.log(isReloaded);
-    console.log(linkTitle);
+
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
   }, []); //linkData가 서버에서 받아오는 데이터
   useEffect(() => {
@@ -51,16 +69,15 @@ const MyLink = () => {
     linkTitle,
   ]);
   return (
-    <div className="content-wrapper">
-      <SectionTitle />
+    <MyLinkSection id="MyLinkSection">
+      <Carousel />
       <Tab.Container id="left-tabs" defaultactiveKey="All">
-        <ContentWrapper>
+        <ContentWrapper id="ContentWrapper">
           <CategoryTab obj={linkData} />
           <ProductTab obj={linkData} />
         </ContentWrapper>
       </Tab.Container>
-      <Footer />
-    </div>
+    </MyLinkSection>
   );
 };
 

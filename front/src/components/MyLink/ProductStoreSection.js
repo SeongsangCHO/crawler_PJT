@@ -22,7 +22,7 @@ const ProductStoredList = styled.div`
 
 const StoreSectionWrapper = styled.div`
   padding: 5px;
-  flex: 2;
+  flex: 1;
 `;
 
 
@@ -34,7 +34,8 @@ const ProductStoreSection = ({ obj }) => {
   return (
     <StoreSectionWrapper>
       <button className="add-button" onClick={() => setModalShow(true)}>
-        <AddLinkImage id="AddLinkImage" />
+        검색 및 구매 상품 추가
+        {/* <AddLinkImage id="AddLinkImage" /> */}
       </button>
       <hr />
       <ProductStoredList>

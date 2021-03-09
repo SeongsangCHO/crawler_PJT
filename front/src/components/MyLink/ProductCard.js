@@ -54,6 +54,13 @@ function ProductCard({ element }) {
     //   currentLinkTitle : e.currentTarget.innerHTML,
     // });
   };
+  const parseLink = (link) => {
+    if (~link.indexOf('https')){
+      return link;
+    } else {
+      return "https://" + link;
+    }
+  }
   const handleReload = (e) => {
     e.preventDefault();
 
@@ -80,7 +87,7 @@ function ProductCard({ element }) {
             <PriceDetail>{element.price}원에 구매</PriceDetail>
             <InfoDetail>{element.info}</InfoDetail>
             <RegisterDetail>{element.date}</RegisterDetail>
-            <LinkDetail target="_blank" href={element.link}>
+            <LinkDetail target="_blank" href={(parseLink(element.link))}>
               링크
             </LinkDetail>
             <form onSubmit={handleReload}>

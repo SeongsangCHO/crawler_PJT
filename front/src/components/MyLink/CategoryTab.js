@@ -6,8 +6,9 @@ import "../css/Contentc.css";
 import { useDispatch } from "react-redux";
 
 const CategoryWrapper = styled.div`
+  margin-left: 5px;
   padding: 5px;
-  flex: 1;
+  flex: .7;
   @media (max-width: 768px) {
     flex-direction: row;
   }
@@ -33,7 +34,7 @@ const CategoryTab = ({ obj }) => {
       <hr />
       <Nav variant="pills" className="flex-sm-column nav-wrapper">
         {obj?.category?.map((cate, idx) => (
-          <Nav.Item className="nav-item-card" key={idx}>
+          <Nav.Item className="nav-item-card" key={Object.keys(cate)}>
             {Object.keys(cate) != "null" ? (
               <Nav.Link
                 value={Object.keys(cate)}
@@ -44,7 +45,7 @@ const CategoryTab = ({ obj }) => {
                 
               </Nav.Link>
             ) : (
-              <Nav.Link>카테고리 추가하세요</Nav.Link>
+              <span>관리할 카테고리를 추가하세요</span>
             )}
           </Nav.Item>
         ))}

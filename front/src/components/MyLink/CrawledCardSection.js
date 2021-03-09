@@ -1,11 +1,9 @@
-import  React, {useState, useEffect}  from 'react';
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Tab from "react-bootstrap/Tab";
 import Badge from "react-bootstrap/Badge";
 
-
-const CrawledCardWrapper = styled.div`
-  border: 0.1px solid gray;
+const CrawledCardSectionWrapper = styled.div`
   border-radius: 5px;
   padding: 5px;
   height: 100%;
@@ -29,14 +27,13 @@ const SsgBadge = styled.span`
   padding-left: 0.6em;
   border-radius: 10rem;
 `;
-const CrawledCardList = styled.div`
+const CrawledCardBox = styled.div`
   border: 1px solid #000;
 `;
 const BadgeDiv = styled.div``;
 const TitleLink = styled.a`
-  dispaly: block;
+  display: block;
   font-size: 13px;
-  text-align: center;
 `;
 const PriceSpan = styled.span`
   font-size: 14px;
@@ -46,68 +43,90 @@ const ProductImage = styled.img`
   width: 100%;
   height: auto;
 `;
+const CrawledCardWrapper = styled.div`
+  padding: 5px;
+`;
 const CrawledCard = ({ crawledData }) => {
-  const { link, imgsrc, title, price } = crawledData;
+  let { link, imgsrc, title, price } = crawledData;
+  if (title.length > 15){
+    title = title.slice(0, 15) + "...";
+  }
   return (
-    <>
+    <CrawledCardWrapper>
       <TitleLink target="_blank" href={link}>
         <ProductImage src={imgsrc} />
 
         {title}
       </TitleLink>
-      <div>
-        <PriceSpan>{price}</PriceSpan>
-      </div>
-    </>
+      <PriceSpan>{price}</PriceSpan>
+    </CrawledCardWrapper>
   );
 };
 
-function CrawledCardSection({ obj }) {
-
+const CoupangCard = ({ element }) => {
   return (
-    <CrawledCardWrapper id="crawl-card-wrapper">
+    <>
+      {element.coupang.map((coupangElement) => (
+        <CrawledCardBox key={coupangElement.title}>
+          <BadgeDiv>
+            <Badge pill variant="primary">
+              COUPANG
+            </Badge>
+          </BadgeDiv>
+          <CrawledCard crawledData={coupangElement}></CrawledCard>
+        </CrawledCardBox>
+      ))}
+    </>
+  );
+};
+const SsgCard = ({ element }) => {
+  return (
+    <>
+      {element.ssg.map((ssgElement, idx) => (
+        <CrawledCardBox key={ssgElement.title}>
+          <BadgeDiv>
+            <SsgBadge pill variant="warning">
+              SSG
+            </SsgBadge>
+          </BadgeDiv>
+          <CrawledCard crawledData={ssgElement}></CrawledCard>
+        </CrawledCardBox>
+      ))}
+    </>
+  );
+};
+const NaverCard = ({ element }) => {
+  return (
+    <>
+      {element.naver.map((naverElement) => (
+        <CrawledCardBox key={naverElement.title}>
+          <BadgeDiv>
+            <Badge pill variant="success">
+              NAVER
+            </Badge>
+            <CrawledCard crawledData={naverElement}></CrawledCard>
+          </BadgeDiv>
+        </CrawledCardBox>
+      ))}
+    </>
+  );
+};
+function CrawledCardSection({ obj }) {
+  console.log(obj);
+  return (
+    <CrawledCardSectionWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, idx) => (
         <Tab.Pane
           eventKey={element.title}
           key={element.title}
           unmountOnExit="true"
         >
-
-          {element.ssg.map((ssgElement, idx) => (
-            <CrawledCardList key={ssgElement.title}>
-              <BadgeDiv>
-                <SsgBadge pill variant="warning">
-                  SSG
-                </SsgBadge>
-              </BadgeDiv>
-              <CrawledCard crawledData={ssgElement}></CrawledCard>
-            </CrawledCardList>
-          ))}
-          {element.coupang.map(coupangElement => (
-            <CrawledCardList key={coupangElement.title}>
-              <BadgeDiv>
-                <Badge pill variant="primary">
-                  COUPANG
-                </Badge>
-              </BadgeDiv>
-              <CrawledCard crawledData={coupangElement}></CrawledCard>
-
-            </CrawledCardList>
-          ))}
-          {element.naver.map(naverElement => (
-            <CrawledCardList key={naverElement.title}>
-              <BadgeDiv>
-                <Badge pill variant="success">
-                  NAVER
-                </Badge>
-                <CrawledCard crawledData={naverElement}></CrawledCard>
-
-              </BadgeDiv>
-            </CrawledCardList>
-          ))}
+          <SsgCard element={element} />
+          <CoupangCard element={element} />
+          <NaverCard element={element} />
         </Tab.Pane>
       ))}
-    </CrawledCardWrapper>
+    </CrawledCardSectionWrapper>
   );
 }
 export default CrawledCardSection;

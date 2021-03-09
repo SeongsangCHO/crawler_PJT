@@ -1,6 +1,6 @@
 #crawl-card-wrapper > div {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 @media (max-width: 768px) {
@@ -8,11 +8,7 @@
     grid-template-columns: 1fr;
   }
 }
-.direction {
-}
 
-.nav-item-card {
-}
 
 #nav-item a {
   text-align: center;
@@ -26,18 +22,12 @@
   color: #ffffff;
 }
 
-.text-wrapper {
-  height: 170px;
-  text-align: center;
-  background-color: #ffeeea;
-}
 
 .title {
   font-size: 25px;
   padding-top: 40px;
 }
-.subtitle {
-}
+
 .add-button {
   width: 100%;
   background-color: #ffeeea;
@@ -56,10 +46,7 @@
   justify-items: center;
 }
 
-#category-wrapper .nav-item-card {
-}
-#category-wrapper div div {
-}
+
 
 #category-wrapper a {
   margin: 3px;

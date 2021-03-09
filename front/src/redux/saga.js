@@ -39,11 +39,11 @@ const URL = `http://localhost:8080`;
 
 const registerURL = `${URL}/register`;
 const loginURL = `${URL}/login`;
-const addCategoryURL = "http://localhost/addcategory";
-const linkDataApiCallURL = "http://localhost/api/mylink";
-const addLinkURL = "http://localhost/addlink";
-const crawlURL = "http://localhost/crawler";
-const reloadURL = "http://localhost/reload";
+const addCategoryURL = `${URL}/addcategory`;
+const linkDataApiCallURL = `${URL}/api/mylink`;
+const addLinkURL = `${URL}/addlink`;
+const crawlURL = `${URL}/crawler`;
+const reloadURL = `${URL}/reload`;
 
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
 
