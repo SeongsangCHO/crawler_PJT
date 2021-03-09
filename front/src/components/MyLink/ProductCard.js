@@ -119,9 +119,7 @@ function ProductCard({ element }) {
     });
   };
 
-  const test = (element) =>{
-    console.log(element);
-  }
+
   return (
     <ProductCardWrapper id="ProductCardWrapper">
       {element.title != null ? (
@@ -142,7 +140,7 @@ function ProductCard({ element }) {
               <CardLink target="_blank" href={parseLink(element.link)}>
                 링크
               </CardLink>
-              <Button onClick={test(element)}>수정</Button>
+              <Button>수정</Button>
               <Button>삭제</Button>
             </CardButtonWrapper>
             <RedoForm onSubmit={handleReload}>

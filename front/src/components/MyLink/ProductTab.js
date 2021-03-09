@@ -18,7 +18,6 @@ function CardTab({ obj }) {
   const linkDataIsCalled = useSelector(
     (state) => state.linkDataApiCallReducer.isCalled
   );
-  const [modalShow, setModalShow] = useState(false);
   return (
     <CardTabWrapper>
       <Tab.Container>

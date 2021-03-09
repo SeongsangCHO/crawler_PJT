@@ -113,14 +113,13 @@ const NaverCard = ({ element }) => {
   );
 };
 function CrawledCardSection({ obj }) {
-  console.log(obj);
   return (
     <CrawledCardSectionWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, idx) => (
         <Tab.Pane
           eventKey={element.title}
           key={element.title}
-          unmountOnExit="true"
+          unmountOnExit={true}
         >
           <SsgCard element={element} />
           <CoupangCard element={element} />

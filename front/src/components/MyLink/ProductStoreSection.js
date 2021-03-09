@@ -36,8 +36,8 @@ const ProductStoreSection = ({ obj }) => {
       </button>
       <hr />
       <ProductStoredList>
-        {obj[Object.keys(obj)]?.map((element) => (
-          <ProductCard element={element} />
+        {obj[Object.keys(obj)]?.map((element, idx) => (
+          <ProductCard key={"ProductCard-"+idx} element={element} />
         ))}
       </ProductStoredList>
       <ProductAddingModal show={modalShow} onHide={() => setModalShow(false)} />

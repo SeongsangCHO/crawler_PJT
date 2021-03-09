@@ -51,13 +51,8 @@ const ButtonWrapper = styled.div`
   margin-right: 20px;
 `;
 
-const TitleLink = styled.a`
+const TitleLink = styled.span`
   color: black;
-  text-decoration: none;
-
-  :hover {
-    color: black;
-  }
 `;
 
 function NavBar() {
