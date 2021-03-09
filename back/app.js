@@ -16,6 +16,9 @@ const { verifyToken } = require("./middlewares/verify");
 var cookieParser = require("cookie-parser");
 require("dotenv").config();
 const app = express();
+
+//raw로 작성된 query module화 해서 가져올 것.
+//URL 환경변수 처리 
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -24,7 +27,7 @@ app.use(
 );
 app.use(cookieParser());
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 8080;
 let testAPIRouter = require("./routes/testAPI");
 const { start } = require("repl");
 const naverCrawler = require("./crawler/naverCrawler");

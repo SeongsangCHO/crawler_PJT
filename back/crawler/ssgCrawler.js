@@ -13,7 +13,6 @@ const FAILURE = 0;
 //크롤링에 인자전달하는 방법
 //db에서 select한 결과를 갖고 크롤링을 해야할듯
 const ssgCrawler = async (searchText, linkId) => {
-
   let start = await new Date().getTime();
   //배포시 headless true로 설정해야함.
   //에러핸들링 추가해야함., 블록스코프에 맞춰서
@@ -36,38 +35,48 @@ const ssgCrawler = async (searchText, linkId) => {
     //page당 아이템 갯수 출력 80개
     return document.querySelectorAll(SELECTOR).length;
   }, ulContentSelector);
+  if (productAmountPerPage <= 0) {
+    //li 태그의 길이가 없다 == 검색결과 없을때 크롤링종료
+    console.log("ssg_ li length is zero");
+    await page.close(); // 페이지 닫기
+    await browser.close(); // 브라우저 닫기
+    return NO_SEARCH_DATA; // 검색결과 없을때
+  }
 
   let productData = [];
-  let lastPageNumber = await ssgUtils.getLastPageNumber(page, productAmountPerPage);
+  let lastPageNumber = await ssgUtils.getLastPageNumber(
+    page,
+    browser,
+    productAmountPerPage
+  );
+  console.log(productAmountPerPage);
+  //페이지가 10개이상일때 last버튼 찾도록 지정
 
-    //페이지가 10개이상일때 last버튼 찾도록 지정
-    if (lastPageNumber >= 10) {
-      lastPageNumber = await page.$eval(`.btn_last`, (element) => {
-        //btn Last가 없을수도있구나.
-        return element.getAttribute("data-filter-value").split("=")[1];
-      });
-    }
+  if (lastPageNumber >= 10) {
+    lastPageNumber = await page.$eval(`.btn_last`, (element) => {
+      //btn Last가 없을수도있구나.
+      return element.getAttribute("data-filter-value").split("=")[1];
+    });
+  }
 
-    try {
-      //첫페이지 ~ 3페이지까지 크롤링
-      for (
-        let pageNumber = 1;
-        pageNumber <= CRAWL_PAGES;
-        pageNumber++
-      ) {
-        if (pageNumber != 1) {
-          await page.goto(
-            `http://www.ssg.com/search.ssg?target=all&query=${searchText}&page=${pageNumber}`,
-            { waitUntil: "networkidle2" }
-          );
-        }
-        productData = await ssgUtils.getProductData(page, productAmountPerPage);
+  try {
+    //첫페이지 ~ 3페이지까지 크롤링
+    for (let pageNumber = 1; pageNumber <= CRAWL_PAGES; pageNumber++) {
+      if (pageNumber != 1) {
+        await page.goto(
+          `http://www.ssg.com/search.ssg?target=all&query=${searchText}&page=${pageNumber}`,
+          { waitUntil: "networkidle2" }
+        );
       }
-    } catch (error) {
-      if (error) console.error(error);
+      productData = await ssgUtils.getProductData(page, productAmountPerPage);
     }
-  
-  console.log("쓱 크롤러 걸린시간 : " + (await new Date().getTime() - start) / 1000);
+  } catch (error) {
+    if (error) console.error(error);
+  }
+
+  console.log(
+    "쓱 크롤러 걸린시간 : " + ((await new Date().getTime()) - start) / 1000
+  );
 
   await page.close(); // 페이지 닫기
   await browser.close(); // 브라우저 닫기

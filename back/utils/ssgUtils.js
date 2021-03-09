@@ -1,12 +1,5 @@
-const getLastPageNumber = async (page, productAmountPerPage) => {
+const getLastPageNumber = async (page, browser, productAmountPerPage) => {
 
-  if (productAmountPerPage <= 0) {
-    //li 태그의 길이가 없다 == 검색결과 없을때 크롤링종료
-    console.log("ssg_ li length is zero");
-    await page.close(); // 페이지 닫기
-    await browser.close(); // 브라우저 닫기
-    return NO_SEARCH_DATA; // 검색결과 없을때
-  }
 
   //마지막 페이지 번호를 구함
   let totalProduct = await page.$eval(

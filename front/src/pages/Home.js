@@ -10,7 +10,7 @@ function Home() {
         <JumbotronImage id="jumbotron" />
         <span id="jumbotron-sentence">Save link, Save time</span>
       </div>
-      <MainContent/>
+      {/* <MainContent/> */}
     </div>
   );
 }

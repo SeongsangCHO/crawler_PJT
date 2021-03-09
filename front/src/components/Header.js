@@ -8,6 +8,7 @@ import RegisterModal from "components/RegisterModal/RegisterModal";
 import LoginModal from "components/LoginModal/LoginModal";
 import CreateNotification from "./CreateNotification";
 import { NotificationContainer } from "react-notifications";
+import styles from "./css/Header.css";
 
 function Jumbotron() {
   return <div id="jumbotron">Jumbotron</div>;
@@ -15,12 +16,58 @@ function Jumbotron() {
 
 const NavBarWrapper = styled.div``;
 
+const SignUpButton = styled.button`
+  background-color: tomato;
+  color: white;
+  border: none;
+  height: 50%;
+  width: 100px;
+  border-radius: 5px;
+  margin-right: 15px;
+  transition: 0.4s;
+  :hover {
+    background-color: white;
+    color: tomato;
+  }
+`;
+const LoginButton = styled.button`
+  border: none;
+  background-color: white;
+  height: 50%;
+  transition: 0.4s;
+  :hover {
+    color: gray;
+  }
+`;
+const HeaderWrapper = styled.div``;
+
+const LogoWrapper = styled.div`
+  margin-left: 32px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+`;
+
+const TitleLink = styled.a`
+  color: black;
+  text-decoration: none;
+
+  :hover {
+    color: black;
+  }
+
+`;
+
 function NavBar() {
   return (
     <NavBarWrapper id="NavBarWrapper">
       <ul id="nav-bar-ul">
         <li>
-          <NavLink to={"/"} id="nav-item-home" className="nav-item">
+          <NavLink to={"/"} className="nav-item" exact>
             Home
           </NavLink>
         </li>
@@ -41,13 +88,13 @@ function Header() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
-    if(isLogined === true){
+    if (isLogined === true) {
       CreateNotification("success")("로그인 성공");
-    } 
-    if(isLogined === false){
+    }
+    if (isLogined === false) {
       CreateNotification("error")("로그인 실패");
     }
-  },[isLogined]);
+  }, [isLogined]);
 
   //custom hooks로 뺴기
   const onToggleRegisterModal = () => {
@@ -58,7 +105,7 @@ function Header() {
   };
 
   return (
-    <div className="header-wrapper">
+    <HeaderWrapper>
       {isRegisterModalOpen == true ? (
         <RegisterModal
           onToggleRegisterModal={onToggleRegisterModal}
@@ -76,27 +123,27 @@ function Header() {
         false
       )}
       <div id="Top-header">
-        <div id="left-header-section">
-          <NavLink to={"/"}>
-            <Logo id="LogoImage" width="100px" height="50px" alt="LOGO"/>
-            {/* <img id="LogoImage" src={LogoImage} alt="React Logo" /> */}
-            <div id="Logo">다링</div>
+        <LogoWrapper>
+          <NavLink style={{ textDecoration: 'none' }} to={"/"}>
+            <Logo id="LogoImage" width="100px" height="50px" alt="LOGO" />
+            <TitleLink style={{ textDecoration: 'none' }} id="TitleLink">다링</TitleLink>
           </NavLink>
-        </div>
-        <div id="Top-header-right">
+        </LogoWrapper>
+        <ButtonWrapper>
           {!isLogined ? (
             <>
-              <button onClick={onToggleLoginModal}>LOGIN</button>
-              <button onClick={onToggleRegisterModal}>REGISTER</button>
+              <SignUpButton onClick={onToggleRegisterModal}>
+                Sign Up
+              </SignUpButton>
+              <LoginButton onClick={onToggleLoginModal}>Log In</LoginButton>
             </>
           ) : (
             <span>{userNickName}님 안녕하세요</span>
           )}
-        </div>
+        </ButtonWrapper>
       </div>
       <NavBar />
-      <NotificationContainer />
-    </div>
+    </HeaderWrapper>
   );
 }
 
