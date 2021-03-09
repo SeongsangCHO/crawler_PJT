@@ -4,18 +4,14 @@ import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 import "./css/Header.css";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
-import RegisterModal from "components/RegisterModal/RegisterModal";
-import LoginModal from "components/LoginModal/LoginModal";
+
 import CreateNotification from "./CreateNotification";
-import { NotificationContainer } from "react-notifications";
-import styles from "./css/Header.css";
+
 import Modal from "./Modal/Modal";
 import RegisterModalContent from "./RegisterModal/RegisterModalContent";
 import LoginModalContent from "./LoginModal/LoginModalContent";
 
-function Jumbotron() {
-  return <div id="jumbotron">Jumbotron</div>;
-}
+
 
 const NavBarWrapper = styled.div``;
 
@@ -116,10 +112,7 @@ function Header() {
           />
         </Modal>
       ) : (
-        // <RegisterModal
-        //   onToggleRegisterModal={onToggleRegisterModal}
-        //   onToggleLoginModal={onToggleLoginModal}
-        // />
+
         false
       )}
       {isLoginModalOpen && !isLogined ? (
@@ -130,10 +123,7 @@ function Header() {
           />
         </Modal>
       ) : (
-        // <LoginModal
-        //   onToggleRegisterModal={onToggleRegisterModal}
-        //   onToggleLoginModal={onToggleLoginModal}
-        // />
+
         false
       )}
       <div id="Top-header">

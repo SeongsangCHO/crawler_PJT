@@ -1,23 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "components/css/RegisterModal.module.css";
 import styled from "styled-components";
-import { ReactComponent as Logo } from "assets/logoimage.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import NickNameInput from "./NickNameInput";
 import PasswordInput from "./PasswordInput";
 import "react-notifications/lib/notifications.css";
-import { NotificationContainer } from "react-notifications";
 import CreateNotification from "components/CreateNotification";
-
-const RegisterModalWrapper = styled.div`
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  background: rgba(0, 0, 0, 0.5);
-`;
 
 const RegisterForm = styled.form`
   display: flex;
@@ -30,33 +17,11 @@ const RegisterForm = styled.form`
   }
 `;
 
-const LogoWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 15px;
-  padding-bottom: 15px;
-`;
-
 const SubmitButton = styled.button`
   border: 1px solid;
   background-color: ${(props) => (props.isDisabled ? "green" : "gray")};
   transition: 0.5s;
   color: white;
-`;
-
-const CloseButton = styled.div`
-  position: relative;
-  display: inline-block;
-  left: 100%;
-  transform: translate(-100%, 0);
-  padding: 5px 5px 0 0;
-  border: none;
-  background-color: white;
-  opacity: 0.7;
-  :hover {
-    opacity: 1;
-  }
 `;
 
 const LoginButton = styled.button`
@@ -89,14 +54,7 @@ const RegisterModalContent = ({
   const handleMatchPassword = (isMatch) => {
     setIsMatchPassword(isMatch);
   };
-  const onCloseRegisterModal = (e) => {
-    if (
-      e.target.id === "RegisterModalWrapper" ||
-      e.target.id === "CloseRegisterModal"
-    ) {
-      onToggleRegisterModal();
-    }
-  };
+
   const onMoveLoginModal = () => {
     onToggleRegisterModal();
     onToggleLoginModal();
