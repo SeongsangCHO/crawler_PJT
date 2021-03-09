@@ -26,7 +26,7 @@
   color: #ffffff;
 }
 
-#nav-item a.active {
+#nav-item a#nav-link.active {
   text-decoration: none;
   background-color: #df7861;
   color: #ffffff;

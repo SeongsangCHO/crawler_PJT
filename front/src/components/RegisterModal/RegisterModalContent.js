@@ -18,20 +18,6 @@ const RegisterModalWrapper = styled.div`
   z-index: 1;
   background: rgba(0, 0, 0, 0.5);
 `;
-const RegisterModalContent = styled.div`
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  max-width: 50vw;
-  min-height: 455px;
-  border-radius: 5px;
-
-  @media (max-width: 576px) {
-    min-height: 60vh;
-  }
-`;
 
 const RegisterForm = styled.form`
   display: flex;
@@ -81,7 +67,10 @@ const LoginButton = styled.button`
   margin-top: 5px;
 `;
 
-const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
+const RegisterModalContent = ({
+  onToggleRegisterModal,
+  onToggleLoginModal,
+}) => {
   const dispatch = useDispatch();
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
@@ -101,7 +90,6 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
     setIsMatchPassword(isMatch);
   };
   const onCloseRegisterModal = (e) => {
-    console.log('closeRegisterModal');
     if (
       e.target.id === "RegisterModalWrapper" ||
       e.target.id === "CloseRegisterModal"
@@ -153,46 +141,24 @@ const RegisterModal = ({ onToggleRegisterModal, onToggleLoginModal }) => {
   };
 
   return (
-    <RegisterModalWrapper
-      id="RegisterModalWrapper"
-      onClick={onCloseRegisterModal}
-    >
-      <RegisterModalContent id="RegisterModalContent" onSubmit={onSignUp}>
-        <CloseButton>
-          <FontAwesomeIcon
-            id="CloseRegisterModal"
-            size="2x"
-            icon={faTimesCircle}
-          />
-        </CloseButton>
-        <LogoWrapper id="LogoWrapper">
-          <Logo />
-        </LogoWrapper>
+    <RegisterForm onSubmit={onSignUp}>
+      <span>Create Account</span>
+      <NickNameInput />
+      <PasswordInput
+        isMatchPassword={isMatchPassword}
+        handleMatchPassword={handleMatchPassword}
+        handlePassword={handlePassword}
+      />
 
-        <RegisterForm>
-          <span>Create Account</span>
-          <NickNameInput />
-          <PasswordInput
-            isMatchPassword={isMatchPassword}
-            handleMatchPassword={handleMatchPassword}
-            handlePassword={handlePassword}
-          />
+      <SubmitButton isDisabled={!signUpVaildCheck()} type="submit">
+        Register
+      </SubmitButton>
 
-          <SubmitButton isDisabled={!signUpVaildCheck()} type="submit">
-            Register
-          </SubmitButton>
-
-          <LoginButton
-            isSignUp={isSignUp}
-            onClick={onMoveLoginModal}
-            type="button"
-          >
-            Login
-          </LoginButton>
-        </RegisterForm>
-      </RegisterModalContent>
-    </RegisterModalWrapper>
+      <LoginButton isSignUp={isSignUp} onClick={onMoveLoginModal} type="button">
+        Login
+      </LoginButton>
+    </RegisterForm>
   );
 };
 
-export default React.memo(RegisterModal);
+export default React.memo(RegisterModalContent);

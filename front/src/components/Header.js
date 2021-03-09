@@ -9,6 +9,9 @@ import LoginModal from "components/LoginModal/LoginModal";
 import CreateNotification from "./CreateNotification";
 import { NotificationContainer } from "react-notifications";
 import styles from "./css/Header.css";
+import Modal from "./Modal/Modal";
+import RegisterModalContent from "./RegisterModal/RegisterModalContent";
+import LoginModalContent from "./LoginModal/LoginModalContent";
 
 function Jumbotron() {
   return <div id="jumbotron">Jumbotron</div>;
@@ -59,7 +62,6 @@ const TitleLink = styled.a`
   :hover {
     color: black;
   }
-
 `;
 
 function NavBar() {
@@ -107,26 +109,40 @@ function Header() {
   return (
     <HeaderWrapper>
       {isRegisterModalOpen == true ? (
-        <RegisterModal
-          onToggleRegisterModal={onToggleRegisterModal}
-          onToggleLoginModal={onToggleLoginModal}
-        />
+        <Modal modalId="Register" onToggleModal={onToggleRegisterModal}>
+          <RegisterModalContent
+            onToggleRegisterModal={onToggleRegisterModal}
+            onToggleLoginModal={onToggleLoginModal}
+          />
+        </Modal>
       ) : (
+        // <RegisterModal
+        //   onToggleRegisterModal={onToggleRegisterModal}
+        //   onToggleLoginModal={onToggleLoginModal}
+        // />
         false
       )}
       {isLoginModalOpen && !isLogined ? (
-        <LoginModal
-          onToggleRegisterModal={onToggleRegisterModal}
-          onToggleLoginModal={onToggleLoginModal}
-        />
+        <Modal modalId="Login" onToggleModal={onToggleLoginModal}>
+          <LoginModalContent
+            onToggleRegisterModal={onToggleRegisterModal}
+            onToggleLoginModal={onToggleLoginModal}
+          />
+        </Modal>
       ) : (
+        // <LoginModal
+        //   onToggleRegisterModal={onToggleRegisterModal}
+        //   onToggleLoginModal={onToggleLoginModal}
+        // />
         false
       )}
       <div id="Top-header">
         <LogoWrapper>
-          <NavLink style={{ textDecoration: 'none' }} to={"/"}>
+          <NavLink style={{ textDecoration: "none" }} to={"/"}>
             <Logo id="LogoImage" width="100px" height="50px" alt="LOGO" />
-            <TitleLink style={{ textDecoration: 'none' }} id="TitleLink">다링</TitleLink>
+            <TitleLink style={{ textDecoration: "none" }} id="TitleLink">
+              다링
+            </TitleLink>
           </NavLink>
         </LogoWrapper>
         <ButtonWrapper>
