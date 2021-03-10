@@ -16,7 +16,9 @@ const { verifyToken } = require("./middlewares/verify");
 var cookieParser = require("cookie-parser");
 require("dotenv").config();
 const app = express();
-
+const moment = require("moment");
+require("moment-timezone");
+moment.tz.setDefault("Asia/Seoul");
 //raw로 작성된 query module화 해서 가져올 것.
 //URL 환경변수 처리
 app.use(
@@ -150,13 +152,16 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
 app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log("server addlink call");
-  let { title, price, link, info, currentCategory } = req.body;
+  let { title, price, link, info, currentCategory, registerTime } = req.body;
+  let KST = new Date(registerTime.toString());
 
-  let sql = `insert into links (title, price, link, info, categories_id, users_id) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
+  KST.setHours(KST.getHours()+9)
+
+  let sql = `insert into links (title, price, link, info, categories_id, users_id, registerTime) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
   and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
-  (select id from users where nickname = '${res.locals.userNickname}'))`;
+  (select id from users where nickname = '${res.locals.userNickname}'), ?)`;
 
-  db.query(sql, [title, price, link, info], (dbError, result) => {
+  db.query(sql, [title, price, link, info, KST], (dbError, result) => {
     if (dbError) throw dbError;
   });
   return res.status(200).json({ message: "링크 추가 SUCCESS" });
@@ -210,17 +215,13 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
           // console.log("in",categoryMap.get(element.category)[
           //   categoryMap.get(element.category).length - 1
           // ]);
-          let timeSource = new Date(element.registerTime);
-          let KST = timeSource.toLocaleString("ko-KR", {
-            timeZone: "Asia/Seoul",
-          });
 
           categoryMap.get(element.category).push({
             title: element.linkTitle,
             link: element.link,
             price: element.linkPrice,
             info: element.linkInfo,
-            date: KST,
+            date: element.registerTime,
             ssg: [],
             coupang: [],
             naver: [],
