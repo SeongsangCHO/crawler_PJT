@@ -15,9 +15,7 @@ const CategoryWrapper = styled.div`
 
 
 const CategoryModal = (props) => {
-  const categoryStatus = useSelector(
-    state => state.addCategoryReducer.category
-  );
+
   useEffect(() => {}, []);
   const [categoryData, setCategoryData] = useState("");
   const dispatch = useDispatch();
@@ -30,7 +28,7 @@ const CategoryModal = (props) => {
     dispatch({
       type: "ADD_CATEGORY_REQUEST",
       category: categoryData,
-      isAdded: false
+      isAddCategory: false
     });
     //[추측][비동기처리해서] 그냥 될떄도있고 안될때도있네 => submit로 페이지 리로딩이 되기때문.
     props.onHide();

@@ -12,6 +12,7 @@ const initialState = {
     link :  '',
     info :  '',
     currentCategory: '',
+    registerTime: '',
   },
 };
 

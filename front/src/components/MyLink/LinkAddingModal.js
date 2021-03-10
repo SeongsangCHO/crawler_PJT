@@ -12,7 +12,7 @@ const ModalWrapper = styled.div`
   width: 100%;
 `;
 
-const ProductAddingModal = (props) => {
+const LinkAddingModal = (props) => {
   // Custom hook으로 onChange하는 거 다 묶어야겠다.
   const dispatch = useDispatch();
   const currentCategory = useSelector(
@@ -20,7 +20,7 @@ const ProductAddingModal = (props) => {
   );
 
   const isVaildFormData = (data) => {
-    if (data.title.value === "") {
+    if (data.title.value === "" || data.link.value === "") {
       return false;
     }
     return true;
@@ -33,21 +33,17 @@ const ProductAddingModal = (props) => {
         type: "ADD_LINK_REQUEST",
         data: {
           title: formData.title.value,
-          price: formData.price.value.toLocaleString(),
+          price: '',
           link: formData.link.value,
           info: formData.info.value,
           currentCategory: currentCategory,
           registerTime: moment()._d,
         },
       });
-      dispatch({
-        type: "RUN_CRAWLER_REQUEST",
-        currentLinkTitle: formData.title.value,
-        isCrawled: false,
-      });
+
       props.onHide();
     } else {
-      CreateNotification("error")("상품명을 입력해주세요.");
+      CreateNotification("error")("제목 또는 링크를 입력해주세요.");
     }
     //여기서 dispatch 수행해서 post요청해야함
   };
@@ -67,9 +63,8 @@ const ProductAddingModal = (props) => {
         <ModalWrapper>
           <form onSubmit={handleAddLink}>
             <input type="hidden" placeholder={currentCategory}></input>
-            <input name="title" type="text" placeholder="구매한 상품명"></input>
-            <input name="price" type="text" placeholder="구매 가격"></input>
-            <input name="link" type="text" placeholder="구매 링크"></input>
+            <input name="title" type="text" placeholder="북마크할 링크 제목"></input>
+            <input name="link" type="text" placeholder="저장 링크"></input>
             <input name="info" type="text" placeholder="메모"></input>
             <button type="submit">저장하기</button>
           </form>
@@ -79,4 +74,4 @@ const ProductAddingModal = (props) => {
   );
 };
 
-export default ProductAddingModal;
+export default LinkAddingModal;

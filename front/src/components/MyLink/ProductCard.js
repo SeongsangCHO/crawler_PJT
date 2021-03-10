@@ -82,7 +82,7 @@ const RedoForm = styled.form`
   }
 `;
 
-function ProductCard({ element }) {
+function ProductCard({ categoryItem }) {
   const dispatch = useDispatch();
   const linkTitle = useSelector((state) => state.reloadReducer.isReloaded);
 
@@ -111,40 +111,42 @@ function ProductCard({ element }) {
   const handleReload = (e) => {
     e.preventDefault();
 
-    // console.log(e.currentTarget.firstChild.innerText); //현재 item 타이틀
     dispatch({
       type: "RELOAD_REQUEST",
       isReloaded: false,
       linkTitle: e.currentTarget.firstChild.innerText,
     });
   };
-
-
+  // let KST = timeSource.toLocaleString("ko-KR", {
+  //   timeZone: "Asia/Seoul",
+  // });
+  useEffect(() => {}, []);
+  //새로운 카드가 등록되었을 때 리랜더링
   return (
     <ProductCardWrapper id="ProductCardWrapper">
-      {element.title != null ? (
+      {categoryItem.title != null ? (
         <Nav.Item id="nav-item">
           <Nav.Link
             id="nav-link"
             onClick={handleCardClick}
             justify="true"
-            eventKey={element.title}
+            eventKey={categoryItem.title}
           >
-            {element.title}
+            {categoryItem.title}
           </Nav.Link>
           <CardDetail>
-            <PriceDetail>{element.price}</PriceDetail>
-            <InfoDetail>{element.info}</InfoDetail>
-            <RegisterDetail>{element.date}</RegisterDetail>
+            <PriceDetail>{categoryItem.price}</PriceDetail>
+            <InfoDetail>{categoryItem.info}</InfoDetail>
+            <RegisterDetail>{categoryItem.date}</RegisterDetail>
             <CardButtonWrapper>
-              <CardLink target="_blank" href={parseLink(element.link)}>
+              <CardLink target="_blank" href={parseLink(categoryItem.link)}>
                 링크
               </CardLink>
               <Button>수정</Button>
               <Button>삭제</Button>
             </CardButtonWrapper>
             <RedoForm onSubmit={handleReload}>
-              <FormTitle>{element.title}</FormTitle>
+              <FormTitle>{categoryItem.title}</FormTitle>
               <Button type="submit">새로고침</Button>
             </RedoForm>
           </CardDetail>

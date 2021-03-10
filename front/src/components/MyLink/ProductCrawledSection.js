@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import CrawledCardSection from './CrawledCardSection';
 
 const ProductCrawledSectionWrapper = styled.div`
-
   flex-wrap: nowrap;
   flex: 1;
 `;
@@ -15,6 +14,7 @@ const ProductCrawledSection = ({obj}) => {
   const linkDataIsCalled = useSelector(
     (state) => state.linkDataApiCallReducer.isCalled
   );
+
   return (
     <ProductCrawledSectionWrapper id="card-tab-right-section">
     {linkDataIsCalled == true ? (

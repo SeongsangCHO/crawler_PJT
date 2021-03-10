@@ -7,6 +7,7 @@ import {
 
 const initialState = {
   category:'',
+  isAddCategory:false,
 };
 
 //상태가 변화할 때 수행되는 함수
@@ -20,11 +21,11 @@ const addCategoryReducer = (state = initialState, action) => {
     }
     case ADD_CATEGORY_SUCCESS: {
       console.log("add카테고리 SUCCESS_리듀서");
-      return { ...state, category: action.category};
+      return { ...state, category: action.category, isAddCategory: action.isAddCategory};
     }
     case ADD_CATEGORY_FAILURE: {
       console.log("add카테고리 FAILURE_리듀서");
-      return { ...state, data: {}};
+      return { ...state, data: {}, isAddCategory: false};
     }
     
     default:

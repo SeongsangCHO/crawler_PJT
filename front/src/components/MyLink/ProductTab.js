@@ -14,16 +14,16 @@ const ProductTabWrapper = styled.div`
 const CardTabWrapper = styled.div``;
 
 
-function CardTab({ obj }) {
+function CardTab({ categoryItems }) {
 
   return (
     <CardTabWrapper>
       <Tab.Container>
         <Nav variant="pills" className="flex-column">
           <Tab.Content style={{ display: "flex" }}>
-            <ProductStoreSection obj={obj}></ProductStoreSection>
+            <ProductStoreSection categoryItems={categoryItems}></ProductStoreSection>
             <ProductCrawledSection
-              obj={obj}
+              obj={categoryItems}
             />
           </Tab.Content>
         </Nav>
@@ -35,22 +35,16 @@ function CardTab({ obj }) {
 const ProductTab = ({ obj }) => {
   const dispatch = useDispatch();
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
-  const isLogined = useSelector((state) => state.loginReducer.isLogined);
 
   useEffect(() => {
-    //dispatch수행해서 리랜더링될 때 , axios로 api호출
-    dispatch({
-      type: "LINK_DATA_REQUEST",
-      data: {},
-      isCalled: false,
-    });
-  }, [isLogined]);
+    console.log('**********Product Tab rendered ************');
+  })
   return (
     <ProductTabWrapper>
       <Tab.Content>
-        {linkData?.category?.map((cate, idx) => (
-          <Tab.Pane eventKey={Object.keys(cate)} key={idx} unmountOnExit={true}>
-            <CardTab obj={cate} />
+        {linkData?.category?.map((categoryItems, idx) => (
+          <Tab.Pane eventKey={Object.keys(categoryItems)} key={idx} unmountOnExit={true}>
+            <CardTab categoryItems={categoryItems} />
           </Tab.Pane>
         ))}
       </Tab.Content>

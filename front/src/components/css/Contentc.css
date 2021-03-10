@@ -43,6 +43,7 @@
   background-color: #ffeeea;
   color: #df7861;
   border-radius: 9px;
+  border: none;
 }
 
 .add-button :hover {

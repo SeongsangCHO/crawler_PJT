@@ -27,7 +27,7 @@ const runCrawlerReducer = (state = initialState, action) => {
     }
     case RUN_CRAWLER_FAILURE: {
       console.log("크롤러 FAILURE_리듀서");
-      return { ...state};
+      return { ...state,isCrawled:false};
     }
     default:
       return state;

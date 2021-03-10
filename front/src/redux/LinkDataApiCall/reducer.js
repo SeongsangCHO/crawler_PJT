@@ -17,8 +17,6 @@ const linkDataApiCallReducer = (state = initialState, action) => {
     }
     case LINK_DATA_SUCCESS: {
       console.log("링크API SUCCESS_리듀서");
-      console.log(action.data);
-      
       return { ...state,  data: {...action.data} ,isCalled:true};
     }
     case LINK_DATA_FAILURE: {
