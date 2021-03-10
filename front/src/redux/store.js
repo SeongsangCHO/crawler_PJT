@@ -42,7 +42,8 @@ const configureStore = () => {
       reloadReducer,
     }),
     initialState,
-    applyMiddleware(sagaMiddleware, logger),
+    enhancer,
+    // applyMiddleware(sagaMiddleware, logger),
   );
   sagaMiddleware.run(rootSaga);
   return store;

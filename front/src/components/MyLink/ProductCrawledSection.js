@@ -1,9 +1,7 @@
 import  React, {useState, useEffect}  from 'react';
 import styled from "styled-components";
 import Spinner from "react-bootstrap/Spinner";
-
-import Tab from "react-bootstrap/Tab";
-import Badge from "react-bootstrap/Badge";
+import { useDispatch, useSelector } from "react-redux";
 import CrawledCardSection from './CrawledCardSection';
 
 const ProductCrawledSectionWrapper = styled.div`
@@ -13,7 +11,10 @@ const ProductCrawledSectionWrapper = styled.div`
 `;
 
 
-const ProductCrawledSection = ({obj, linkDataIsCalled}) => {
+const ProductCrawledSection = ({obj}) => {
+  const linkDataIsCalled = useSelector(
+    (state) => state.linkDataApiCallReducer.isCalled
+  );
   return (
     <ProductCrawledSectionWrapper id="card-tab-right-section">
     {linkDataIsCalled == true ? (

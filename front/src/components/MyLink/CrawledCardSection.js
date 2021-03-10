@@ -113,6 +113,7 @@ const NaverCard = ({ element }) => {
   );
 };
 function CrawledCardSection({ obj }) {
+  console.log('크롤카드섹션 생성')
   return (
     <CrawledCardSectionWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, idx) => (

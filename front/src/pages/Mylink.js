@@ -15,16 +15,15 @@ const ContentWrapper = styled.div`
   }
 `;
 
-const MyLinkSection = styled.div`
-`;
+const MyLinkSection = styled.div``;
 const CarouselWrapper = styled.div`
   height: 170px;
   text-align: center;
   background-color: #ffeeea;
-  @media (max-width: 576px){
-    display:none;
+  @media (max-width: 576px) {
+    display: none;
   }
-`
+`;
 const Carousel = () => {
   return (
     <CarouselWrapper>
@@ -37,22 +36,8 @@ const Carousel = () => {
 
 const MyLink = () => {
   const dispatch = useDispatch();
-  const currentLinkTitle = useSelector(
-    (state) => state.runCrawlerReducer.currentLinkTitle
-  );
-
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
-  const currentLink = useSelector((state) => state.addLinkReducer.data.link);
-  const currentTitle = useSelector((state) => state.addLinkReducer.data.title);
-  const currentCategory = useSelector(
-    (state) => state.addCategoryReducer.category
-  );
-  const isReloaded = useSelector((state) => state.reloadReducer.isReloaded);
-  const linkTitle = useSelector((state) => state.reloadReducer.linkTitle);
-  useEffect(() => {
 
-    //dispatch수행해서 리랜더링될 때 , axios로 api호출
-  }, []); //linkData가 서버에서 받아오는 데이터
   useEffect(() => {
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
@@ -60,21 +45,14 @@ const MyLink = () => {
       data: {},
       isCalled: false,
     });
-  }, [
-    currentCategory,
-    currentLink,
-    currentTitle,
-    currentLinkTitle,
-    isReloaded,
-    linkTitle,
-  ]);
+  }, []);
   return (
     <MyLinkSection id="MyLinkSection">
       <Carousel />
       <Tab.Container id="left-tabs" defaultactiveKey="All">
         <ContentWrapper id="ContentWrapper">
           <CategoryTab obj={linkData} />
-          <ProductTab obj={linkData} />
+          <ProductTab />
         </ContentWrapper>
       </Tab.Container>
     </MyLinkSection>

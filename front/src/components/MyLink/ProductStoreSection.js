@@ -24,9 +24,7 @@ const StoreSectionWrapper = styled.div`
 
 
 const ProductStoreSection = ({ obj }) => {
-  const linkDataIsCalled = useSelector(
-    (state) => state.linkDataApiCallReducer.isCalled
-  );
+
   const [modalShow, setModalShow] = useState(false);
   return (
     <StoreSectionWrapper id="StoreSectionWrapper">

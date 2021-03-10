@@ -15,9 +15,7 @@ const CardTabWrapper = styled.div``;
 
 
 function CardTab({ obj }) {
-  const linkDataIsCalled = useSelector(
-    (state) => state.linkDataApiCallReducer.isCalled
-  );
+
   return (
     <CardTabWrapper>
       <Tab.Container>
@@ -26,7 +24,6 @@ function CardTab({ obj }) {
             <ProductStoreSection obj={obj}></ProductStoreSection>
             <ProductCrawledSection
               obj={obj}
-              linkDataIsCalled={linkDataIsCalled}
             />
           </Tab.Content>
         </Nav>
@@ -36,10 +33,22 @@ function CardTab({ obj }) {
 }
 
 const ProductTab = ({ obj }) => {
+  const dispatch = useDispatch();
+  const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
+  const isLogined = useSelector((state) => state.loginReducer.isLogined);
+
+  useEffect(() => {
+    //dispatch수행해서 리랜더링될 때 , axios로 api호출
+    dispatch({
+      type: "LINK_DATA_REQUEST",
+      data: {},
+      isCalled: false,
+    });
+  }, [isLogined]);
   return (
     <ProductTabWrapper>
       <Tab.Content>
-        {obj?.category?.map((cate, idx) => (
+        {linkData?.category?.map((cate, idx) => (
           <Tab.Pane eventKey={Object.keys(cate)} key={idx} unmountOnExit={true}>
             <CardTab obj={cate} />
           </Tab.Pane>

@@ -4,9 +4,7 @@ import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 import "./css/Header.css";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
-
 import CreateNotification from "./CreateNotification";
-
 import Modal from "./Modal/Modal";
 import RegisterModalContent from "./RegisterModal/RegisterModalContent";
 import LoginModalContent from "./LoginModal/LoginModalContent";
