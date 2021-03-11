@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Nav from "react-bootstrap/Nav";
 import { useDispatch, useSelector } from "react-redux";
-
-import { ReactComponent as Redo } from "assets/redo.svg";
+import moment from 'moment';
 
 const ProductCardWrapper = styled.div`
   height: 100%;
@@ -138,6 +137,34 @@ function ProductCard({ categoryItem }) {
   // let KST = timeSource.toLocaleString("ko-KR", {
   //   timeZone: "Asia/Seoul",
   // });
+  const getDays = (year,month,day) => {
+    for(let i = 1; i < month; i++){
+      day += new Date(year, i,0).getDate();
+    }
+    return day;
+  }
+  const convertDay = (date) => {
+    const current = new Date();
+    //현재시간
+    const currentDate = {
+      year : current.getFullYear(),
+      month: current.getMonth() + 1,
+      day : current.getDate(),
+      hour: current.getHours(),
+      min: current.getMinutes(),
+      second: current.getSeconds(),
+    }
+    //글 작성시간
+    let [year, month, day, hour, min, second] = moment(date)._a;
+    month += 1;
+    let currentDays = getDays(currentDate.year, currentDate.month,currentDate.day);
+    let writtenDays = getDays(year,month,day);
+    let daysDiff = ((currentDate.year - year) * 365) + (currentDays - writtenDays);
+    //1.1부터 현재일까지 몇일인지 일수 계산
+    console.log(currentDays, writtenDays);
+    //(현재년도 - 작성년도) * 365 + (햔재월 일까지의 days)
+    return daysDiff == 0 ? "오늘 작성" : daysDiff+"일전에 작성";
+  }
   useEffect(() => {}, []);
   //새로운 카드가 등록되었을 때 리랜더링
   return (
@@ -155,7 +182,7 @@ function ProductCard({ categoryItem }) {
           <CardDetail>
             <CardPrice>{priceComma(categoryItem.price)}</CardPrice>
             <CardInfo>{categoryItem.info}</CardInfo>
-            <CardDate>{categoryItem.date}</CardDate>
+            <CardDate>{convertDay(categoryItem.date)}</CardDate>
           </CardDetail>
           <CardButtonWrapper>
             <CardLink target="_blank" href={parseLink(categoryItem.link)}>

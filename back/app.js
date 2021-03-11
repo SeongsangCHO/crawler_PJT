@@ -1,16 +1,14 @@
 let express = require("express");
 let path = require("path");
-let ssgCrawler = require("./crawler/ssgCrawler");
-let coupangCrawler = require("./crawler/coupangCrawler");
-// let multi = require("./crawler/multi");
-// let cluster = require("./crawler/cluster");
+const ssgCrawler = require("./crawler/ssgCrawler");
+const coupangCrawler = require("./crawler/coupangCrawler");
+const naverCrawler = require("./crawler/naverCrawler");
+
 var cors = require("cors");
 const accecptURL = "http:/localhost:3000";
-let db = require("./config/db_config");
+const db = require("./config/db_config");
 const bcrypt = require("bcrypt");
 const loginAuth = require("./middlewares/auth");
-const jwt = require("jsonwebtoken");
-const SECRET_KEY = "piTeam";
 const HASH_ROUND = 10;
 const { verifyToken } = require("./middlewares/verify");
 var cookieParser = require("cookie-parser");
@@ -31,8 +29,6 @@ app.use(cookieParser());
 
 const port = process.env.PORT || 8080;
 let testAPIRouter = require("./routes/testAPI");
-const { start } = require("repl");
-const naverCrawler = require("./crawler/naverCrawler");
 
 //템플릿엔진 ejs 설정 __dirname +'views'랑 같음
 app.set("views", path.join(__dirname, "views"));
@@ -107,15 +103,8 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
   }
   return res.status(200).json({ message: "가입 success" });
 
-  //userData의 password를 bcrpt로 해싱
-  // res.render("../views/userRegister", {user_data: req.body});
 });
-//클릭시 처리를 어떻게 해야할까
-//https://stackoverflow.com/questions/55647287/how-to-send-request-on-click-react-hooks-way
 
-//클릭데이터를 서버에 전달해야하는뎀.
-
-//login시 auth에서 로그인데이터가 일치할시 jwt발행, 발급받은 데이터 front에 전달..
 app.post(
   "/login",
   cors(accecptURL),
@@ -153,8 +142,9 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log("server addlink call");
   let { title, price, link, info, currentCategory, registerTime } = req.body;
+  
+  //한국표준시에 맞추기
   let KST = new Date(registerTime.toString());
-
   KST.setHours(KST.getHours() + 9);
 
   let sql = `insert into links (title, price, link, info, categories_id, users_id, registerTime) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
@@ -167,12 +157,7 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   return res.status(200).json({ message: "링크 추가 SUCCESS" });
 });
 
-//크롤러는 하나임, 데이터를 저장할 크롤러 하나 뿐
-//링크박스 추가시 크롤러데이터를 저장할 부분과 클릭할 때 이를 가져올 부분을 따로 작성해야함.
-//링크박스가 저장될때마다 ,요청이 발생할때마다 호출할 함수 crawler
-//링크박스의 제목을 기반으로 크롤러 수행
-//크롤러 데이터를 db에 저장함
-//
+
 app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
@@ -195,43 +180,55 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   };
   let categoryMap = new Map();
 
-  const makeCategoryKey = ({ category }) => {
+  const makeCategoryKey = (categoryMap,{ category }) => {
     //카테고리가 없으면 카테고리명:[] 생성
     if (!categoryMap.get(category)) {
       categoryMap.set(category, []);
     }
   };
+  const makeLinkCard = (categoryMap,{
+    category,
+    linkTitle,
+    link,
+    linkPrice,
+    linkInfo,
+    registerTime,
+  }) => {
+    categoryMap.get(category).push({
+      title: linkTitle,
+      link: link,
+      price: linkPrice,
+      info: linkInfo,
+      date: registerTime,
+      ssg: [],
+      coupang: [],
+      naver: [],
+    });
+    //링크카드 생성
+    //카테고리:[{},{},{}] 카드데이터 채우기
+  };
+  const isMakeLinkCard = (categoryMap,{ category, link }) => {
+    //반복이 크롤카드갯수만큼 일어남.
+    //같은 아이템에 대한 반복이 일어나므로, 카드생성시 link중복을 고려해 이전,다음링크가 들어왔을때만 카드생성
+    if (
+      !(
+        categoryMap.get(category)[categoryMap.get(category).length - 1] ==
+          undefined ||
+        categoryMap.get(category)[categoryMap.get(category).length - 1].link !==
+          link
+      )
+    ) {
+      return false;
+    }
+    return true;
+  };
   db.query(sql, (err, result) => {
-    console.log(result);
     if (result) {
       result.map((element, idx) => {
-        let tmpLink = element.link;
-        makeCategoryKey(element);
-        //반복이 크롤카드갯수만큼 일어남.
-        //같은 아이템에 대한 반복이 일어나므로, 카드생성시 link중복을 고려해 이전,다음링크가 들어왔을때만 카드생성
-        if (
-          categoryMap.get(element.category)[
-            categoryMap.get(element.category).length - 1
-          ] == undefined ||
-          categoryMap.get(element.category)[
-            categoryMap.get(element.category).length - 1
-          ].link !== tmpLink
-        ) {
-          console.log(tmpLink, categoryMap.get(element.category)[
-            categoryMap.get(element.category).length - 1
-          ]?.link );
-          //링크카드 생성
-          //카테고리:[{},{},{}] 카드데이터 채우기
-          categoryMap.get(element.category).push({
-            title: element.linkTitle,
-            link: element.link,
-            price: element.linkPrice,
-            info: element.linkInfo,
-            date: element.registerTime,
-            ssg: [],
-            coupang: [],
-            naver: [],
-          });
+        makeCategoryKey(categoryMap,element);
+
+        if (isMakeLinkCard(categoryMap,element)) {
+          makeLinkCard(categoryMap,element);
         }
         //링크카드에 대한 크롤링 데이터 생성
         if (element.crawlTitle !== null) {
@@ -255,7 +252,6 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
     for (let key of Object.keys(obj)) {
       let tmp = {};
       tmp[key] = obj[key];
-
       mylinkData.category.push(tmp);
     }
     res.json(mylinkData);
@@ -265,7 +261,6 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
 app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   let searchText = req.body.currentLinkTitle;
-  let status = "쓱 ,쿠팡 크롤러";
 
   //0 : 실패
   //1 : 성공
@@ -278,9 +273,6 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   db.query(findLinkId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
     // ssgCrawler(searchText, dbResult[0].id).then((result) => {
-    //   //끝나면 리턴받긴하네
-    //   //크롤러들의 수행이 끝나면 성공값을 리턴해야함.
-
     //   console.log(result);
     // });
     // coupangCrawler(searchText, dbResult[0].id).then((result) => {
