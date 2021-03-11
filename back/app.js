@@ -155,7 +155,7 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   let { title, price, link, info, currentCategory, registerTime } = req.body;
   let KST = new Date(registerTime.toString());
 
-  KST.setHours(KST.getHours()+9)
+  KST.setHours(KST.getHours() + 9);
 
   let sql = `insert into links (title, price, link, info, categories_id, users_id, registerTime) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
   and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
@@ -187,23 +187,28 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
  LEFT join categories on users.id = categories.users_id
  LEFT  join links on categories.id = links.categories_id
  LEFT  join crawl on links.id = crawl.links_id
- where users.nickname = '${res.locals.userNickname}';`;
-  console.log(res.locals.userNickname);
+ where users.nickname = '${res.locals.userNickname}'
+ ORDER BY registerTime DESC`;
 
   let mylinkData = {
     category: [],
   };
-
   let categoryMap = new Map();
 
+  const makeCategoryKey = ({ category }) => {
+    //카테고리가 없으면 카테고리명:[] 생성
+    if (!categoryMap.get(category)) {
+      categoryMap.set(category, []);
+    }
+  };
   db.query(sql, (err, result) => {
+    console.log(result);
     if (result) {
       result.map((element, idx) => {
-        if (!categoryMap.get(element.category)) {
-          categoryMap.set(element.category, []);
-        }
         let tmpLink = element.link;
-
+        makeCategoryKey(element);
+        //반복이 크롤카드갯수만큼 일어남.
+        //같은 아이템에 대한 반복이 일어나므로, 카드생성시 link중복을 고려해 이전,다음링크가 들어왔을때만 카드생성
         if (
           categoryMap.get(element.category)[
             categoryMap.get(element.category).length - 1
@@ -212,10 +217,11 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
             categoryMap.get(element.category).length - 1
           ].link !== tmpLink
         ) {
-          // console.log("in",categoryMap.get(element.category)[
-          //   categoryMap.get(element.category).length - 1
-          // ]);
-
+          console.log(tmpLink, categoryMap.get(element.category)[
+            categoryMap.get(element.category).length - 1
+          ]?.link );
+          //링크카드 생성
+          //카테고리:[{},{},{}] 카드데이터 채우기
           categoryMap.get(element.category).push({
             title: element.linkTitle,
             link: element.link,
@@ -227,6 +233,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
             naver: [],
           });
         }
+        //링크카드에 대한 크롤링 데이터 생성
         if (element.crawlTitle !== null) {
           let tmp = {
             title: element.crawlTitle,
@@ -234,8 +241,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
             link: element.crawlLink,
             imgsrc: element.crawlImgSrc,
           };
-          // console.log(tmp);
-
+          //해당링크카드(추가된 마지막 카드)에 ssg, coupang, naver키에 크롤데이터 push
           categoryMap
             .get(element.category)
             [categoryMap.get(element.category).length - 1][
@@ -244,6 +250,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
         }
       });
     }
+    //맵을 key,value쌍으로 갖는 obj로 변환
     let obj = Object.fromEntries(categoryMap);
     for (let key of Object.keys(obj)) {
       let tmp = {};

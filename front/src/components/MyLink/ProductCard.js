@@ -6,34 +6,46 @@ import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Redo } from "assets/redo.svg";
 
 const ProductCardWrapper = styled.div`
-  min-height: 150px;
   height: 100%;
   border-radius: 4px;
   border: 1px solid gray;
+  position: relative;
 `;
 
-const PriceDetail = styled.div`
-  font-size: 14px;
+const CardPrice = styled.span`
+  font-size: 1rem;
+  display:block;
 `;
 
-const InfoDetail = styled.div`
-  font-size: 10px;
+const CardInfo = styled.span`
+  font-size: .7px;
+  display:block;
+  min-height:15px;
+
 `;
 const LinkDetail = styled.a``;
 const CardDetail = styled.div`
   margin: 3px 0px 0px 3px;
+  min-height:50px;
+  font-size:16px;
+  overflow:hidden;
+  position:relative;
 `;
 const FormTitle = styled.span`
   display: none;
 `;
 
-const RegisterDetail = styled.div`
-  font-size: 10px;
+const CardDate = styled.div`
+  font-size: .3rem;
+  position:absolute;
+  top:100%;
+  transform:translate(0, -100%);
 `;
 
 const CardButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  top: 100%;
 `;
 const CardLink = styled.a`
   background-color: #ffeeea;
@@ -117,6 +129,12 @@ function ProductCard({ categoryItem }) {
       linkTitle: e.currentTarget.firstChild.innerText,
     });
   };
+  const priceComma = (price) =>{
+    if(price === ""){
+      return "-";
+    }
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"원";
+  }
   // let KST = timeSource.toLocaleString("ko-KR", {
   //   timeZone: "Asia/Seoul",
   // });
@@ -135,21 +153,21 @@ function ProductCard({ categoryItem }) {
             {categoryItem.title}
           </Nav.Link>
           <CardDetail>
-            <PriceDetail>{categoryItem.price}</PriceDetail>
-            <InfoDetail>{categoryItem.info}</InfoDetail>
-            <RegisterDetail>{categoryItem.date}</RegisterDetail>
-            <CardButtonWrapper>
-              <CardLink target="_blank" href={parseLink(categoryItem.link)}>
-                링크
-              </CardLink>
-              <Button>수정</Button>
-              <Button>삭제</Button>
-            </CardButtonWrapper>
+            <CardPrice>{priceComma(categoryItem.price)}</CardPrice>
+            <CardInfo>{categoryItem.info}</CardInfo>
+            <CardDate>{categoryItem.date}</CardDate>
+          </CardDetail>
+          <CardButtonWrapper>
+            <CardLink target="_blank" href={parseLink(categoryItem.link)}>
+              링크
+            </CardLink>
+            {/* <Button>수정</Button>
+              <Button>삭제</Button> */}
             <RedoForm onSubmit={handleReload}>
               <FormTitle>{categoryItem.title}</FormTitle>
               <Button type="submit">새로고침</Button>
             </RedoForm>
-          </CardDetail>
+          </CardButtonWrapper>
         </Nav.Item>
       ) : (
         <div>자주사는 물품을 등록해주세요</div>

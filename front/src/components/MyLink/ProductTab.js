@@ -35,7 +35,7 @@ function CardTab({ categoryItems }) {
 const ProductTab = ({ obj }) => {
   const dispatch = useDispatch();
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
-
+  console.log(linkData);
   useEffect(() => {
     console.log('**********Product Tab rendered ************');
   })
