@@ -6,47 +6,47 @@ const getProductData = async (page, productAmountPerPage) => {
 
   for (let idx = 1; idx <= productAmountPerPage; idx++) {
     let productObj = {};
-      try {
-        //우선순위, 제목, 가격, link 를 찾아서 추가해주는 part, TODO : unit-price도 추가해야할지 고민
-        productObj["priority"] = priority++;
-        productObj["title"] = await page.$eval(
-          `#productList li:nth-child(${idx}) div.name`,
-          (element) => {
-            return element.textContent || "";
-          }
-        );
-        productObj["price"] = await page.$eval(
-          `#productList li:nth-child(${idx}) .price-value`,
-          (element) => {
-            return element.textContent || "";
-          }
-        );
-        productObj["link"] = await page.$eval(
-          `#productList li:nth-child(${idx}) a`,
-          (element) => {
-            return element.href || "";
-          }
-        );
-        productObj["imgsrc"] = await page.$eval(
-          `#productList li:nth-child(${idx}) img`,
-          (element) => {
-            return element.getAttribute("src");
-          }
-        );
-      } catch (error) {
-        console.error(error);
-      }
-      //데이터가 존재할때만 추가함.
-      if (productObj.title && productObj.price && productObj.link)
-        productData.push(productObj);
-      //존재하지않으면 우선순위 증가하지 않도록 --
-      else {
-        priority--;
-        continue;
-      }
+    try {
+      //우선순위, 제목, 가격, link 를 찾아서 추가해주는 part, TODO : unit-price도 추가해야할지 고민
+      productObj["priority"] = priority++;
+      productObj["title"] = await page.$eval(
+        `#productList li:nth-child(${idx}) div.name`,
+        (element) => {
+          return element.textContent || "";
+        }
+      );
+      productObj["price"] = await page.$eval(
+        `#productList li:nth-child(${idx}) .price-value`,
+        (element) => {
+          return element.textContent || "";
+        }
+      );
+      productObj["link"] = await page.$eval(
+        `#productList li:nth-child(${idx}) a`,
+        (element) => {
+          return element.href || "";
+        }
+      );
+      productObj["imgsrc"] = await page.$eval(
+        `#productList li:nth-child(${idx}) img`,
+        (element) => {
+          return element.getAttribute("src");
+        }
+      );
+    } catch (error) {
+      console.error(error);
     }
-    return productData;
-}
+    //데이터가 존재할때만 추가함.
+    if (productObj.title && productObj.price && productObj.link)
+      productData.push(productObj);
+    //존재하지않으면 우선순위 증가하지 않도록 --
+    else {
+      priority--;
+      continue;
+    }
+  }
+  return productData;
+};
 
 //페이지당 광고 삭제
 const removeAd = async (page) => {
@@ -89,15 +89,15 @@ const getSearchRange = async (page) => {
   }
   if (lastPageNumber >= 10) {
     //page가 10개 이상일 때 마지막 페이지 수를 구하기 위함.
-    await page.waitForSelector("div.search-pagination a.btn-last.disabled");
-    lastPageNumber = await page.$eval(
-      "div.search-pagination a.btn-last.disabled",
-      (element) => element.textContent
-    );
+    // await page.waitForSelector("div.search-pagination a.btn-last.disabled");
+    // lastPageNumber = await page.$eval(
+    //   "div.search-pagination a.btn-last.disabled",
+    //   (element) => element.textContent
+    // );
   }
   return {
     totalProducts: totalProducts,
-    lastPageNumber: lastPageNumber,
+    lastPageNumber: totalProducts / LIST_SIZE,
   };
 };
 
