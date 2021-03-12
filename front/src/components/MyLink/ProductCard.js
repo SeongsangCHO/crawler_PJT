@@ -161,7 +161,6 @@ function ProductCard({ categoryItem }) {
     let writtenDays = getDays(year,month,day);
     let daysDiff = ((currentDate.year - year) * 365) + (currentDays - writtenDays);
     //1.1부터 현재일까지 몇일인지 일수 계산
-    console.log(currentDays, writtenDays);
     //(현재년도 - 작성년도) * 365 + (햔재월 일까지의 days)
     return daysDiff == 0 ? "오늘 작성" : daysDiff+"일전에 작성";
   }

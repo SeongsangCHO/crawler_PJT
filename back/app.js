@@ -3,7 +3,8 @@ let path = require("path");
 const ssgCrawler = require("./crawler/ssgCrawler");
 const coupangCrawler = require("./crawler/coupangCrawler");
 const naverCrawler = require("./crawler/naverCrawler");
-
+const FAILULE = 0;
+const SUCCESS = 1;
 var cors = require("cors");
 const accecptURL = "http:/localhost:3000";
 const db = require("./config/db_config");
@@ -102,7 +103,6 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
     console.error(error);
   }
   return res.status(200).json({ message: "가입 success" });
-
 });
 
 app.post(
@@ -142,21 +142,21 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log("server addlink call");
   let { title, price, link, info, currentCategory, registerTime } = req.body;
-  
-  //한국표준시에 맞추기
+
   let KST = new Date(registerTime.toString());
   KST.setHours(KST.getHours() + 9);
 
+  //한국표준시에 맞추기
+  //데이터 중복이 아닐 때 카드 추가
   let sql = `insert into links (title, price, link, info, categories_id, users_id, registerTime) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
-  and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
-  (select id from users where nickname = '${res.locals.userNickname}'), ?)`;
+    and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
+    (select id from users where nickname = '${res.locals.userNickname}'), ?)`;
 
   db.query(sql, [title, price, link, info, KST], (dbError, result) => {
     if (dbError) throw dbError;
   });
   return res.status(200).json({ message: "링크 추가 SUCCESS" });
 });
-
 
 app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -180,20 +180,16 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   };
   let categoryMap = new Map();
 
-  const makeCategoryKey = (categoryMap,{ category }) => {
+  const makeCategoryKey = (categoryMap, { category }) => {
     //카테고리가 없으면 카테고리명:[] 생성
     if (!categoryMap.get(category)) {
       categoryMap.set(category, []);
     }
   };
-  const makeLinkCard = (categoryMap,{
-    category,
-    linkTitle,
-    link,
-    linkPrice,
-    linkInfo,
-    registerTime,
-  }) => {
+  const makeLinkCard = (
+    categoryMap,
+    { category, linkTitle, link, linkPrice, linkInfo, registerTime }
+  ) => {
     categoryMap.get(category).push({
       title: linkTitle,
       link: link,
@@ -207,7 +203,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
     //링크카드 생성
     //카테고리:[{},{},{}] 카드데이터 채우기
   };
-  const isMakeLinkCard = (categoryMap,{ category, link }) => {
+  const isMakeLinkCard = (categoryMap, { category, link }) => {
     //반복이 크롤카드갯수만큼 일어남.
     //같은 아이템에 대한 반복이 일어나므로, 카드생성시 link중복을 고려해 이전,다음링크가 들어왔을때만 카드생성
     if (
@@ -225,10 +221,10 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   db.query(sql, (err, result) => {
     if (result) {
       result.map((element, idx) => {
-        makeCategoryKey(categoryMap,element);
+        makeCategoryKey(categoryMap, element);
 
-        if (isMakeLinkCard(categoryMap,element)) {
-          makeLinkCard(categoryMap,element);
+        if (isMakeLinkCard(categoryMap, element)) {
+          makeLinkCard(categoryMap, element);
         }
         //링크카드에 대한 크롤링 데이터 생성
         if (element.crawlTitle !== null) {
@@ -270,15 +266,31 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   (select id from users where nickname = '${res.locals.userNickname}'
   and title ='${searchText}'
   )`;
+
+  let sql = `
+  select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
+  links.link as link,links.registerTime as registerTime,
+  crawl.title as crawlTitle,
+  crawl.price as crawlPrice,
+  crawl.source as crawlSource,
+  crawl.link as crawlLink,
+  crawl.imgsrc as crawlImgSrc
+ from users
+ LEFT join categories on users.id = categories.users_id
+ LEFT  join links on categories.id = links.categories_id
+ LEFT  join crawl on links.id = crawl.links_id
+ where links.title = '${searchText}' ORDER BY registerTime DESC;`;
+  //데이터가 있다면 크롤러 수행하지 않고 그대로 저장
+  db.query(sql, (err, result) => {
+    if (result) {
+      console.log("*****************");
+      // console.log(result);
+      console.log("*****************");
+    }
+  });
   db.query(findLinkId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
-    // ssgCrawler(searchText, dbResult[0].id).then((result) => {
-    //   console.log(result);
-    // });
-    // coupangCrawler(searchText, dbResult[0].id).then((result) => {
-    //   console.log(result);
-    //   return res.status(200).json({ message: "성공?" });
-    // });
+
     const crawlers = [
       ssgCrawler(searchText, dbResult[0].id),
       coupangCrawler(searchText, dbResult[0].id),

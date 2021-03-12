@@ -6,6 +6,7 @@ import CreateNotification from "components/CreateNotification";
 import Moment from "react-moment";
 import moment from "moment";
 import "moment-timezone";
+import runCrawlerReducer from "redux/RunCrawler/reducer";
 
 const ModalWrapper = styled.div`
   display: flex;
@@ -15,10 +16,40 @@ const ModalWrapper = styled.div`
 const ProductAddingModal = (props) => {
   // Custom hook으로 onChange하는 거 다 묶어야겠다.
   const dispatch = useDispatch();
+  const linkCardData = useSelector((state) => state.linkDataApiCallReducer.data.category);//array
+  const checkIsCardTitle = (title) => {
+    for(let categories of linkCardData){
+      for(let item of categories[Object.keys(categories)]){
+        if(item.title === title){
+          return false;
+        }
+      }
+    }
+    return true;
+  }
   const currentCategory = useSelector(
     (state) => state.currentCategoryReducer.currentCategory
   );
-
+  const addLinkCard = ({title, price, link, info}) => {
+    dispatch({
+      type: "ADD_LINK_REQUEST",
+      data: {
+        title: title.value,
+        price: price.value.toLocaleString(),
+        link: link.value,
+        info: info.value,
+        currentCategory: currentCategory,
+        registerTime: moment()._d,
+      },
+    });
+  }
+  const doCrawl = (title) =>{
+    dispatch({
+      type: "RUN_CRAWLER_REQUEST",
+      currentLinkTitle: title,
+      isCrawled: false,
+    });
+  }
   const isVaildFormData = (data) => {
     if (data.title.value === "") {
       return false;
@@ -28,23 +59,9 @@ const ProductAddingModal = (props) => {
   const handleAddLink = (e) => {
     e.preventDefault();
     const formData = e.target;
-    if (isVaildFormData(formData)) {
-      dispatch({
-        type: "ADD_LINK_REQUEST",
-        data: {
-          title: formData.title.value,
-          price: formData.price.value.toLocaleString(),
-          link: formData.link.value,
-          info: formData.info.value,
-          currentCategory: currentCategory,
-          registerTime: moment()._d,
-        },
-      });
-      dispatch({
-        type: "RUN_CRAWLER_REQUEST",
-        currentLinkTitle: formData.title.value,
-        isCrawled: false,
-      });
+    if (isVaildFormData(formData) && checkIsCardTitle(formData.title.value)) {
+      addLinkCard(formData);
+      doCrawl(formData.title.value);
       props.onHide();
     } else {
       CreateNotification("error")("상품명을 입력해주세요.");
