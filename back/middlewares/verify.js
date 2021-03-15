@@ -6,8 +6,14 @@ const verifyToken = (req, res, next) => {
     if(!req.cookies.user){
       throw err;
     }
+    console.log("토큰 확인");
+    const clientToken = req.cookies.user;
+    const decoded = jwt.verify(clientToken, "piTeam");
+    req.currentUserNickname = decoded.nickname;
+    //서버 로컬로 유저닉네임을 정하면 안됨. 매 로그인마다 값이 바뀌게 될 것임.
+
     if (decoded) {
-      res.locals.userNickname = decoded.nickname;
+      // res.locals.userNickname = decoded.nickname;
       next();
     } else {
       res.status(401).json({ error: "unauthorized" });
@@ -17,9 +23,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-const tokenDecode = (req) =>{
-  const decodedToken = jwt.verify(req.cookies.user, "piTeam");
-  return decodedToken;
-}
 exports.verifyToken = verifyToken;
-exports.tokenDecode = tokenDecode;

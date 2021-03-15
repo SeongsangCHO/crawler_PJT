@@ -122,7 +122,7 @@ app.post(
 app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
-  console.log("현재 로그인된 사용자 아이디: " + res.locals.userNickname);
+  console.log("현재 로그인된 사용자 아이디: " + `${tokenDecode(req).nickname}`);
   console.log("전달받은 카테고리 명 : " + req.body.category);
   //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
   //front에서 전달받은 category명을 테이블에 삽입함
@@ -132,7 +132,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   `;
   db.query(
     sql,
-    [res.locals.userNickname, req.body.category],
+    [req.currentUserNickname, req.body.category],
     (dbError, result) => {
       if (dbError) {
         throw dbError;
@@ -153,8 +153,8 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   //한국표준시에 맞추기
   //데이터 중복이 아닐 때 카드 추가
   let sql = `insert into links (title, price, link, info, categories_id, users_id, registerTime) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
-    and users_id = (select id from users where nickname = '${res.locals.userNickname}')),
-    (select id from users where nickname = '${res.locals.userNickname}'), ?)`;
+    and users_id = (select id from users where nickname = '${req.currentUserNickname}')),
+    (select id from users where nickname = '${req.currentUserNickname}'), ?)`;
 
   db.query(sql, [title, price, link, info, KST], (dbError, result) => {
     if (dbError) throw dbError;
@@ -162,7 +162,8 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   return res.status(200).json({ message: "링크 추가 SUCCESS" });
 });
 
-app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res) => {
+app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
+  console.log(req.currentUserNickname);
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
   links.link as link,links.registerTime as registerTime,
@@ -175,7 +176,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res) => {
  LEFT join categories on users.id = categories.users_id
  LEFT  join links on categories.id = links.categories_id
  LEFT  join crawl on links.id = crawl.links_id
- where users.nickname = '${tokenDecode(req).nickname}'
+ where users.nickname = '${req.currentUserNickname}'
  ORDER BY registerTime DESC`;
 
   let mylinkData = {
@@ -266,7 +267,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   //2 : 검색결과 없음
 
   let findLinkId = `select id from links where users_id =
-  (select id from users where nickname = '${res.locals.userNickname}'
+  (select id from users where nickname = '${req.currentUserNickname}'
   and title ='${searchText}'
   )`;
 
@@ -309,7 +310,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
 app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const title = req.body.linkTitle;
-  const userId = res.locals.userNickname;
+  const userId = req.currentUserNickname;
   const linkCardId = `select id from links where users_id =
   (select id from users where nickname = '${userId}'
   and title ='${title}'
