@@ -4,8 +4,7 @@ import Tab from "react-bootstrap/Tab";
 import CategoryTab from "../components/MyLink/CategoryTab";
 import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
-import Header from "components/Header";
-import Footer from "components/Footer";
+import {useCookies } from 'react-cookie';
 
 const ContentWrapper = styled.div`
   margin-top: 10px;
@@ -57,7 +56,6 @@ const MyLink = () => {
   const isAddCategory = useSelector((state)=>state.addCategoryReducer.isAddCategory); // 카테고리를 추가했을 때
   const linkCardData = useSelector((state) => state.addLinkReducer.data); // 상품카드를 저장했을 때
   const isCrawled = useSelector((state)=>state.runCrawlerReducer.isCrawled); // 크롤링을 수행했을 때
-
   useEffect(() => {
     //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
@@ -65,6 +63,7 @@ const MyLink = () => {
       data: {},
       isCalled: false,
     });
+
   }, [isLogined, linkCardData, isAddCategory,isCrawled]);
   return (
     <MyLinkSection id="MyLinkSection">

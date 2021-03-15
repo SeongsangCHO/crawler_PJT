@@ -107,7 +107,6 @@ function* loginRequst(action) {
   try {
     console.log("loginRequest in saga");
     const result = yield call(loginAPI, action.data);
-    console.log(result.status);
     if (result.status == 200) {
       yield put({
         type: LOGIN_SUCCESS,

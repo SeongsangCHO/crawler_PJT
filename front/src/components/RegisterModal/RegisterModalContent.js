@@ -48,13 +48,16 @@ const RegisterModalContent = ({
     (state) => state.doubleCheckReducer.data.user_nickname
   );
 
+  // useCallback으로 변경하기
   const handlePassword = (inputPassword) => {
     setPassword(inputPassword);
   };
+  // useCallback으로 변경하기
   const handleMatchPassword = (isMatch) => {
     setIsMatchPassword(isMatch);
   };
 
+  // useCallback으로 변경하기
   const onMoveLoginModal = () => {
     onToggleRegisterModal();
     onToggleLoginModal();

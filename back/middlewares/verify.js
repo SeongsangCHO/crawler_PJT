@@ -2,14 +2,10 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
   try {
-    console.log("토큰 확인");
-
-    console.log(req.cookies);
-    const clientToken = req.cookies.user;
-    const decoded = jwt.verify(clientToken, "piTeam");
-
+    if(!req.cookies.user){
+      throw err;
+    }
     if (decoded) {
       res.locals.userNickname = decoded.nickname;
       next();
@@ -20,4 +16,10 @@ const verifyToken = (req, res, next) => {
     res.status(401).json({ error: "token expired" });
   }
 };
+
+const tokenDecode = (req) =>{
+  const decodedToken = jwt.verify(req.cookies.user, "piTeam");
+  return decodedToken;
+}
 exports.verifyToken = verifyToken;
+exports.tokenDecode = tokenDecode;

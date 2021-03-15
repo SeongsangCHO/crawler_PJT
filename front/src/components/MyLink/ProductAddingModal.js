@@ -21,11 +21,11 @@ const ProductAddingModal = (props) => {
     for(let categories of linkCardData){
       for(let item of categories[Object.keys(categories)]){
         if(item.title === title){
-          return false;
+          return true;
         }
       }
     }
-    return true;
+    return false;
   }
   const currentCategory = useSelector(
     (state) => state.currentCategoryReducer.currentCategory
@@ -51,6 +51,7 @@ const ProductAddingModal = (props) => {
     });
   }
   const isVaildFormData = (data) => {
+    //입력 form데이터 유효성체크 조건 추가필요.
     if (data.title.value === "") {
       return false;
     }
@@ -59,12 +60,20 @@ const ProductAddingModal = (props) => {
   const handleAddLink = (e) => {
     e.preventDefault();
     const formData = e.target;
-    if (isVaildFormData(formData) && checkIsCardTitle(formData.title.value)) {
+    const isDouble = checkIsCardTitle(formData.title.value);
+    const isVaild = isVaildFormData(formData);
+    if (isVaild && !isDouble) {
       addLinkCard(formData);
       doCrawl(formData.title.value);
       props.onHide();
     } else {
-      CreateNotification("error")("상품명을 입력해주세요.");
+      if(isDouble){
+        CreateNotification("error")("상품명이 이미 카테고리에 있습니다.");
+      }
+      if(!isVaild){
+        CreateNotification("error")("입력을 확인해주세요.");
+      }
+      
     }
     //여기서 dispatch 수행해서 post요청해야함
   };

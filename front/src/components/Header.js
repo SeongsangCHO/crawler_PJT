@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
@@ -8,8 +8,7 @@ import CreateNotification from "./CreateNotification";
 import Modal from "./Modal/Modal";
 import RegisterModalContent from "./RegisterModal/RegisterModalContent";
 import LoginModalContent from "./LoginModal/LoginModalContent";
-
-
+import { useCookies } from "react-cookie";
 
 const NavBarWrapper = styled.div``;
 
@@ -71,12 +70,13 @@ function NavBar() {
     </NavBarWrapper>
   );
 }
-
+//새로고침해도 유저의 닉네임을 가져올 수 있도록 하기.
 function Header() {
   const isLogined = useSelector((state) => state.loginReducer.isLogined);
   const userNickName = useSelector((state) => state.loginReducer.user_nickname);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies([]);
 
   useEffect(() => {
     if (isLogined === true) {
@@ -87,7 +87,7 @@ function Header() {
     }
   }, [isLogined]);
 
-  //custom hooks로 뺴기
+  //custom hooks로 뺴기 => useCallback으로 변경하기
   const onToggleRegisterModal = () => {
     setIsRegisterModalOpen((prev) => !prev);
   };
@@ -105,7 +105,6 @@ function Header() {
           />
         </Modal>
       ) : (
-
         false
       )}
       {isLoginModalOpen && !isLogined ? (
@@ -116,7 +115,6 @@ function Header() {
           />
         </Modal>
       ) : (
-
         false
       )}
       <div id="Top-header">

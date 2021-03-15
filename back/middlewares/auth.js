@@ -16,37 +16,36 @@ exports.createToken = async function (req, res, next) {
     db.query(sql, (error, result) => {
       if (error) console.error(error);
       if (result[0] && result[0].nickname === req.body.user_nickname) {
-        bcrypt.compare(req.body.user_password, result[0].password, function (
-          err,
-          hash
-        ) {
-          if (err) {
-            throw err;
-          }
+        bcrypt.compare(
+          req.body.user_password,
+          result[0].password,
+          function (err, hash) {
+            if (err) {
+              throw err;
+            }
 
-          if (hash) {
-            const token = jwt.sign(
-              {
-                nickname: req.body.user_nickname
-              },
-              "piTeam",
-              {
-                expiresIn: "30m"
-              }
-            );
-            console.log(token);
-            res.cookie("user", token);
-            res.status(200).json({
-              result: "ok",
-              token
-            });
-            console.log("토큰발행성공");
-          } else {
-            console.log("비밀번호달라");
-
-            return res.status(400).json({ error: "비밀번호가 달라요" });
+            if (hash) {
+              const token = jwt.sign(
+                {
+                  nickname: req.body.user_nickname,
+                },
+                "piTeam",
+                {
+                  expiresIn: "30m",
+                }
+              );
+              res.cookie("user", token);
+              next();
+              res.status(200).json({
+                result: "ok",
+                token,
+              });
+              console.log("토큰발행성공");
+            } else {
+              return res.status(400).json({ error: "비밀번호가 달라요" });
+            }
           }
-        });
+        );
       } else {
         return res.status(400).json({ error: "그런 닉네임은 없어요" });
       }

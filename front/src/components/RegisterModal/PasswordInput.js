@@ -32,7 +32,7 @@ const PasswordInput = ({ isMatchPassword,handlePassword, handleMatchPassword }) 
     onMatchPassword(firstPassword, e.target.value);
 
   };
-
+//무조건 call되는 onChange
   return (
     <>
       <InputTitle>Password</InputTitle>

@@ -11,7 +11,7 @@ const db = require("./config/db_config");
 const bcrypt = require("bcrypt");
 const loginAuth = require("./middlewares/auth");
 const HASH_ROUND = 10;
-const { verifyToken } = require("./middlewares/verify");
+const { verifyToken, tokenDecode } = require("./middlewares/verify");
 var cookieParser = require("cookie-parser");
 require("dotenv").config();
 const app = express();
@@ -104,11 +104,16 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
   }
   return res.status(200).json({ message: "가입 success" });
 });
+const jwt = require("jsonwebtoken");
 
+function test(req, res, next) {
+  // console.log(jwt.verify(req.cookies.user, "piTeam"))
+}
 app.post(
   "/login",
   cors(accecptURL),
   loginAuth.createToken,
+  test,
   (req, res, next) => {
     return res.status(400);
   }
@@ -142,7 +147,6 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   console.log("server addlink call");
   let { title, price, link, info, currentCategory, registerTime } = req.body;
-
   let KST = new Date(registerTime.toString());
   KST.setHours(KST.getHours() + 9);
 
@@ -158,9 +162,8 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   return res.status(200).json({ message: "링크 추가 SUCCESS" });
 });
 
-app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
+app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
   let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
   links.link as link,links.registerTime as registerTime,
   crawl.title as crawlTitle,
@@ -172,7 +175,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
  LEFT join categories on users.id = categories.users_id
  LEFT  join links on categories.id = links.categories_id
  LEFT  join crawl on links.id = crawl.links_id
- where users.nickname = '${res.locals.userNickname}'
+ where users.nickname = '${tokenDecode(req).nickname}'
  ORDER BY registerTime DESC`;
 
   let mylinkData = {
