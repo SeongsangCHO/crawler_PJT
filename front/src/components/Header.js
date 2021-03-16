@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useHistory } from "react-router-dom";
 import "./css/Header.css";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
 import CreateNotification from "./CreateNotification";
@@ -9,6 +9,7 @@ import Modal from "./Modal/Modal";
 import RegisterModalContent from "./RegisterModal/RegisterModalContent";
 import LoginModalContent from "./LoginModal/LoginModalContent";
 import { useCookies } from "react-cookie";
+import jwt_decode from "jwt-decode";
 
 const NavBarWrapper = styled.div``;
 
@@ -72,19 +73,23 @@ function NavBar() {
 }
 //새로고침해도 유저의 닉네임을 가져올 수 있도록 하기.
 function Header() {
+  const history = useHistory();
   const isLogined = useSelector((state) => state.loginReducer.isLogined);
   const userNickName = useSelector((state) => state.loginReducer.user_nickname);
+  const token = useSelector((state)=> state.loginReducer.token);
+  const [user, setUser] = useState('');
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies([]);
-
+  const [cookies] = useCookies(['']);
   useEffect(() => {
     if (isLogined === true) {
       CreateNotification("success")("로그인 성공");
+      console.log(token);
     }
     if (isLogined === false) {
       CreateNotification("error")("로그인 실패");
     }
+    //cookies는 객체니까 이전상태랑 레퍼런스가 달라지지 않는구나
   }, [isLogined]);
 
   //custom hooks로 뺴기 => useCallback으로 변경하기
@@ -127,7 +132,7 @@ function Header() {
           </NavLink>
         </LogoWrapper>
         <ButtonWrapper>
-          {!isLogined ? (
+          {cookies.user === undefined && !isLogined ?(
             <>
               <SignUpButton onClick={onToggleRegisterModal}>
                 Sign Up
@@ -135,7 +140,7 @@ function Header() {
               <LoginButton onClick={onToggleLoginModal}>Log In</LoginButton>
             </>
           ) : (
-            <span>{userNickName}님 안녕하세요</span>
+            <span>{jwt_decode(token).nickname}님 안녕하세요</span>
           )}
         </ButtonWrapper>
       </div>

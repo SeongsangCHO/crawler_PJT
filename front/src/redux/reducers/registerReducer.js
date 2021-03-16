@@ -20,7 +20,7 @@ const initialState = {
 //상태가 변화할 때 수행되는 함수
 //Type에 따른 상태변화
 const registerReducer = (state = initialState, action) => {
-  console.log("리듀서 호출");
+
 
   switch (action?.type) {
 
