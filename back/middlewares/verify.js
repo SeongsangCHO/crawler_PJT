@@ -3,10 +3,9 @@ const jwt = require("jsonwebtoken");
 const verifyToken = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   try {
-    if(!req.cookies.user){
+    if (!req.cookies.user) {
       throw err;
     }
-    console.log("토큰 확인");
     const clientToken = req.cookies.user;
     const decoded = jwt.verify(clientToken, "piTeam");
     req.currentUserNickname = decoded.nickname;

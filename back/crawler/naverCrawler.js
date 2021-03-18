@@ -25,17 +25,15 @@ async function infiniteScroll(page) {
     await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
     delay(200);
   }
-  return (1);
+  return 1;
 }
-
-
 
 const naverCrawler = async (searchText, linkId) => {
   let start = await new Date().getTime();
   let productData = [];
 
   const browser = await puppeteer.launch({
-    headless: false
+    headless: false,
   });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
@@ -52,7 +50,7 @@ const naverCrawler = async (searchText, linkId) => {
   const scrollResult = await infiniteScroll(page);
 
   try {
-    const isSearchResult = await page.$eval(`#powerlink-div`, element => {
+    const isSearchResult = await page.$eval(`#powerlink-div`, (element) => {
       return element.childNodes.length;
     });
 
@@ -77,7 +75,6 @@ const naverCrawler = async (searchText, linkId) => {
       if (totalPages - CRAWL_PAGES < 0) lastPageNumber = totalPages;
 
       for (let pageNumber = 1; pageNumber <= lastPageNumber; pageNumber++) {
-
         if (pageNumber != 1) {
           await page.goto(
             `https://search.shopping.naver.com/search/all?frm=NVSHATC&origQuery=%EB%AC%BC&pagingIndex=${pageNumber}&pagingSize=40&productSet=total&query=%EB%AC%BC&sort=rel&timestamp=&viewType=list`,
@@ -93,7 +90,10 @@ const naverCrawler = async (searchText, linkId) => {
         let productAmountPerPage = await page.evaluate(() => {
           return document.querySelectorAll(`.list_basis > div > div`).length;
         });
-        productData = await naverUtils.getProductData(page, productAmountPerPage);
+        productData = await naverUtils.getProductData(
+          page,
+          productAmountPerPage
+        );
       }
     } else {
       console.log("검색 결과가 없어요");
@@ -118,9 +118,10 @@ const naverCrawler = async (searchText, linkId) => {
   } catch (error) {
     console.error(error);
   }
-  console.log("네이버 크롤러 time :" + (await new Date().getTime() - start) / 1000);
+  console.log(
+    "네이버 크롤러 time :" + ((await new Date().getTime()) - start) / 1000
+  );
   return SUCCESS;
 };
-
 
 module.exports = naverCrawler;

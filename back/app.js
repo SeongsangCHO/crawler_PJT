@@ -1,32 +1,35 @@
-let express = require("express");
-let path = require("path");
+const express = require("express");
+const path = require("path");
 const ssgCrawler = require("./crawler/ssgCrawler");
 const coupangCrawler = require("./crawler/coupangCrawler");
 const naverCrawler = require("./crawler/naverCrawler");
-const FAILULE = 0;
-const SUCCESS = 1;
-var cors = require("cors");
+const cors = require("cors");
 const accecptURL = "http:/localhost:3000";
 const db = require("./config/db_config");
 const bcrypt = require("bcrypt");
-const loginAuth = require("./middlewares/auth");
+const {createToken} = require("./middlewares/auth");
 const HASH_ROUND = 10;
-const { verifyToken, tokenDecode } = require("./middlewares/verify");
-var cookieParser = require("cookie-parser");
+const { verifyToken } = require("./middlewares/verify");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const app = express();
 const moment = require("moment");
+const middlewares = require('./middlewares/middlewares');
 require("moment-timezone");
 moment.tz.setDefault("Asia/Seoul");
+middlewares(app);
 //raw로 작성된 query module화 해서 가져올 것.
 //URL 환경변수 처리
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
-app.use(cookieParser());
+
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   })
+// );
+// app.use(cookieParser());
+// app.use("/", testAPIRouter);
+// app.use(express.json()); //body-parser 대신사용할수있음.
 
 const port = process.env.PORT || 8080;
 let testAPIRouter = require("./routes/testAPI");
@@ -34,9 +37,6 @@ let testAPIRouter = require("./routes/testAPI");
 //템플릿엔진 ejs 설정 __dirname +'views'랑 같음
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
-app.use("/", testAPIRouter);
-app.use(express.json()); //body-parser 대신사용할수있음.
 app.get("/", (req, res) => {
   res.send("hello World");
 });
@@ -107,14 +107,15 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
 const jwt = require("jsonwebtoken");
 
 function test(req, res, next) {
-  // console.log(jwt.verify(req.cookies.user, "piTeam"))
+  console.log('로그인 성공 후 next')
 }
 app.post(
   "/login",
   cors(accecptURL),
-  loginAuth.createToken,
+  createToken,
   test,
   (req, res, next) => {
+    test();
     return res.status(400);
   }
 );
@@ -122,7 +123,6 @@ app.post(
 app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
-  console.log("현재 로그인된 사용자 아이디: " + `${tokenDecode(req).nickname}`);
   console.log("전달받은 카테고리 명 : " + req.body.category);
   //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
   //front에서 전달받은 category명을 테이블에 삽입함
@@ -163,8 +163,8 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
 });
 
 app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
-  console.log(req.currentUserNickname);
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("`Access-Control-Allow-Credentials", "http://localhost:3000");
   let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
   links.link as link,links.registerTime as registerTime,
   crawl.title as crawlTitle,
@@ -302,7 +302,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
     ];
     Promise.all(crawlers).then((result) => {
       console.log(result);
-      return res.status(200).json({ message: "성공" });
+      return res.status(200).json({ message: "크롤링 성공" });
     });
   });
 });

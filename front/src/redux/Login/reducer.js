@@ -6,7 +6,6 @@ import {
   LOGIN_FAILURE,
 } from "../actions/registerAction";
 
-console.log(document.cookie.indexOf('='));
 const initialState = {
   user_nickname: '',
   isLogined: '',

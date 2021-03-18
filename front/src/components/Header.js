@@ -81,6 +81,7 @@ function Header() {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [cookies] = useCookies(['']);
+
   useEffect(() => {
     if (isLogined === true) {
       CreateNotification("success")("로그인 성공");
