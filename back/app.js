@@ -10,7 +10,16 @@ const bcrypt = require("bcrypt");
 const { createToken } = require("./middlewares/auth");
 const HASH_ROUND = 10;
 const { verifyToken } = require("./middlewares/verify");
-const cookieParser = require("cookie-parser");
+const {
+  selectCrawlTargetLinkCardIdQuery,
+  selectCardCrawledDataQuery,
+  selectLinkCardIdQuery,
+  selectUserDataQuery,
+} = require("./query/selectQuery");
+const {
+  insertCategoryQuery,
+  insertLinkCardQuery,
+} = require("./query/insertQuery");
 require("dotenv").config();
 const app = express();
 const moment = require("moment");
@@ -21,19 +30,7 @@ middlewares(app);
 //raw로 작성된 query module화 해서 가져올 것.
 //URL 환경변수 처리
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     credentials: true,
-//   })
-// );
-// app.use(cookieParser());
-// app.use("/", testAPIRouter);
-// app.use(express.json()); //body-parser 대신사용할수있음.
-
 const port = process.env.PORT || 8080;
-let testAPIRouter = require("./routes/testAPI");
-
 //템플릿엔진 ejs 설정 __dirname +'views'랑 같음
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -44,14 +41,6 @@ app.get("/", (req, res) => {
 app.get("/api", (req, res) => {
   res.render("../views/index", { title: "api page" });
 });
-
-//닉네임 중복체크를 post로 던져서 select, 중복체크, false리턴
-// 그 값에 따라서 alert 반환
-
-//app.get("/mylink", cors(), verifyToken, (req,res,next)) => 사용자가 mylink를 클릭했을때
-//get요청을보내서 login ID에 해당하는 결과물을 가져올 수 있도록
-//로그인이 되지않았다면 에러를 반환해서 alert창 출력하도록하면 될듯
-//DB설계를 해야겠네
 
 app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
@@ -104,7 +93,6 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
   }
   return res.status(200).json({ message: "가입 success" });
 });
-const jwt = require("jsonwebtoken");
 
 function test(req, res, next) {
   console.log("로그인 성공 후 next");
@@ -121,9 +109,7 @@ app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
   //front에서 전달받은 category명을 테이블에 삽입함
   //카테고리 id도 외래키 userId로 얻을 수 있음
-  let sql = `insert into categories (users_id, title) values 
-  ((SELECT id from users WHERE nickname = ?), ?);
-  `;
+  let sql = insertCategoryQuery();
   db.query(
     sql,
     [req.currentUserNickname, req.body.category],
@@ -146,9 +132,7 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
 
   //한국표준시에 맞추기
   //데이터 중복이 아닐 때 카드 추가
-  let sql = `insert into links (title, price, link, info, categories_id, users_id, registerTime) values (?, ?, ?, ?, (select id from categories where title = '${currentCategory}'
-    and users_id = (select id from users where nickname = '${req.currentUserNickname}')),
-    (select id from users where nickname = '${req.currentUserNickname}'), ?)`;
+  let sql = insertLinkCardQuery(req, currentCategory);
 
   db.query(sql, [title, price, link, info, KST], (dbError, result) => {
     if (dbError) throw dbError;
@@ -160,19 +144,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader("`Access-Control-Allow-Credentials", true);
 
-  let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
-  links.link as link,links.registerTime as registerTime,
-  crawl.title as crawlTitle,
-  crawl.price as crawlPrice,
-  crawl.source as crawlSource,
-  crawl.link as crawlLink,
-  crawl.imgsrc as crawlImgSrc
- from users
- LEFT join categories on users.id = categories.users_id
- LEFT  join links on categories.id = links.categories_id
- LEFT  join crawl on links.id = crawl.links_id
- where users.nickname = '${req.currentUserNickname}'
- ORDER BY registerTime DESC`;
+  let sql = selectUserDataQuery(req);
 
   let mylinkData = {
     category: [],
@@ -255,30 +227,18 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
 
 app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  let searchText = req.body.currentLinkTitle;
+  let searchTitle = req.body.currentLinkTitle;
 
   //0 : 실패
   //1 : 성공
   //2 : 검색결과 없음
 
-  let findLinkId = `select id from links where users_id =
-  (select id from users where nickname = '${req.currentUserNickname}'
-  and title ='${searchText}'
-  )`;
+  let crawlTargetLinkCardId = selectCrawlTargetLinkCardIdQuery(
+    req,
+    searchTitle
+  );
 
-  let sql = `
-  select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
-  links.link as link,links.registerTime as registerTime,
-  crawl.title as crawlTitle,
-  crawl.price as crawlPrice,
-  crawl.source as crawlSource,
-  crawl.link as crawlLink,
-  crawl.imgsrc as crawlImgSrc
- from users
- LEFT join categories on users.id = categories.users_id
- LEFT  join links on categories.id = links.categories_id
- LEFT  join crawl on links.id = crawl.links_id
- where links.title = '${searchText}' ORDER BY registerTime DESC;`;
+  let sql = selectCardCrawledDataQuery(searchTitle);
   //데이터가 있다면 크롤러 수행하지 않고 그대로 저장
   db.query(sql, (err, result) => {
     if (result) {
@@ -287,13 +247,13 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
       console.log("*****************");
     }
   });
-  db.query(findLinkId, (dbErr, dbResult) => {
+  db.query(crawlTargetLinkCardId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
 
     const crawlers = [
-      ssgCrawler(searchText, dbResult[0].id),
-      coupangCrawler(searchText, dbResult[0].id),
-      naverCrawler(searchText, dbResult[0].id),
+      ssgCrawler(searchTitle, dbResult[0].id),
+      coupangCrawler(searchTitle, dbResult[0].id),
+      naverCrawler(searchTitle, dbResult[0].id),
     ];
     Promise.all(crawlers).then((result) => {
       console.log(result);
@@ -305,12 +265,8 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
 app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const title = req.body.linkTitle;
-  const userId = req.currentUserNickname;
-  const linkCardId = `select id from links where users_id =
-  (select id from users where nickname = '${userId}'
-  and title ='${title}'
-  )`;
-  db.query(linkCardId, (dbErr, dbResult) => {
+  const sql = selectLinkCardIdQuery(req,title);
+  db.query(sql, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
     db.query(
       `delete from crawl where links_id = ${dbResult[0].id}`,
@@ -329,12 +285,12 @@ app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
   });
 });
 
-app.get("/api/logout", verifyToken,(req,res) => {
+app.get("/api/logout", verifyToken, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.clearCookie("user");
   console.log(req.cookies);
-  return res.status(200).json({message: "logout SUCCESS"});
-})
+  return res.status(200).json({ message: "logout SUCCESS" });
+});
 
 app.listen(port, () => {
   console.log(`server is listening at localhost:${port}`);

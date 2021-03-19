@@ -27,7 +27,6 @@ function* addCategory(action) {
         category: action.category,
         isAddCategory: true,
       });
-      alert("요청성공");
     }
   } catch (err) {
     alert("로그인이 필요합니다");
