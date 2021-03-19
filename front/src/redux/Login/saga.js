@@ -12,7 +12,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
 
-} from "../actions/registerAction";
+} from "../actions/Action";
 
 import axios from "axios";
 

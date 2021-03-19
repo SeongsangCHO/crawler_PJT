@@ -40,6 +40,7 @@ const createToken = async function (req, res, next) {
               res.cookie("user", token, {
                 httpOnly:false,
                 expires: new Date(Date.now() + 1 * 3600000) // cookie will be removed after 8 hours
+                // expires: new Date(Date.now() + 1 * 3600000) // cookie will be removed after 8 hours
               });
 
               return res.status(200,{

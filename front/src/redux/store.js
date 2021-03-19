@@ -14,6 +14,7 @@ import currentCategoryReducer from './CurrentCategory/reducer';
 import addLinkReducer from './AddLink/reducer';
 import runCrawlerReducer from './RunCrawler/reducer';
 import reloadReducer from './ReloadCrawl/reducer';
+import logoutReducer from './Logout/reducer';
 
 import rootSaga from "./saga";
 const initialState = {
@@ -40,6 +41,7 @@ const configureStore = () => {
       addLinkReducer,
       runCrawlerReducer,
       reloadReducer,
+      logoutReducer
     }),
     initialState,
     enhancer,

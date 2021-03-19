@@ -29,21 +29,26 @@ import {
   RELOAD_REQUEST,
   RELOAD_SUCCESS,
   RELOAD_FAILURE,
-} from "./actions/registerAction";
-
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+} from "./actions/Action";
+import {logoutRequest} from './Logout/saga';
+import {runCrawler} from './RunCrawler/saga';
 import doubleCheckSaga from "../redux/DoubleCheck/saga.js";
 import loginSaga from "../redux/Login/saga.js";
 
 import axios from "axios";
-const URL = `http://localhost:8080`;
+const ENDPOINT = `http://localhost:8080`;
 
-const registerURL = `${URL}/register`;
-const loginURL = `${URL}/login`;
-const addCategoryURL = `${URL}/addcategory`;
-const linkDataApiCallURL = `${URL}/api/mylink`;
-const addLinkURL = `${URL}/addlink`;
-const crawlURL = `${URL}/crawler`;
-const reloadURL = `${URL}/reload`;
+const registerURL = `${ENDPOINT}/register`;
+const loginURL = `${ENDPOINT}/login`;
+const addCategoryURL = `${ENDPOINT}/addcategory`;
+const linkDataApiCallURL = `${ENDPOINT}/api/mylink`;
+const addLinkURL = `${ENDPOINT}/addlink`;
+const crawlURL = `${ENDPOINT}/crawler`;
+const reloadURL = `${ENDPOINT}/reload`;
+const logoutURL = `${ENDPOINT}/api/logout`
 
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
 
@@ -211,10 +216,10 @@ function* getLinkData(action) {
     console.log("getlinkData");
     const result = yield call(getLinkDataAPI, action.data);
     if (result.status == 200) {
-      yield put({ type: LINK_DATA_SUCCESS, data: result.data, isCalled: true });
+      yield put({ type: LINK_DATA_SUCCESS, data: result.data, isCalled: true,message:action.message});
     }
   } catch (error) {
-    yield put({ type: LINK_DATA_FAILURE, err: error, isCalled: false });
+    yield put({ type: LINK_DATA_FAILURE, err: error.message, isCalled: false, message: action.message });
 
     console.error(error);
   }
@@ -272,33 +277,6 @@ function* watchAddLink() {
   yield takeLatest(ADD_LINK_REQUEST, addLink);
 }
 
-function runCrawlerAPI(currentLinkTitle) {
-  //여기까지 잘 전달되는데..
-  //객체형태로 전달해주어야하는군,.
-  return axios.post(
-    crawlURL,
-    { currentLinkTitle },
-    {
-      withCredentials: true,
-    }
-  );
-}
-
-function* runCrawler(action) {
-  try {
-    const result = yield call(runCrawlerAPI, action.currentLinkTitle);
-    console.log(result);
-    if (result.status == 200) {
-      yield put({
-        type: RUN_CRAWLER_SUCCESS,
-        currentLinkTitle: action.currentLinkTitle,
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    yield put({ type: RUN_CRAWLER_FAILURE });
-  }
-}
 
 function* watchRunCrawler() {
   console.log("watch Crawler");
@@ -338,6 +316,12 @@ function* watchReloading() {
   yield takeLatest(RELOAD_REQUEST, reloadCrawler);
 }
 
+
+function* watchLogout() {
+  console.log("watch reloading");
+  yield takeLatest(LOGOUT_REQUEST, logoutRequest);
+}
+
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
   yield all([
@@ -350,5 +334,6 @@ export default function* rootSaga() {
     fork(watchAddLink),
     fork(watchRunCrawler),
     fork(watchReloading),
+    fork(watchLogout),
   ]);
 }

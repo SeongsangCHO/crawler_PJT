@@ -3,7 +3,7 @@ import {
   ADD_CATEGORY_REQUEST,
   ADD_CATEGORY_SUCCESS,
   ADD_CATEGORY_FAILURE,
-} from "../actions/registerAction";
+} from "../actions/Action";
 
 const initialState = {
   category:'',

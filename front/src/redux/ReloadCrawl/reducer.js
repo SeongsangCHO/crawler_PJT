@@ -2,7 +2,7 @@ import {
 	RELOAD_REQUEST,
 	RELOAD_SUCCESS,
 	RELOAD_FAILURE,
-  } from "../actions/registerAction";
+  } from "../actions/Action";
   
   const initialState = {
 	  isReloaded: false,

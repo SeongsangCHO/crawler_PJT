@@ -91,8 +91,9 @@ function Header() {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
+
     if (isLogined === true) {
       CreateNotification("success")("로그인 성공");
       console.log(token);
@@ -110,8 +111,15 @@ function Header() {
   const onToggleLoginModal = () => {
     setIsLoginModalOpen((prev) => !prev);
   };
+  const doLogOut = () =>{
+    dispatch({
+      type: "LOGOUT_REQUEST",
+      message: "LOGOUT REQUEST"
+    });
+  }
   const onLogout = () => {
-    removeCookie("user");
+    doLogOut();
+    // removeCookie("user");
     setTimeout(() => {
       window.location.reload();
     }, 1000);

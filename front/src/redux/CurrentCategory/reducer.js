@@ -3,7 +3,7 @@ import {
   GET_CATEGORY_REQUEST,
   GET_CATEGORY_SUCCESS,
   GET_CATEGORY_FAILURE,
-} from "../actions/registerAction";
+} from "../actions/Action";
 
 const initialState = {
   currentCategory: '',

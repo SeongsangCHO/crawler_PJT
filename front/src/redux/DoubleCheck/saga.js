@@ -12,7 +12,7 @@ import {
   NICK_DOUBLE_CHECK_REQUEST,
   NICK_DOUBLE_CHECK_SUCCESS,
   NICK_DOUBLE_CHECK_FAILURE,
-} from "../actions/registerAction";
+} from "../actions/Action";
 
 import axios from "axios";
 

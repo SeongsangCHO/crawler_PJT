@@ -4,7 +4,7 @@ import {
   RUN_CRAWLER_REQUEST,
   RUN_CRAWLER_SUCCESS,
   RUN_CRAWLER_FAILURE,
-} from "../actions/registerAction";
+} from "../actions/Action";
 
 const initialState = {
 

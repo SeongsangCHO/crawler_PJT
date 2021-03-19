@@ -2,7 +2,7 @@ import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} from "../actions/registerAction";
+} from "../actions/Action";
 
 const initialState = {
   data: {

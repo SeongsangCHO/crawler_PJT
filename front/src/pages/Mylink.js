@@ -5,6 +5,7 @@ import CategoryTab from "../components/MyLink/CategoryTab";
 import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
 import {useCookies } from 'react-cookie';
+import CreateNotification from "components/CreateNotification";
 
 const ContentWrapper = styled.div`
   margin-top: 10px;
@@ -52,16 +53,16 @@ const MyLink = () => {
   //크롤링수행
   //상품카드 추가
   //카테고리 추가
+  const linkApiResult = useSelector((state) => state.linkDataApiCallReducer.message);
   const isLogined = useSelector((state) => state.loginReducer.isLogined); //로그인이 되었을 때
   const isAddCategory = useSelector((state)=>state.addCategoryReducer.isAddCategory); // 카테고리를 추가했을 때
   const linkCardData = useSelector((state) => state.addLinkReducer.data); // 상품카드를 저장했을 때
   const isCrawled = useSelector((state)=>state.runCrawlerReducer.isCrawled); // 크롤링을 수행했을 때
   useEffect(() => {
-    //dispatch수행해서 리랜더링될 때 , axios로 api호출
     dispatch({
       type: "LINK_DATA_REQUEST",
       data: {},
-      isCalled: false,
+      message:'request',
     });
 
   }, [isLogined, linkCardData, isAddCategory,isCrawled]);

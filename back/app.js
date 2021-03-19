@@ -329,6 +329,13 @@ app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
   });
 });
 
+app.get("/api/logout", verifyToken,(req,res) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.clearCookie("user");
+  console.log(req.cookies);
+  return res.status(200).json({message: "logout SUCCESS"});
+})
+
 app.listen(port, () => {
   console.log(`server is listening at localhost:${port}`);
 });
