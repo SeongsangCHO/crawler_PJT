@@ -7,14 +7,14 @@ const cors = require("cors");
 const accecptURL = "http:/localhost:3000";
 const db = require("./config/db_config");
 const bcrypt = require("bcrypt");
-const {createToken} = require("./middlewares/auth");
+const { createToken } = require("./middlewares/auth");
 const HASH_ROUND = 10;
 const { verifyToken } = require("./middlewares/verify");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const app = express();
 const moment = require("moment");
-const middlewares = require('./middlewares/middlewares');
+const middlewares = require("./middlewares/middlewares");
 require("moment-timezone");
 moment.tz.setDefault("Asia/Seoul");
 middlewares(app);
@@ -107,18 +107,12 @@ app.post("/register", cors(accecptURL), (req, res, next) => {
 const jwt = require("jsonwebtoken");
 
 function test(req, res, next) {
-  console.log('로그인 성공 후 next')
+  console.log("로그인 성공 후 next");
 }
-app.post(
-  "/login",
-  cors(accecptURL),
-  createToken,
-  test,
-  (req, res, next) => {
-    test();
-    return res.status(400);
-  }
-);
+app.post("/login", cors(accecptURL), createToken, test, (req, res, next) => {
+  test();
+  return res.status(400);
+});
 
 app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -164,7 +158,8 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
 
 app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.setHeader("`Access-Control-Allow-Credentials", "http://localhost:3000");
+  res.setHeader("`Access-Control-Allow-Credentials", true);
+
   let sql = `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
   links.link as link,links.registerTime as registerTime,
   crawl.title as crawlTitle,

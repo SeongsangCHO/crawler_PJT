@@ -10,7 +10,7 @@ import RegisterModalContent from "./RegisterModal/RegisterModalContent";
 import LoginModalContent from "./LoginModal/LoginModalContent";
 import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
-
+import { Redirect } from "react-router-dom";
 const NavBarWrapper = styled.div``;
 
 const SignUpButton = styled.button`
@@ -36,6 +36,19 @@ const LoginButton = styled.button`
     color: gray;
   }
 `;
+
+const LogoutButton = styled.button`
+  border: none;
+  margin-left: 10px;
+  color: blue;
+  background-color: white;
+  height: 50%;
+  transition: 0.4s;
+  :hover {
+    color: gray;
+  }
+`;
+
 const HeaderWrapper = styled.div``;
 
 const LogoWrapper = styled.div`
@@ -73,14 +86,11 @@ function NavBar() {
 }
 //새로고침해도 유저의 닉네임을 가져올 수 있도록 하기.
 function Header() {
-  const history = useHistory();
   const isLogined = useSelector((state) => state.loginReducer.isLogined);
-  const userNickName = useSelector((state) => state.loginReducer.user_nickname);
-  const token = useSelector((state)=> state.loginReducer.token);
-  const [user, setUser] = useState('');
+  const token = useSelector((state) => state.loginReducer.token);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [cookies] = useCookies(['']);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   useEffect(() => {
     if (isLogined === true) {
@@ -91,7 +101,7 @@ function Header() {
       CreateNotification("error")("로그인 실패");
     }
     //cookies는 객체니까 이전상태랑 레퍼런스가 달라지지 않는구나
-  }, [isLogined]);
+  }, [isLogined, cookies]);
 
   //custom hooks로 뺴기 => useCallback으로 변경하기
   const onToggleRegisterModal = () => {
@@ -99,6 +109,13 @@ function Header() {
   };
   const onToggleLoginModal = () => {
     setIsLoginModalOpen((prev) => !prev);
+  };
+  const onLogout = () => {
+    removeCookie("user");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+    CreateNotification("success")("로그아웃 되었습니다.");
   };
 
   return (
@@ -133,7 +150,7 @@ function Header() {
           </NavLink>
         </LogoWrapper>
         <ButtonWrapper>
-          {cookies.user === undefined && !isLogined ?(
+          {cookies.user === undefined && !isLogined ? (
             <>
               <SignUpButton onClick={onToggleRegisterModal}>
                 Sign Up
@@ -141,7 +158,10 @@ function Header() {
               <LoginButton onClick={onToggleLoginModal}>Log In</LoginButton>
             </>
           ) : (
-            <span>{jwt_decode(token).nickname}님 안녕하세요</span>
+            <>
+              <span>{jwt_decode(token).nickname}님 안녕하세요</span>
+              <LogoutButton onClick={onLogout}>Logout</LogoutButton>
+            </>
           )}
         </ButtonWrapper>
       </div>
