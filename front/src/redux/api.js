@@ -8,3 +8,4 @@ export const addLinkURL = `${ENDPOINT}/addlink`;
 export const crawlURL = `${ENDPOINT}/crawler`;
 export const reloadURL = `${ENDPOINT}/reload`;
 export const logoutURL = `${ENDPOINT}/api/logout`
+export const doubleCheckURL = `${ENDPOINT}/doublecheck`;

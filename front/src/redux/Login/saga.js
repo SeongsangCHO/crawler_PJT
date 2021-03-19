@@ -1,22 +1,8 @@
-import {
-  all,
-  fork,
-  call,
-  put,
-  takeEvery,
-  takeLatest,
-  delay,
-} from "redux-saga/effects";
-import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-
-} from "../actions/Action";
-
+import { loginURL } from "../api";
+import { put, call } from "redux-saga/effects";
 import axios from "axios";
+import { LOGIN_SUCCESS, LOGIN_FAILURE } from "../actions/Action";
 
-const loginURL = "http://localhost/login";
 
 function loginAPI(loginData) {
   console.log("loginAPI in saga");
@@ -26,24 +12,23 @@ function loginAPI(loginData) {
   });
 }
 
-
-
-function* loginRequst(action) {
+function* loginRequest(action) {
   try {
     console.log("loginRequest in saga");
     const result = yield call(loginAPI, action.data);
-    console.log(result.status);
+    console.log(result);
     if (result.status == 200) {
-      yield put({ type: LOGIN_SUCCESS, isLogined: true });
+      yield put({
+        type: LOGIN_SUCCESS,
+        user_nickname: action.data.user_nickname,
+        isLogined: true,
+        token: result.data.token,
+      });
     }
   } catch (err) {
-    alert("아이디 또는 비밀번호를 다시 확인해주세요");
     yield put({ type: LOGIN_FAILURE, isLogined: false });
     console.error(err);
   }
 }
 
-export default function* watchLogin() {
-  console.log("watch Login");
-  yield takeLatest(LOGIN_REQUEST, loginRequst);
-}
+export { loginRequest };
