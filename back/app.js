@@ -137,6 +137,7 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   db.query(sql, [title, price, link, info, KST], (dbError, result) => {
     if (dbError) throw dbError;
   });
+
   return res.status(200).json({ message: "링크 추가 SUCCESS" });
 });
 
@@ -265,7 +266,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
 app.post("/reload", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const title = req.body.linkTitle;
-  const sql = selectLinkCardIdQuery(req,title);
+  const sql = selectLinkCardIdQuery(req, title);
   db.query(sql, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
     db.query(
