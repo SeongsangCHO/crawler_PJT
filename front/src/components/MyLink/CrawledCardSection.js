@@ -53,6 +53,12 @@ const CrawledCard = ({ crawledData }) => {
   if (title.length > 15) {
     title = title.slice(0, 15) + "...";
   }
+  const priceComma = (price) => {
+    if (price === "") {
+      return "-";
+    }
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
+  };
   return (
     <CrawledCardWrapper>
       <TitleLink target="_blank" href={link}>
@@ -60,57 +66,8 @@ const CrawledCard = ({ crawledData }) => {
 
         {title}
       </TitleLink>
-      <PriceSpan>{price}</PriceSpan>
+      <PriceSpan>{priceComma(price)}</PriceSpan>
     </CrawledCardWrapper>
-  );
-};
-
-const CoupangCard = ({ element }) => {
-  return (
-    <>
-      {element.coupang.map((coupangElement) => (
-        <CrawledCardBox key={coupangElement.title}>
-          <BadgeDiv>
-            <Badge pill variant="primary">
-              COUPANG
-            </Badge>
-          </BadgeDiv>
-          <CrawledCard crawledData={coupangElement}></CrawledCard>
-        </CrawledCardBox>
-      ))}
-    </>
-  );
-};
-const SsgCard = ({ element }) => {
-  return (
-    <>
-      {element.ssg.map((ssgElement, idx) => (
-        <CrawledCardBox key={ssgElement.title}>
-          <BadgeDiv>
-            <SsgBadge pill variant="warning">
-              SSG
-            </SsgBadge>
-          </BadgeDiv>
-          <CrawledCard crawledData={ssgElement}></CrawledCard>
-        </CrawledCardBox>
-      ))}
-    </>
-  );
-};
-const NaverCard = ({ element }) => {
-  return (
-    <>
-      {element.naver.map((naverElement) => (
-        <CrawledCardBox key={naverElement.title}>
-          <BadgeDiv>
-            <Badge pill variant="success">
-              NAVER
-            </Badge>
-          </BadgeDiv>
-          <CrawledCard crawledData={naverElement}></CrawledCard>
-        </CrawledCardBox>
-      ))}
-    </>
   );
 };
 
@@ -188,12 +145,9 @@ function CrawledCardSection({ obj }) {
           <button onClick={() => onPriceSortDesc(element)}>
             가격 높은순 정렬
           </button>
-          {element.crawl.map((item) => (
-            <CrawlCardList item={item} />
+          {element.crawl.map((item, idx) => (
+            <CrawlCardList id={idx} item={item} />
           ))}
-          {/* <SsgCard element={element} />
-          <CoupangCard element={element} />
-          <NaverCard element={element} /> */}
         </Tab.Pane>
       ))}
     </CrawledCardSectionWrapper>
