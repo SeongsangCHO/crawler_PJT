@@ -171,6 +171,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
       ssg: [],
       coupang: [],
       naver: [],
+      crawl:[],
     });
     //링크카드 생성
     //카테고리:[{},{},{}] 카드데이터 채우기
@@ -205,6 +206,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
             price: element.crawlPrice,
             link: element.crawlLink,
             imgsrc: element.crawlImgSrc,
+            source: element.crawlSource,
           };
           //해당링크카드(추가된 마지막 카드)에 ssg, coupang, naver키에 크롤데이터 push
           categoryMap
@@ -212,6 +214,11 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
             [categoryMap.get(element.category).length - 1][
               element.crawlSource
             ].push(tmp);
+            
+
+            categoryMap
+            .get(element.category)
+            [categoryMap.get(element.category).length - 1].crawl.push(tmp);
         }
       });
     }

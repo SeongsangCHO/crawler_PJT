@@ -14,7 +14,6 @@ const InputTitle = styled.span`
 const NickNameInput = () => {
   const dispatch = useDispatch();
   const isDouble = useSelector((state) => state.doubleCheckReducer.isDouble);
-  const [nickNameVaild, setNickNameVaild] = useState(false);
   const [nickName, setNickName] = useState("");
   const [isValid, setIsValid] = useState(false);
   const checkSpc = /[~!@#$%^&*()_+|<>?:{}]/;

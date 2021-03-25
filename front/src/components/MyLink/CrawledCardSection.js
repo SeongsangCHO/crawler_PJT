@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Tab from "react-bootstrap/Tab";
 import Badge from "react-bootstrap/Badge";
+import { useSelector } from "react-redux";
 
 const CrawledCardSectionWrapper = styled.div`
   border-radius: 5px;
@@ -34,7 +35,7 @@ const BadgeDiv = styled.div``;
 const TitleLink = styled.a`
   display: block;
   font-size: 13px;
-  min-height:135px;
+  min-height: 135px;
 `;
 const PriceSpan = styled.span`
   font-size: 14px;
@@ -49,7 +50,7 @@ const CrawledCardWrapper = styled.div`
 `;
 const CrawledCard = ({ crawledData }) => {
   let { link, imgsrc, title, price } = crawledData;
-  if (title.length > 15){
+  if (title.length > 15) {
     title = title.slice(0, 15) + "...";
   }
   return (
@@ -105,33 +106,74 @@ const NaverCard = ({ element }) => {
             <Badge pill variant="success">
               NAVER
             </Badge>
-            <CrawledCard crawledData={naverElement}></CrawledCard>
           </BadgeDiv>
+          <CrawledCard crawledData={naverElement}></CrawledCard>
         </CrawledCardBox>
       ))}
     </>
   );
 };
 
+const CrawlCardList = ({ item }) => {
+  const getBadgeStyle = () => {
+    let badgeStyle = "";
+    if (item.source === "naver") {
+      badgeStyle = "success";
+    } else if (item.source === "coupang") {
+      badgeStyle = "primary";
+    } else {
+      badgeStyle = "warning";
+    }
+    return badgeStyle;
+  };
+  return (
+    <CrawledCardBox key={item.title}>
+      <BadgeDiv>
+        <Badge pill variant={getBadgeStyle()}>
+          {item.source.toUpperCase()}
+        </Badge>
+      </BadgeDiv>
+      <CrawledCard crawledData={item}></CrawledCard>
+    </CrawledCardBox>
+  );
+};
+const parsePrice = (item) => {
+  if (typeof item.price === "string" && item.price.includes("원")) {
+    item.price = parseInt(
+      item.price.slice(0, item.price.indexOf("원")).split(",").join("")
+    );
+  }
+};
 
 function CrawledCardSection({ obj }) {
+  const { isReloaded, linkTitle } = useSelector((state) => state.reloadReducer);
+  console.log("rerender");
+  const [reloadTitle, setReloadTitle] = useState("");
+  const [sortToggle, setSortToggle] = useState("");
+  useEffect(() => {
+    if (isReloaded) {
+      setReloadTitle(linkTitle);
+    }
+  }, [isReloaded]);
 
-
-  const onPriceSort = (element) =>{
+  const onPriceSortAsc = (element) => {
+    setSortToggle("desc");
     //데이터 sort해서 그 값을 상태로 전달해주어야함.
-    const {coupang, naver, ssg} = element;
-    console.log(element);
-    naver.map((item) => {
-      if (item.price.includes("원")){
-        item.price = parseInt(item.price.slice(0, item.price.indexOf("원")).split(',').join(''));
-        console.log(item.price);
-      }
-    })
-    let sorted = naver.sort((a, b) => a.price - b.price);
-    console.log(sorted);
-    const crawlData = [coupang, naver, ssg];
-    console.log(crawlData);
-  }
+    const { crawl } = element;
+    crawl.map((item) => {
+      parsePrice(item);
+    });
+    crawl.sort((a, b) => a.price - b.price);
+  };
+
+  const onPriceSortDesc = (element) => {
+    setSortToggle("asc");
+    const { crawl } = element;
+    crawl.map((item) => {
+      parsePrice(item);
+    });
+    crawl.sort((a, b) => b.price - a.price);
+  };
   return (
     <CrawledCardSectionWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, idx) => (
@@ -140,10 +182,18 @@ function CrawledCardSection({ obj }) {
           key={element.title}
           unmountOnExit={true}
         >
-          <button onClick={()=>onPriceSort(element)}>가격순 정렬</button>
-          <SsgCard element={element} />
+          <button onClick={() => onPriceSortAsc(element)}>
+            가격 낮은순 정렬
+          </button>
+          <button onClick={() => onPriceSortDesc(element)}>
+            가격 높은순 정렬
+          </button>
+          {element.crawl.map((item) => (
+            <CrawlCardList item={item} />
+          ))}
+          {/* <SsgCard element={element} />
           <CoupangCard element={element} />
-          <NaverCard element={element} />
+          <NaverCard element={element} /> */}
         </Tab.Pane>
       ))}
     </CrawledCardSectionWrapper>
