@@ -3,6 +3,20 @@ import styled from "styled-components";
 import Tab from "react-bootstrap/Tab";
 import Badge from "react-bootstrap/Badge";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
+
+const SortButton = styled.button`
+  width: 100%;
+  background-color:#feeeea;
+  border-radius:5px;
+  color:#df7861;
+  border:none;
+  margin-right:5px;
+  .active{
+    background-color:black;
+  }
+`;
 
 const CrawledCardSectionWrapper = styled.div`
   border-radius: 5px;
@@ -10,24 +24,6 @@ const CrawledCardSectionWrapper = styled.div`
   height: 100%;
 `;
 
-const SsgBadge = styled.span`
-  display: inline;
-  padding: 0.25em 0.4em;
-  font-size: 75%;
-  font-weight: 700;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  color: #000;
-  background-color: #f6ae14;
-  padding-right: 0.6em;
-  padding-left: 0.6em;
-  border-radius: 10rem;
-`;
 const CrawledCardBox = styled.div`
   border: 1px solid #000;
 `;
@@ -134,21 +130,30 @@ function CrawledCardSection({ obj }) {
   return (
     <CrawledCardSectionWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, idx) => (
-        <Tab.Pane
-          eventKey={element.title}
-          key={element.title}
-          unmountOnExit={true}
-        >
-          <button onClick={() => onPriceSortAsc(element)}>
-            가격 낮은순 정렬
-          </button>
-          <button onClick={() => onPriceSortDesc(element)}>
-            가격 높은순 정렬
-          </button>
-          {element.crawl.map((item, idx) => (
-            <CrawlCardList id={idx} item={item} />
-          ))}
-        </Tab.Pane>
+        <>
+          <Tab.Pane
+            eventKey={element.title}
+            key={element.title}
+            unmountOnExit={true}
+          >
+            <div>
+              <SortButton onClick={() => onPriceSortAsc(element)}>
+                <FontAwesomeIcon icon={faAngleDown} />
+                <span style={{ marginLeft: "5px" }}>정렬</span>
+              </SortButton>
+            </div>
+            <div>
+              <SortButton onClick={() => onPriceSortDesc(element)}>
+                <FontAwesomeIcon icon={faAngleUp} />
+                <span style={{ marginLeft: "5px" }}>정렬</span>
+              </SortButton>
+            </div>
+            <div></div>
+            {element.crawl.map((item, idx) => (
+              <CrawlCardList id={idx} item={item} />
+            ))}
+          </Tab.Pane>
+        </>
       ))}
     </CrawledCardSectionWrapper>
   );

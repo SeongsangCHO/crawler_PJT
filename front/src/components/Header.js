@@ -52,7 +52,7 @@ const LogoutButton = styled.button`
 const HeaderWrapper = styled.div``;
 
 const LogoWrapper = styled.div`
-  margin-left: 32px;
+  margin-left: 12px;
 `;
 
 const ButtonWrapper = styled.div`

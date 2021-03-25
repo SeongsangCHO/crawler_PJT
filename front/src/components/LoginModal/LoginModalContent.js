@@ -21,6 +21,8 @@ const InputTitle = styled.span`
 
 const SubmitButton = styled.button`
   border: 1px solid;
+  background-color: #2196F3;
+  color:white;
 `;
 
 const Input = styled.input`
@@ -30,6 +32,8 @@ const Input = styled.input`
 const RegisterButton = styled.button`
   border: 1px solid;
   margin-top: 5px;
+  background-color:green;
+  color:white;
 `;
 const LoginModalContent = ({ onToggleLoginModal, onToggleRegisterModal }) => {
   const dispatch = useDispatch();
