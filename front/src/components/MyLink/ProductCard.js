@@ -173,15 +173,13 @@ function ProductCard({ categoryItem }) {
     // });
   };
 
-  const handleReload = (e) => {
-    e.preventDefault();
-    console.log(e.target);
+  const handleReload = (title) => {
 
-    // dispatch({
-    //   type: "RELOAD_REQUEST",
-    //   isReloaded: false,
-    //   linkTitle: e.currentTarget.firstChild.innerText,
-    // });
+    dispatch({
+      type: "RELOAD_REQUEST",
+      isReloaded: false,
+      linkTitle: title,
+    });
   };
 
 
@@ -203,7 +201,7 @@ function ProductCard({ categoryItem }) {
                 <Button>삭제</Button>
                 <Button>수정</Button>
 
-                <Button onClick={handleReload}>새로고침</Button>
+                <Button onClick={()=>handleReload(categoryItem.title)}>새로고침</Button>
               </DropDownMenu>
             </DropDownWrapper>
           </Nav.Link>
