@@ -115,7 +115,23 @@ const NaverCard = ({ element }) => {
 
 
 function CrawledCardSection({ obj }) {
-  console.log('크롤카드섹션 생성')
+
+
+  const onPriceSort = (element) =>{
+    //데이터 sort해서 그 값을 상태로 전달해주어야함.
+    const {coupang, naver, ssg} = element;
+    console.log(element);
+    naver.map((item) => {
+      if (item.price.includes("원")){
+        item.price = parseInt(item.price.slice(0, item.price.indexOf("원")).split(',').join(''));
+        console.log(item.price);
+      }
+    })
+    let sorted = naver.sort((a, b) => a.price - b.price);
+    console.log(sorted);
+    const crawlData = [coupang, naver, ssg];
+    console.log(crawlData);
+  }
   return (
     <CrawledCardSectionWrapper id="crawl-card-wrapper">
       {obj[Object.keys(obj)]?.map((element, idx) => (
@@ -124,6 +140,7 @@ function CrawledCardSection({ obj }) {
           key={element.title}
           unmountOnExit={true}
         >
+          <button onClick={()=>onPriceSort(element)}>가격순 정렬</button>
           <SsgCard element={element} />
           <CoupangCard element={element} />
           <NaverCard element={element} />

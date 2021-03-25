@@ -30,8 +30,14 @@ const getProductData = async (page, productAmountPerPage) => {
         `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div:nth-child(2) strong`,
         (element) => {
           return element.innerText.includes("최저")
-            ? element.innerText.slice(2, element.innerText.indexOf("원") + 1)
-            : element.innerText || "";
+            ? element.innerText
+                .slice(2, element.innerText.indexOf("원"))
+                .split(",")
+                .join("")
+            : element.innerText
+                .slice(0, element.innerText.indexOf("원"))
+                .split(",")
+                .join("") || "가격정보 링크에서 확인";
         }
       );
       productObj["link"] = await page.$eval(

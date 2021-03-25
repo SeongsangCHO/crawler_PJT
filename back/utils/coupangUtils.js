@@ -18,7 +18,7 @@ const getProductData = async (page, productAmountPerPage) => {
       productObj["price"] = await page.$eval(
         `#productList li:nth-child(${idx}) .price-value`,
         (element) => {
-          return element.textContent || "";
+          return element.textContent.split(",").join("") || "중고물품";
         }
       );
       productObj["link"] = await page.$eval(
