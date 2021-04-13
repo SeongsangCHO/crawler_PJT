@@ -11,6 +11,7 @@ const ProductCrawledSectionWrapper = styled.div`
 
 
 const ProductCrawledSection = ({obj}) => {
+
   const linkDataIsCalled = useSelector(
     (state) => state.linkDataApiCallReducer.isCalled
   );

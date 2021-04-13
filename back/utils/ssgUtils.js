@@ -1,6 +1,4 @@
 const getLastPageNumber = async (page, browser, productAmountPerPage) => {
-
-
   //마지막 페이지 번호를 구함
   let totalProduct = await page.$eval(
     `div#area_itemCount > .tx_ko`,
@@ -35,14 +33,14 @@ const getProductData = async (page, productAmountPerPage) => {
     );
     productObj[
       "imgsrc"
-    ] = await page.$eval(`#idProductImg li:nth-child(${idx}) img`,
-     (element) => element.getAttribute('src')
+    ] = await page.$eval(`#idProductImg li:nth-child(${idx}) img`, (element) =>
+      element.getAttribute("src")
     );
-    
+
     productData.push(productObj);
   }
   return productData;
-}
+};
 
-  exports.getProductData = getProductData;
-  exports.getLastPageNumber = getLastPageNumber;
+exports.getProductData = getProductData;
+exports.getLastPageNumber = getLastPageNumber;

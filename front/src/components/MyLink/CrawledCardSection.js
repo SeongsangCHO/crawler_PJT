@@ -2,6 +2,21 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Tab from "react-bootstrap/Tab";
 import Badge from "react-bootstrap/Badge";
+import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
+
+const SortButton = styled.button`
+  width: 100%;
+  background-color: #feeeea;
+  border-radius: 5px;
+  color: #df7861;
+  border: none;
+  margin-right: 5px;
+  .active {
+    background-color: black;
+  }
+`;
 
 const SsgBadge = styled.span`
   display: inline;
@@ -39,23 +54,43 @@ const ProductImage = styled.img`
   width: 100%;
   height: auto;
 `;
-
 const priceComma = (price) => {
   if (price === "") {
     return "-";
   }
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
 };
+
+const getBadgeStyle = (source) => {
+  let badgeStyle = "";
+  if (source === "naver") {
+    badgeStyle = "success";
+  } else if (source === "coupang") {
+    badgeStyle = "primary";
+  } else {
+    badgeStyle = "warning";
+  }
+  return badgeStyle;
+};
+
+const parsePrice = (item) => {
+  if (typeof item.price === "string" && item.price.includes("원")) {
+    item.price = parseInt(
+      item.price.slice(0, item.price.indexOf("원")).split(",").join("")
+    );
+  }
+};
+
 const CrawledCard = ({ crawledData }) => {
   let { link, imgsrc, title, price } = crawledData;
   if (title.length > 15) {
     title = title.slice(0, 15) + "...";
   }
+
   return (
     <div>
       <TitleLink target="_blank" href={link}>
         <ProductImage src={imgsrc} />
-
         {title}
       </TitleLink>
       <PriceSpan>{priceComma(price)}</PriceSpan>
@@ -63,69 +98,92 @@ const CrawledCard = ({ crawledData }) => {
   );
 };
 
-const CoupangCard = ({ element }) => {
+const CrawlCardList = ({ item }) => {
   return (
-    <>
-      {element.coupang.map((coupangElement) => (
-        <CrawledCardBox key={coupangElement.title}>
-          <BadgeDiv>
-            <Badge pill variant="primary">
-              COUPANG
-            </Badge>
-          </BadgeDiv>
-          <CrawledCard crawledData={coupangElement}></CrawledCard>
-        </CrawledCardBox>
-      ))}
-    </>
-  );
-};
-const SsgCard = ({ element }) => {
-  return (
-    <>
-      {element.ssg.map((ssgElement, idx) => (
-        <CrawledCardBox key={ssgElement.title}>
-          <BadgeDiv>
-            <SsgBadge pill variant="warning">
-              SSG
-            </SsgBadge>
-          </BadgeDiv>
-          <CrawledCard crawledData={ssgElement}></CrawledCard>
-        </CrawledCardBox>
-      ))}
-    </>
-  );
-};
-const NaverCard = ({ element }) => {
-  return (
-    <>
-      {element.naver.map((naverElement) => (
-        <CrawledCardBox key={naverElement.title}>
-          <BadgeDiv>
-            <Badge pill variant="success">
-              NAVER
-            </Badge>
-            <CrawledCard crawledData={naverElement}></CrawledCard>
-          </BadgeDiv>
-        </CrawledCardBox>
-      ))}
-    </>
+    <CrawledCardBox key={item.title}>
+      <BadgeDiv>
+        <Badge pill variant={() => getBadgeStyle(item.source)}>
+          {item.source.toUpperCase()}
+        </Badge>
+      </BadgeDiv>
+      <CrawledCard crawledData={item}></CrawledCard>
+    </CrawledCardBox>
   );
 };
 
 function CrawledCardSection({ obj }) {
-  console.log("크롤카드섹션 생성");
+  const { isReloaded, linkTitle } = useSelector((state) => state.reloadReducer);
+  console.log("rerender");
+  const [reloadTitle, setReloadTitle] = useState("");
+  const [sortToggle, setSortToggle] = useState("");
+  useEffect(() => {
+    if (isReloaded) {
+      setReloadTitle(linkTitle);
+    }
+  }, [isReloaded]);
+
+  const onPriceSortAsc = (element) => {
+    const { crawl } = element;
+    setSortToggle("desc");
+    //데이터 sort해서 그 값을 상태로 전달해주어야함.
+    crawl.map((item) => {
+      parsePrice(item);
+    });
+    crawl.sort((a, b) => a.price - b.price);
+  };
+
+  const onPriceSort = (element) => {
+    const { crawl } = element;
+    crawl.map((item) => {
+      parsePrice(item);
+    });
+    if (sortToggle === "desc") {
+      crawl.sort((a, b) => a.price - b.price);
+      setSortToggle("asc");
+    } else {
+      crawl.sort((a, b) => b.price - a.price);
+      setSortToggle("desc");
+    }
+    //데이터 sort해서 그 값을 상태로 전달해주어야함.
+    crawl.map((item) => {
+      parsePrice(item);
+    });
+  };
+
+  const onPriceSortDesc = (element) => {
+    const { crawl } = element;
+    setSortToggle("asc");
+    crawl.map((item) => {
+      parsePrice(item);
+    });
+    crawl.sort((a, b) => b.price - a.price);
+  };
   return (
     <>
       {obj[Object.keys(obj)]?.map((element, idx) => (
-        <CardWrapper
-          eventKey={element.title}
-          key={element.title}
-          unmountOnExit={true}
-        >
-          <SsgCard element={element} />
-          <CoupangCard element={element} />
-          <NaverCard element={element} />
-        </CardWrapper>
+        <>
+          <CardWrapper
+            eventKey={element.title}
+            key={element.title}
+            unmountOnExit={true}
+          >
+            <div>
+              <SortButton onClick={() => onPriceSort(element)}>
+                {sortToggle === "desc" ? (
+                  <FontAwesomeIcon icon={faAngleDown} />
+                ) : (
+                  <FontAwesomeIcon icon={faAngleUp} />
+                )}
+                <span style={{ marginLeft: "5px" }}>정렬</span>
+              </SortButton>
+            </div>
+            <div></div>
+            <div></div>
+            {element.crawl.map((item, idx) => (
+              <CrawlCardList id={idx} item={item} />
+            ))}
+          </CardWrapper>
+        </>
       ))}
     </>
   );

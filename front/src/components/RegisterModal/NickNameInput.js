@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -14,26 +14,30 @@ const InputTitle = styled.span`
 const NickNameInput = () => {
   const dispatch = useDispatch();
   const isDouble = useSelector((state) => state.doubleCheckReducer.isDouble);
-  const [nickNameVaild, setNickNameVaild] = useState(false);
   const [nickName, setNickName] = useState("");
   const [isValid, setIsValid] = useState(false);
   const checkSpc = /[~!@#$%^&*()_+|<>?:{}]/;
   const checkKor = /[ㄱ-ㅎ|ㅏ-ㅣ]/;
+  useEffect(() => {
+    if (nickName === "") {
+      console.log("nameInput");
+    }
+  });
+  const nickNameAction = (nickName) => ({
+    type: "NICK_DOUBLE_CHECK_REQUEST",
+    data: {
+      user_nickname: nickName,
+    },
+    isDouble: isDouble,
+  });
   const onNickNameDoubleCheck = (e) => {
     if (checkKor.test(e.target.value) || checkSpc.test(e.target.value)) {
-      console.log("한글임, 인클루드해야겠네");
       setIsValid(false);
-    } else{
+    } else {
       setIsValid(true);
     }
     setNickName(e.target.value);
-    dispatch({
-      type: "NICK_DOUBLE_CHECK_REQUEST",
-      data: {
-        user_nickname: e.target.value,
-      },
-      isDouble: isDouble,
-    });
+    dispatch(nickNameAction(e.target.value));
   };
   return (
     <>
@@ -41,7 +45,11 @@ const NickNameInput = () => {
       {isDouble ? (
         <span>닉네임 중복입니다</span>
       ) : nickName.length > 0 ? (
-        isValid ? <span>사용가능한 닉네임입니다.</span> : <span>영문 소문자, 한글만 사용할 수 있습니다.</span>
+        isValid ? (
+          <span>사용가능한 닉네임입니다.</span>
+        ) : (
+          <span>영문 소문자, 한글만 사용할 수 있습니다.</span>
+        )
       ) : (
         <span>사용하실 닉네입을 입력해주세요</span>
       )}
