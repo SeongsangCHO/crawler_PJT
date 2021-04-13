@@ -27,7 +27,7 @@ const getProductData = async (page, productAmountPerPage) => {
 
     productObj["price"] = await page.$eval(
       `#idProductImg li:nth-child(${idx}) em.ssg_price`,
-      (element) => element.textContent + "원"
+      (element) => element.textContent.split(",").join("")
     );
     productObj["link"] = await page.$eval(
       `#idProductImg li:nth-child(${idx}) div.title a`,

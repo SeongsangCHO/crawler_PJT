@@ -13,7 +13,7 @@ const LIST_SIZE = 72;
 const coupangCrawler = async (searchText, linkId) => {
   let start = await new Date().getTime();
 
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );

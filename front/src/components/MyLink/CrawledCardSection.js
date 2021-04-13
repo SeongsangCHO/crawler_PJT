@@ -47,6 +47,13 @@ const ProductImage = styled.img`
 const CrawledCardWrapper = styled.div`
   padding: 5px;
 `;
+
+const priceComma = (price) =>{
+  if(price === ""){
+    return "-";
+  }
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"원";
+}
 const CrawledCard = ({ crawledData }) => {
   let { link, imgsrc, title, price } = crawledData;
   if (title.length > 15){
@@ -59,7 +66,7 @@ const CrawledCard = ({ crawledData }) => {
 
         {title}
       </TitleLink>
-      <PriceSpan>{price}</PriceSpan>
+      <PriceSpan>{priceComma(price)}</PriceSpan>
     </CrawledCardWrapper>
   );
 };

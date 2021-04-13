@@ -50,7 +50,6 @@ const CardLink = styled.a`
   background-color: #ffeeea;
   color: #df7861;
   text-align: center;
-  font-size: 14px;
   width: 100%;
   :link {
     background-color: #ffeeea;
@@ -79,7 +78,7 @@ const Button = styled.button`
   color: #df7861;
   border: none;
   outline: 0;
-  font-size: 14px;
+  /* font-size: 14px; */
   width: 100%;
 
   :hover {

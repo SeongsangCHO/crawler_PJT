@@ -58,10 +58,9 @@ const ProductStoreSection = ({ categoryItems }) => {
           구매 상품 추가
           {/* <AddLinkImage id="AddLinkImage" /> */}
         </AddProductButton>
-        <AddLinkButton onClick={() => setLinkModalShow(true)}>
+        {/* <AddLinkButton onClick={() => setLinkModalShow(true)}>
           링크 추가
-          {/* <AddLinkImage id="AddLinkImage" /> */}
-        </AddLinkButton>
+        </AddLinkButton> */}
       </AddButtonWrapper>
       <hr />
       <ProductStoredList>

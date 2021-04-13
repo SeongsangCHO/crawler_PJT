@@ -1,8 +1,8 @@
 const removeAd = async (page, LIST_SIZE) => {
   for (let idx = 0; idx < LIST_SIZE; idx++) {
-    await page.waitForSelector(
-      `.list_basis > div > div:nth-child(${idx + 1}) img`
-    );
+    // await page.waitForSelector(
+    //   `.list_basis > div > div:nth-child(${idx + 1}) img`
+    // );
     await page.evaluate(() => {
       let adCard = document.querySelector("li.ad");
       if (adCard) {
@@ -30,8 +30,8 @@ const getProductData = async (page, productAmountPerPage) => {
         `.list_basis > div > div:nth-child(${idx}) > li > div > div:nth-child(2) div:nth-child(2) strong`,
         (element) => {
           return element.innerText.includes("최저")
-            ? element.innerText.slice(2, element.innerText.indexOf("원") + 1)
-            : element.innerText || "";
+            ? element.innerText.slice(2, element.innerText.indexOf("원")).split(",").join("")
+            : element.innerText.slice(0, element.innerText.indexOf("원")).split(",").join("") || "";
         }
       );
       productObj["link"] = await page.$eval(
