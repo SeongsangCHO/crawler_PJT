@@ -4,8 +4,8 @@ import Tab from "react-bootstrap/Tab";
 import CategoryTab from "../components/MyLink/CategoryTab";
 import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
-import Accordion from 'react-bootstrap/Accordion'
-import Card from 'react-bootstrap/Card'
+import Accordion from "react-bootstrap/Accordion";
+import Card from "react-bootstrap/Card";
 const ContentWrapper = styled.div`
   margin-top: 10px;
   display: flex;
@@ -73,6 +73,7 @@ const MyLink = () => {
   //크롤링수행
   //상품카드 추가
   //카테고리 추가
+  const sectionRef = useRef(null);
   const linkApiResult = useSelector(
     (state) => state.linkDataApiCallReducer.message
   );
@@ -82,8 +83,10 @@ const MyLink = () => {
   ); // 카테고리를 추가했을 때
   const linkCardData = useSelector((state) => state.addLinkReducer.data); // 상품카드를 저장했을 때
   const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled); // 크롤링을 수행했을 때
-
-  
+  const scrollToTop = () =>{
+    console.log('click');
+    sectionRef.current.scrollIntoView();
+  }
   useEffect(() => {
     dispatch({
       type: "LINK_DATA_REQUEST",
@@ -92,7 +95,7 @@ const MyLink = () => {
     });
   }, [isLogined, linkCardData, isAddCategory, isCrawled]);
   return (
-    <MyLinkSection id="MyLinkSection">
+    <MyLinkSection id="MyLinkSection" ref={sectionRef}>
       {/* <Search /> */}
       <Tab.Container id="left-tabs" defaultactiveKey="All">
         <ContentWrapper id="ContentWrapper">
@@ -100,8 +103,27 @@ const MyLink = () => {
           <ProductTab />
         </ContentWrapper>
       </Tab.Container>
+      <div style={{ position: "relative" }}>
+        <ScrollTopButton onClick={scrollToTop}>맨 위로</ScrollTopButton>
+      </div>
     </MyLinkSection>
   );
 };
 
 export default MyLink;
+
+const ScrollTopButton = styled.a`
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  background-color: tomato;
+  color: white;
+  height: 30px;
+  border-radius: 5px;
+  line-height: 30px;
+  cursor: pointer;
+  :hover {
+    color: blue;
+    text-decoration: none;
+  }
+`;

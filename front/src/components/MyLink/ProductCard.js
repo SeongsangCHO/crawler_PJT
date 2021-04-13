@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Nav from "react-bootstrap/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon as DropDownButton } from "@fortawesome/react-fontawesome";
 import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 const ProductCardWrapper = styled.div`
@@ -88,13 +88,18 @@ const Button = styled.button`
     color: white;
   }
 `;
-const DropDownWrapper = styled.div``;
+const DropDownWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  top: 6px;
+  height: 0px;
+`;
 const DropDownMenu = styled.div`
   position: absolute;
   left: 0;
   width: 100%;
   opacity: 0;
-  transition:.4s;
+  transition: 0.4s;
   z-index: 1;
   visibility: hidden;
   ${({ active }) =>
@@ -151,7 +156,7 @@ const convertDay = (date) => {
   return daysDiff == 0 ? "오늘 작성" : daysDiff + "일전에 작성";
 };
 
-function ProductCard({bottomScrollRef, categoryItem }) {
+function ProductCard({ bottomScrollRef, categoryItem }) {
   const dispatch = useDispatch();
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
@@ -170,94 +175,97 @@ function ProductCard({bottomScrollRef, categoryItem }) {
     //   type: "RUN_CRAWLER_REQUEST",
     //   currentLinkTitle : e.currentTarget.innerHTML,
     // });
-
     bottomScrollRef.current.scrollIntoView();
-
   };
 
   const handleReload = (title) => {
-
     dispatch({
       type: "RELOAD_REQUEST",
       isReloaded: false,
       linkTitle: title,
     });
   };
-  const priceComma = (price) =>{
-    if(price === ""){
+  const priceComma = (price) => {
+    if (price === "") {
       return "-";
     }
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"원";
-  }
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
+  };
   // let KST = timeSource.toLocaleString("ko-KR", {
   //   timeZone: "Asia/Seoul",
   // });
-  const getDays = (year,month,day) => {
-    for(let i = 1; i < month; i++){
-      day += new Date(year, i,0).getDate();
+  const getDays = (year, month, day) => {
+    for (let i = 1; i < month; i++) {
+      day += new Date(year, i, 0).getDate();
     }
     return day;
-  }
+  };
   const convertDay = (date) => {
     const current = new Date();
     //현재시간
     const currentDate = {
-      year : current.getFullYear(),
+      year: current.getFullYear(),
       month: current.getMonth() + 1,
-      day : current.getDate(),
+      day: current.getDate(),
       hour: current.getHours(),
       min: current.getMinutes(),
       second: current.getSeconds(),
-    }
+    };
     //글 작성시간
     let [year, month, day, hour, min, second] = moment(date)._a;
     month += 1;
-    let currentDays = getDays(currentDate.year, currentDate.month,currentDate.day);
-    let writtenDays = getDays(year,month,day);
-    let daysDiff = ((currentDate.year - year) * 365) + (currentDays - writtenDays);
+    let currentDays = getDays(
+      currentDate.year,
+      currentDate.month,
+      currentDate.day
+    );
+    let writtenDays = getDays(year, month, day);
+    let daysDiff =
+      (currentDate.year - year) * 365 + (currentDays - writtenDays);
     //1.1부터 현재일까지 몇일인지 일수 계산
     //(현재년도 - 작성년도) * 365 + (햔재월 일까지의 days)
-    return daysDiff == 0 ? "오늘 작성" : daysDiff+"일전에 작성";
-  }
-
+    return daysDiff == 0 ? "오늘 작성" : daysDiff + "일전에 작성";
+  };
 
   useEffect(() => {}, []);
   //새로운 카드가 등록되었을 때 리랜더링
   return (
     <ProductCardWrapper id="ProductCardWrapper">
       {categoryItem.title != null ? (
-        <Nav.Item id="nav-item">
-          <Nav.Link
-            id="nav-link"
-            onClick={handleCardClick}
-            justify="true"
-            eventKey={categoryItem.title}
-          >
-            {categoryItem.title}
-            <DropDownWrapper>
-              <FontAwesomeIcon onClick={onDropDownToggle} icon={faAngleDown} />
+        <>
+          <DropDownWrapper>
+            <DropDownButton onClick={onDropDownToggle} icon={faAngleDown} />
+            <DropDownMenu ref={dropdownRef} active={isActive}>
+              <Button>삭제</Button>
+              <Button>수정</Button>
+              <CardLink target="_blank" href={parseLink(categoryItem.link)}>
+                링크
+              </CardLink>
 
-              <DropDownMenu ref={dropdownRef} active={isActive}>
-                <Button>삭제</Button>
-                <Button>수정</Button>
-
-                <Button onClick={()=>handleReload(categoryItem.title)}>새로고침</Button>
-              </DropDownMenu>
-            </DropDownWrapper>
-          </Nav.Link>
-          <CardDetail>
-            <CardPrice>{priceComma(categoryItem.price)}</CardPrice>
-            <CardInfo>{categoryItem.info}</CardInfo>
-            <CardDate>{convertDay(categoryItem.date)}</CardDate>
-          </CardDetail>
-          <CardLink target="_blank" href={parseLink(categoryItem.link)}>
-            링크
-          </CardLink>
-        </Nav.Item>
+              <Button onClick={() => handleReload(categoryItem.title)}>
+                새로고침
+              </Button>
+            </DropDownMenu>
+          </DropDownWrapper>
+          <Nav.Item id="nav-item">
+            <Nav.Link
+              id="nav-link"
+              onClick={handleCardClick}
+              justify="true"
+              eventKey={categoryItem.title}
+            >
+              {categoryItem.title}
+            </Nav.Link>
+            <CardDetail>
+              <CardPrice>{priceComma(categoryItem.price)}</CardPrice>
+              <CardInfo>{categoryItem.info}</CardInfo>
+              <CardDate>{convertDay(categoryItem.date)}</CardDate>
+            </CardDetail>
+          </Nav.Item>
+        </>
       ) : (
         <div>자주사는 물품을 등록해주세요</div>
       )}
-
     </ProductCardWrapper>
   );
 }

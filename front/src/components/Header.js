@@ -127,7 +127,7 @@ function Header() {
   };
 
   return (
-    <HeaderWrapper>
+    <HeaderWrapper >
       {isRegisterModalOpen == true ? (
         <Modal modalId="Register" onToggleModal={onToggleRegisterModal}>
           <RegisterModalContent
