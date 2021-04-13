@@ -56,16 +56,12 @@ const ProductStoreSection = ({ categoryItems }) => {
       <AddButtonWrapper>
         <AddProductButton onClick={() => setProductModalShow(true)}>
           구매 상품 추가
-          {/* <AddLinkImage id="AddLinkImage" /> */}
         </AddProductButton>
-        {/* <AddLinkButton onClick={() => setLinkModalShow(true)}>
-          링크 추가
-        </AddLinkButton> */}
       </AddButtonWrapper>
       <hr />
       <ProductStoredList>
         {categoryItems[Object.keys(categoryItems)]?.map((categoryItem, idx) => (
-          <ProductCard key={"ProductCard-" + idx} categoryItem={categoryItem} />
+          <ProductCard key={idx} categoryItem={categoryItem} />
         ))}
       </ProductStoredList>
       <ProductAddingModal show={productModalShow} onHide={() => setProductModalShow(false)} />

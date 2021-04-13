@@ -9,7 +9,7 @@ function dataInsert(crawlerData, linkId) {
 
   crawlerData
     .filter((obj) => {
-      return obj.priority <= 3;
+      return obj.priority <= 10;
     })
     .forEach((filterd) => {
       db.query(

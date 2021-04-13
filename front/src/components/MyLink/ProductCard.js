@@ -163,6 +163,8 @@ function ProductCard({ categoryItem }) {
     //(현재년도 - 작성년도) * 365 + (햔재월 일까지의 days)
     return daysDiff == 0 ? "오늘 작성" : daysDiff+"일전에 작성";
   }
+
+
   useEffect(() => {}, []);
   //새로운 카드가 등록되었을 때 리랜더링
   return (

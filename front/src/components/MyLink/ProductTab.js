@@ -17,10 +17,9 @@ const CardTabWrapper = styled.div``;
 function CardTab({ categoryItems }) {
 
   return (
-    <CardTabWrapper>
       <Tab.Container>
         <Nav variant="pills" className="flex-column">
-          <Tab.Content style={{ display: "flex" }}>
+          <Tab.Content >
             <ProductStoreSection categoryItems={categoryItems}></ProductStoreSection>
             <ProductCrawledSection
               obj={categoryItems}
@@ -28,14 +27,13 @@ function CardTab({ categoryItems }) {
           </Tab.Content>
         </Nav>
       </Tab.Container>
-    </CardTabWrapper>
   );
 }
 
 const ProductTab = ({ obj }) => {
+  
   const dispatch = useDispatch();
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
-  console.log(linkData);
   useEffect(() => {
     console.log('**********Product Tab rendered ************');
   })

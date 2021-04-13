@@ -3,12 +3,6 @@ import styled from "styled-components";
 import Tab from "react-bootstrap/Tab";
 import Badge from "react-bootstrap/Badge";
 
-const CrawledCardSectionWrapper = styled.div`
-  border-radius: 5px;
-  padding: 5px;
-  height: 100%;
-`;
-
 const SsgBadge = styled.span`
   display: inline;
   padding: 0.25em 0.4em;
@@ -28,13 +22,14 @@ const SsgBadge = styled.span`
   border-radius: 10rem;
 `;
 const CrawledCardBox = styled.div`
-  border: 1px solid #000;
+  border: 1px solid gray;
+  border-radius: 5px;
 `;
 const BadgeDiv = styled.div``;
 const TitleLink = styled.a`
   display: block;
   font-size: 13px;
-  min-height:135px;
+  min-height: 135px;
 `;
 const PriceSpan = styled.span`
   font-size: 14px;
@@ -44,30 +39,27 @@ const ProductImage = styled.img`
   width: 100%;
   height: auto;
 `;
-const CrawledCardWrapper = styled.div`
-  padding: 5px;
-`;
 
-const priceComma = (price) =>{
-  if(price === ""){
+const priceComma = (price) => {
+  if (price === "") {
     return "-";
   }
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"원";
-}
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
+};
 const CrawledCard = ({ crawledData }) => {
   let { link, imgsrc, title, price } = crawledData;
-  if (title.length > 15){
+  if (title.length > 15) {
     title = title.slice(0, 15) + "...";
   }
   return (
-    <CrawledCardWrapper>
+    <div>
       <TitleLink target="_blank" href={link}>
         <ProductImage src={imgsrc} />
 
         {title}
       </TitleLink>
       <PriceSpan>{priceComma(price)}</PriceSpan>
-    </CrawledCardWrapper>
+    </div>
   );
 };
 
@@ -120,13 +112,12 @@ const NaverCard = ({ element }) => {
   );
 };
 
-
 function CrawledCardSection({ obj }) {
-  console.log('크롤카드섹션 생성')
+  console.log("크롤카드섹션 생성");
   return (
-    <CrawledCardSectionWrapper id="crawl-card-wrapper">
+    <>
       {obj[Object.keys(obj)]?.map((element, idx) => (
-        <Tab.Pane
+        <CardWrapper
           eventKey={element.title}
           key={element.title}
           unmountOnExit={true}
@@ -134,9 +125,18 @@ function CrawledCardSection({ obj }) {
           <SsgCard element={element} />
           <CoupangCard element={element} />
           <NaverCard element={element} />
-        </Tab.Pane>
+        </CardWrapper>
       ))}
-    </CrawledCardSectionWrapper>
+    </>
   );
 }
 export default CrawledCardSection;
+
+const CardWrapper = styled(Tab.Pane)`
+  display: grid;
+  padding: 5px;
+  grid-template-columns: repeat(3, 1fr);
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+`;

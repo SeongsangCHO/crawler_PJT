@@ -82,6 +82,8 @@ const MyLink = () => {
   ); // 카테고리를 추가했을 때
   const linkCardData = useSelector((state) => state.addLinkReducer.data); // 상품카드를 저장했을 때
   const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled); // 크롤링을 수행했을 때
+
+  
   useEffect(() => {
     dispatch({
       type: "LINK_DATA_REQUEST",

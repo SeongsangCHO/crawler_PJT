@@ -5,7 +5,7 @@ const FAILURE = 0;
 function dataInsert(productData, linkId) {
   productData
     .filter((obj) => {
-      return obj.priority <= 3;
+      return obj.priority <= 10;
     })
     .forEach((filterd) => {
       db.query(

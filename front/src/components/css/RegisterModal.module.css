@@ -4,5 +4,4 @@ form input[type=text]{
 
 form > span:nth-child(1){
   margin-bottom: 20px;
-  border-bottom: 1px solid;
 }
