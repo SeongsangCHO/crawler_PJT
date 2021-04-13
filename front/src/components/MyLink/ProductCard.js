@@ -151,12 +151,11 @@ const convertDay = (date) => {
   return daysDiff == 0 ? "오늘 작성" : daysDiff + "일전에 작성";
 };
 
-function ProductCard({ categoryItem }) {
+function ProductCard({bottomScrollRef, categoryItem }) {
   const dispatch = useDispatch();
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
   const onDropDownToggle = () => setIsActive(!isActive);
-
   const handleCardClick = (e) => {
     //여기서 innerHTML해서 제목데이터를 상태로 관리하고,
     // link card의 제목을 클릭할 때마다, 상태값으로 관리
@@ -171,6 +170,9 @@ function ProductCard({ categoryItem }) {
     //   type: "RUN_CRAWLER_REQUEST",
     //   currentLinkTitle : e.currentTarget.innerHTML,
     // });
+
+    bottomScrollRef.current.scrollIntoView();
+
   };
 
   const handleReload = (title) => {
@@ -251,19 +253,11 @@ function ProductCard({ categoryItem }) {
           <CardLink target="_blank" href={parseLink(categoryItem.link)}>
             링크
           </CardLink>
-          {/* <CardButtonWrapper>
-            <CardLink target="_blank" href={parseLink(categoryItem.link)}>
-              링크
-            </CardLink>
-            <Button>삭제</Button>
-            <Button onClick={handleReload}>
-              새로고침
-            </Button>
-          </CardButtonWrapper> */}
         </Nav.Item>
       ) : (
         <div>자주사는 물품을 등록해주세요</div>
       )}
+
     </ProductCardWrapper>
   );
 }

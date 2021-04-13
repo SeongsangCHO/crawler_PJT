@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import ProductAddingModal from "./ProductAddingModal";
@@ -8,14 +8,15 @@ import ProductCard from "./ProductCard";
 
 const ProductStoredList = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-column-gap:5px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-column-gap: 5px;
   grid-row-gap: 10px;
+  margin-bottom: 30px;
   @media (max-width: 768px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
   @media (max-width: 576px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
@@ -26,31 +27,24 @@ const StoreSectionWrapper = styled.div`
 
 const AddButtonWrapper = styled.div`
   display: flex;
-  padding:0 5px 0 5px;
+  padding: 0 5px 0 5px;
   box-sizing: border-box;
 `;
 
 const AddProductButton = styled.button`
-  background-color: #F55117;
+  background-color: #f55117;
   color: white;
   border-radius: 9px;
   flex: 1;
-  border:none;
-  margin-right:10px;
-`;
-
-const AddLinkButton = styled.button`
-  background-color: #F55117;
-  color: white;
-  border-radius: 9px;
-  flex: 1;
-  border:none;
+  border: none;
+  margin-right: 10px;
 `;
 
 const ProductStoreSection = ({ categoryItems }) => {
   const [productModalShow, setProductModalShow] = useState(false);
   const [linkModalShow, setLinkModalShow] = useState(false);
-
+  const bottomScrollRef = useRef(null);
+  
   return (
     <StoreSectionWrapper id="StoreSectionWrapper">
       <AddButtonWrapper>
@@ -61,13 +55,30 @@ const ProductStoreSection = ({ categoryItems }) => {
       <hr />
       <ProductStoredList>
         {categoryItems[Object.keys(categoryItems)]?.map((categoryItem, idx) => (
-          <ProductCard key={idx} categoryItem={categoryItem} />
+          <ProductCard
+            bottomScrollRef={bottomScrollRef}
+            key={idx}
+            categoryItem={categoryItem}
+          />
         ))}
       </ProductStoredList>
-      <ProductAddingModal show={productModalShow} onHide={() => setProductModalShow(false)} />
-      <LinkAddingModal show={linkModalShow} onHide={()=> setLinkModalShow(false)}/>
+      <ProductAddingModal
+        show={productModalShow}
+        onHide={() => setProductModalShow(false)}
+      />
+      <LinkAddingModal
+        show={linkModalShow}
+        onHide={() => setLinkModalShow(false)}
+      />
+
+  <ScrollBottom id="scroll-bottom" ref={bottomScrollRef}></ScrollBottom>
+
     </StoreSectionWrapper>
   );
 };
 
 export default ProductStoreSection;
+const ScrollBottom = styled.div`
+  visibility:hidden;
+`;
+

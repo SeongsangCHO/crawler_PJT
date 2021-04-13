@@ -8,14 +8,18 @@ import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 const SortButton = styled.button`
   width: 100%;
-  background-color: #feeeea;
-  border-radius: 5px;
-  color: #df7861;
+  background-color: #df7861;
+  color: white;
   border: none;
   margin-right: 5px;
   .active {
     background-color: black;
   }
+  position: absolute;
+    left: 100%;
+    border-radius: 5px;
+    width: 50px;
+    transform: translate(-55px, -30px);
 `;
 
 const SsgBadge = styled.span`
@@ -84,7 +88,7 @@ const parsePrice = (item) => {
 const CrawledCard = ({ crawledData }) => {
   let { link, imgsrc, title, price } = crawledData;
   if (title.length > 15) {
-    title = title.slice(0, 15) + "...";
+    title = title.slice(0, 18) + "...";
   }
 
   return (
@@ -102,7 +106,7 @@ const CrawlCardList = ({ item }) => {
   return (
     <CrawledCardBox key={item.title}>
       <BadgeDiv>
-        <Badge pill variant={() => getBadgeStyle(item.source)}>
+        <Badge pill variant={getBadgeStyle(item.source)}>
           {item.source.toUpperCase()}
         </Badge>
       </BadgeDiv>
@@ -113,7 +117,6 @@ const CrawlCardList = ({ item }) => {
 
 function CrawledCardSection({ obj }) {
   const { isReloaded, linkTitle } = useSelector((state) => state.reloadReducer);
-  console.log("rerender");
   const [reloadTitle, setReloadTitle] = useState("");
   const [sortToggle, setSortToggle] = useState("");
   useEffect(() => {
@@ -122,17 +125,8 @@ function CrawledCardSection({ obj }) {
     }
   }, [isReloaded]);
 
-  const onPriceSortAsc = (element) => {
-    const { crawl } = element;
-    setSortToggle("desc");
-    //데이터 sort해서 그 값을 상태로 전달해주어야함.
-    crawl.map((item) => {
-      parsePrice(item);
-    });
-    crawl.sort((a, b) => a.price - b.price);
-  };
-
   const onPriceSort = (element) => {
+    console.log(element);
     const { crawl } = element;
     crawl.map((item) => {
       parsePrice(item);
@@ -150,14 +144,6 @@ function CrawledCardSection({ obj }) {
     });
   };
 
-  const onPriceSortDesc = (element) => {
-    const { crawl } = element;
-    setSortToggle("asc");
-    crawl.map((item) => {
-      parsePrice(item);
-    });
-    crawl.sort((a, b) => b.price - a.price);
-  };
   return (
     <>
       {obj[Object.keys(obj)]?.map((element, idx) => (
@@ -167,18 +153,13 @@ function CrawledCardSection({ obj }) {
             key={element.title}
             unmountOnExit={true}
           >
-            <div>
-              <SortButton onClick={() => onPriceSort(element)}>
-                {sortToggle === "desc" ? (
-                  <FontAwesomeIcon icon={faAngleDown} />
-                ) : (
-                  <FontAwesomeIcon icon={faAngleUp} />
-                )}
-                <span style={{ marginLeft: "5px" }}>정렬</span>
-              </SortButton>
-            </div>
-            <div></div>
-            <div></div>
+            <SortButton onClick={() => onPriceSort(element)}>
+              {sortToggle === "desc" ? (
+                <FontAwesomeIcon icon={faAngleDown} />
+              ) : (
+                <FontAwesomeIcon icon={faAngleUp} />
+              )}
+            </SortButton>
             {element.crawl.map((item, idx) => (
               <CrawlCardList id={idx} item={item} />
             ))}
@@ -193,7 +174,7 @@ export default CrawledCardSection;
 const CardWrapper = styled(Tab.Pane)`
   display: grid;
   padding: 5px;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   @media (max-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
