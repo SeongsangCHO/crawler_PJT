@@ -160,9 +160,10 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
   };
   const makeLinkCard = (
     categoryMap,
-    { category, linkTitle, link, linkPrice, linkInfo, registerTime }
+    { linkId, category, linkTitle, link, linkPrice, linkInfo, registerTime }
   ) => {
     categoryMap.get(category).push({
+      id : linkId,
       title: linkTitle,
       link: link,
       price: linkPrice,

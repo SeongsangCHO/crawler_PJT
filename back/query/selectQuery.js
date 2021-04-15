@@ -30,7 +30,7 @@ const selectLinkCardIdQuery = (req, title) => {
 };
 
 const selectUserDataQuery = (req) => {
-  return `select  categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
+  return `select  links.id as linkId, categories.title as category, links.title as linkTitle , links.price as linkPrice, links.info as linkInfo,
   links.link as link,links.registerTime as registerTime,
   crawl.title as crawlTitle,
   crawl.price as crawlPrice,
