@@ -3,8 +3,6 @@ import styled from "styled-components";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 
-
-
 const CategoryWrapper = styled.div`
   padding: 5px;
   flex: 1;
@@ -13,22 +11,20 @@ const CategoryWrapper = styled.div`
   }
 `;
 
-
 const CategoryModal = (props) => {
-
   useEffect(() => {}, []);
   const [categoryData, setCategoryData] = useState("");
   const dispatch = useDispatch();
-  const handleSetCategory = e => {
+  const handleSetCategory = (e) => {
     setCategoryData(e.target.value);
   };
-  const handleAddCategory = e => {
+  const handleAddCategory = (e) => {
     //페이지리로딩 방지를 위해서 넣어주어야해.
     e.preventDefault();
     dispatch({
       type: "ADD_CATEGORY_REQUEST",
       category: categoryData,
-      isAddCategory: false
+      isAddCategory: false,
     });
     //[추측][비동기처리해서] 그냥 될떄도있고 안될때도있네 => submit로 페이지 리로딩이 되기때문.
     props.onHide();
@@ -49,7 +45,7 @@ const CategoryModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <div>
-          <form onSubmit={handleAddCategory}>
+          <ModalForm onSubmit={handleAddCategory}>
             <input
               onChange={handleSetCategory}
               autoFocus
@@ -58,11 +54,20 @@ const CategoryModal = (props) => {
               required
             ></input>
             <button type="submit">저장하기</button>
-          </form>
+          </ModalForm>
         </div>
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 export default CategoryModal;
+
+const ModalForm = styled.form`
+  width: 100%;
+  /* text-align: center; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;

@@ -16,7 +16,7 @@ import {
 	switch (action?.type) {
 	  case RELOAD_REQUEST: {
 		console.log("리로딩 REQUEST_리듀서");
-		return { ...state };
+		return { ...state , isReloaded:false,};
 	  }
 	  case RELOAD_SUCCESS: {
 		console.log("리로딩 SUCCESS_리듀서");

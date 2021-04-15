@@ -13,7 +13,7 @@ const RegisterForm = styled.form`
   flex-direction: column;
   padding: 15px;
   @media (max-width: 576px) {
-    padding: 5px;
+    padding: 15px;
   }
 `;
 

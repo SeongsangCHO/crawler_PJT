@@ -16,10 +16,10 @@ const SortButton = styled.button`
     background-color: black;
   }
   position: absolute;
-    left: 100%;
-    border-radius: 5px;
-    width: 50px;
-    transform: translate(-55px, -30px);
+  left: 100%;
+  border-radius: 5px;
+  width: 50px;
+  transform: translate(-55px, -30px);
 `;
 
 const SsgBadge = styled.span`
@@ -42,9 +42,13 @@ const SsgBadge = styled.span`
 `;
 const CrawledCardBox = styled.div`
   border: 1px solid gray;
+  padding: 10px;
+  text-align: center;
   border-radius: 5px;
 `;
-const BadgeDiv = styled.div``;
+const BadgeDiv = styled.div`
+  margin-bottom: 15px;
+`;
 const TitleLink = styled.a`
   display: block;
   font-size: 13px;
@@ -92,13 +96,17 @@ const CrawledCard = ({ crawledData }) => {
   }
 
   return (
-    <div>
-      <TitleLink target="_blank" href={link}>
-        <ProductImage src={imgsrc} />
-        {title}
-      </TitleLink>
+    <>
+      <div>
+        <TitleLink target="_blank" href={link}>
+          <ProductImage src={imgsrc} />
+          {title}
+        </TitleLink>
+      </div>
+      <div>
       <PriceSpan>{priceComma(price)}</PriceSpan>
-    </div>
+      </div>
+    </>
   );
 };
 
@@ -116,14 +124,16 @@ const CrawlCardList = ({ item }) => {
 };
 
 function CrawledCardSection({ obj }) {
+  const [sortToggle, setSortToggle] = useState("");
   const { isReloaded, linkTitle } = useSelector((state) => state.reloadReducer);
   const [reloadTitle, setReloadTitle] = useState("");
-  const [sortToggle, setSortToggle] = useState("");
   useEffect(() => {
     if (isReloaded) {
+      console.log('reload했음.');
+      
       setReloadTitle(linkTitle);
     }
-  }, [isReloaded]);
+  }, [isReloaded]); 
 
   const onPriceSort = (element) => {
     console.log(element);
@@ -147,24 +157,22 @@ function CrawledCardSection({ obj }) {
   return (
     <>
       {obj[Object.keys(obj)]?.map((element, idx) => (
-        <>
-          <CardWrapper
-            eventKey={element.title}
-            key={element.title}
-            unmountOnExit={true}
-          >
-            <SortButton onClick={() => onPriceSort(element)}>
-              {sortToggle === "desc" ? (
-                <FontAwesomeIcon icon={faAngleDown} />
-              ) : (
-                <FontAwesomeIcon icon={faAngleUp} />
-              )}
-            </SortButton>
-            {element.crawl.map((item, idx) => (
-              <CrawlCardList id={idx} item={item} />
-            ))}
-          </CardWrapper>
-        </>
+        <CardWrapper
+          eventKey={element.title}
+          key={element.title}
+          unmountOnExit={true}
+        >
+          <SortButton onClick={() => onPriceSort(element)}>
+            {sortToggle === "desc" ? (
+              <FontAwesomeIcon icon={faAngleDown} />
+            ) : (
+              <FontAwesomeIcon icon={faAngleUp} />
+            )}
+          </SortButton>
+          {element.crawl.map((item, idx) => (
+            <CrawlCardList key={idx} item={item} />
+          ))}
+        </CardWrapper>
       ))}
     </>
   );

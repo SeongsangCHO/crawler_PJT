@@ -27,7 +27,6 @@ const StoreSectionWrapper = styled.div`
 
 const AddButtonWrapper = styled.div`
   display: flex;
-  padding: 0 5px 0 5px;
   box-sizing: border-box;
 `;
 
@@ -37,7 +36,6 @@ const AddProductButton = styled.button`
   border-radius: 9px;
   flex: 1;
   border: none;
-  margin-right: 10px;
 `;
 
 const ProductStoreSection = ({ categoryItems }) => {

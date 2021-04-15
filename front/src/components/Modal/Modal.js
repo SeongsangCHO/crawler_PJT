@@ -26,7 +26,7 @@ const ModalContent = styled.div`
   border-radius: 5px;
 
   @media (max-width: 576px) {
-    min-height: 60vh;
+    min-height: 50vh;
   }
 `;
 

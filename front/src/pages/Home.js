@@ -8,7 +8,7 @@ function Home() {
     <div id="home-wrapper">
       <div id="jumbotron-section">
         <JumbotronImage id="jumbotron" />
-        <span id="jumbotron-sentence">Save link, Save time</span>
+        <span id="jumbotron-sentence">자주 사는 상품을 링크로 관리하세요</span>
       </div>
       {/* <MainContent/> */}
     </div>

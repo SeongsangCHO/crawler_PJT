@@ -40,8 +40,10 @@ const LoginButton = styled.button`
 const LogoutButton = styled.button`
   border: none;
   margin-left: 10px;
-  color: blue;
-  background-color: white;
+  min-width: 70px;
+  border-radius: 5px;
+  color: white;
+  background-color: coral;
   height: 50%;
   transition: 0.4s;
   :hover {
@@ -59,7 +61,7 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 10px;
 `;
 
 const TitleLink = styled.span`
@@ -93,7 +95,6 @@ function Header() {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const dispatch = useDispatch();
   useEffect(() => {
-
     if (isLogined === true) {
       CreateNotification("success")("로그인 성공");
       console.log(token);
@@ -111,12 +112,12 @@ function Header() {
   const onToggleLoginModal = () => {
     setIsLoginModalOpen((prev) => !prev);
   };
-  const doLogOut = () =>{
+  const doLogOut = () => {
     dispatch({
       type: "LOGOUT_REQUEST",
-      message: "LOGOUT REQUEST"
+      message: "LOGOUT REQUEST",
     });
-  }
+  };
   const onLogout = () => {
     doLogOut();
     // removeCookie("user");
@@ -127,7 +128,7 @@ function Header() {
   };
 
   return (
-    <HeaderWrapper >
+    <HeaderWrapper>
       {isRegisterModalOpen == true ? (
         <Modal modalId="Register" onToggleModal={onToggleRegisterModal}>
           <RegisterModalContent
