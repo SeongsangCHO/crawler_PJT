@@ -20,6 +20,9 @@ const {
   insertCategoryQuery,
   insertLinkCardQuery,
 } = require("./query/insertQuery");
+
+const { deleteProductCardQuery } = require("./query/deleteQuery");
+
 require("dotenv").config();
 const app = express();
 const moment = require("moment");
@@ -163,7 +166,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
     { linkId, category, linkTitle, link, linkPrice, linkInfo, registerTime }
   ) => {
     categoryMap.get(category).push({
-      id : linkId,
+      id: linkId,
       title: linkTitle,
       link: link,
       price: linkPrice,
@@ -298,6 +301,21 @@ app.get("/api/logout", verifyToken, (req, res) => {
   res.clearCookie("user");
   console.log(req.cookies);
   return res.status(200).json({ message: "logout SUCCESS" });
+});
+
+app.delete("/postdelete/:id", verifyToken, (req, res) => {
+  const deleteId = req.params.id;
+  console.log(deleteId);
+  
+  const sql = deleteProductCardQuery(deleteId);
+  try {
+    db.query(sql, (err, result) => {
+      if(err) throw err;
+    });
+  } catch (err) {
+    return res.status(404).json({ok : false});
+  }
+  return res.status(200).json({ok : true});
 });
 
 app.listen(port, () => {
