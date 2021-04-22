@@ -1,1 +1,0 @@
-data.category["양아치"] = spread.category["양아치"]
