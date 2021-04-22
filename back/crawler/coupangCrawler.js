@@ -27,9 +27,25 @@ const coupangCrawler = async (searchText, linkId) => {
   await page.goto(
     `https://www.coupang.com/np/search?q=${searchText}&channel=user&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=${LIST_SIZE}&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=1&rocketAll=false&searchIndexingToken=1=4&backgroundColor=`,
     //page로 넘기면 검색가능
-    { waitUntil: "networkidle2" }
+    { waitUntil: "networkidle0" }
   );
-
+  function delay(time) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, time);
+    });
+  }
+  async function infiniteScroll(page) {
+    let previousHeight = await page.evaluate(`document.body.scrollHeight`);
+    let currentScroll = 0;
+    while (currentScroll <= previousHeight) {
+      currentScroll += 50;
+      previousHeight = await page.evaluate(`document.body.scrollHeight`);
+      await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
+      delay(500);
+    }
+    return 1;
+  }
+  await infiniteScroll(page);
   // let lastPageNumber;
   const searchRange = await coupangUtils.getSearchRange(page);
   let totalProducts = searchRange.totalProducts;
@@ -42,12 +58,12 @@ const coupangCrawler = async (searchText, linkId) => {
 
   try {
     //특정 페이지 수 만큼 크롤링해오기 현재 : 1
-    for (let pageNumber = 1; pageNumber <= CRAWL_PAGES; pageNumber++) {
+    for (let pageNumber = 1; pageNumber <= 1; pageNumber++) {
       if (pageNumber != 1) {
         //CRAWL_PAGES만큼 페이지 이동
         await page.goto(
           `https://www.coupang.com/np/search?q=${searchText}&channel=user&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=72&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=${pageNumber}&rocketAll=false&searchIndexingToken=1=4&backgroundColor=`,
-          { waitUntil: "networkidle2" }
+          { waitUntil: "networkidle0" }
         );
       }
 

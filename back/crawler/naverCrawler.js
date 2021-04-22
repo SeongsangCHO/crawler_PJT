@@ -47,6 +47,7 @@ const naverCrawler = async (searchText, linkId) => {
     `,
     { waitUntil: "networkidle2" }
   );
+
   const scrollResult = await infiniteScroll(page);
 
   try {

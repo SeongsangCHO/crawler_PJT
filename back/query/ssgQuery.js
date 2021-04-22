@@ -3,13 +3,13 @@ const SUCCESS = 1;
 const FAILURE = 0;
 
 function dataInsert(crawlerData, linkId) {
-  //필터로 갯수 조절하면 될듯
+  //필터로 갯수 조절
   //성공하면 return되도록
   console.log("링크 아이디", linkId);
 
   crawlerData
     .filter((obj) => {
-      return obj.priority <= 10;
+      return obj.priority <= 8;
     })
     .forEach((filterd) => {
       db.query(

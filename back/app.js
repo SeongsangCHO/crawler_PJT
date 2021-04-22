@@ -38,12 +38,9 @@ const port = process.env.PORT || 8080;
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.get("/", (req, res) => {
-  res.send("hello World");
+  
 });
 
-app.get("/api", (req, res) => {
-  res.render("../views/index", { title: "api page" });
-});
 
 app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
@@ -145,7 +142,7 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
 });
 
 app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader("`Access-Control-Allow-Credentials", true);
 
   let sql = selectUserDataQuery(req);
@@ -237,7 +234,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
 });
 
 app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   let searchTitle = req.body.currentLinkTitle;
 
   //0 : 실패
@@ -250,14 +247,14 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   );
 
   let sql = selectCardCrawledDataQuery(searchTitle);
-  //데이터가 있다면 크롤러 수행하지 않고 그대로 저장
-  db.query(sql, (err, result) => {
-    if (result) {
-      console.log("*****************");
-      // console.log(result);
-      console.log("*****************");
-    }
-  });
+  //TODO : 데이터가 있다면 크롤러 수행하지 않고 그대로 저장
+  // db.query(sql, (err, result) => {
+  //   if (result) {
+  //     console.log("*****************");
+  //     // console.log(result);
+  //     console.log("*****************");
+  //   }
+  // });
   db.query(crawlTargetLinkCardId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
 

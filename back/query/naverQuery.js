@@ -5,7 +5,7 @@ const FAILURE = 0;
 function dataInsert(crawlerData, linkId) {
   crawlerData
     .filter(obj => {
-      return obj.priority <= 10;
+      return obj.priority <= 8;
     })
     .forEach(filtered => {
       db.query(
