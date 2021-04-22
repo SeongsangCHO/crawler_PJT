@@ -30,9 +30,12 @@ const getProductData = async (page, productAmountPerPage) => {
       productObj["imgsrc"] = await page.$eval(
         `#productList li:nth-child(${idx}) img`,
         (element) => {
+          if(element.getAttribute("src").slice(-3)==="gif")
+            return element.getAttribute("data-img-src");
           return element.getAttribute("src");
         }
       );
+      
     } catch (error) {
       console.error(error);
     }

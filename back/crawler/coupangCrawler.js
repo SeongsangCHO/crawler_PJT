@@ -13,7 +13,7 @@ const LIST_SIZE = 72;
 const coupangCrawler = async (searchText, linkId) => {
   let start = await new Date().getTime();
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   await browser.userAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
   );
@@ -27,7 +27,7 @@ const coupangCrawler = async (searchText, linkId) => {
   await page.goto(
     `https://www.coupang.com/np/search?q=${searchText}&channel=user&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=${LIST_SIZE}&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=1&rocketAll=false&searchIndexingToken=1=4&backgroundColor=`,
     //page로 넘기면 검색가능
-    { waitUntil: "networkidle0" }
+    { waitUntil: "networkidle2" }
   );
   function delay(time) {
     return new Promise(function (resolve) {
@@ -38,10 +38,9 @@ const coupangCrawler = async (searchText, linkId) => {
     let previousHeight = await page.evaluate(`document.body.scrollHeight`);
     let currentScroll = 0;
     while (currentScroll <= previousHeight) {
-      currentScroll += 50;
+      currentScroll += 150;
       previousHeight = await page.evaluate(`document.body.scrollHeight`);
       await page.evaluate(`window.scrollTo(0, ${currentScroll})`);
-      delay(500);
     }
     return 1;
   }
