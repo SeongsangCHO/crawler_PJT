@@ -51,7 +51,7 @@ const NickNameInput = () => {
           <span>영문 소문자, 한글만 사용할 수 있습니다.</span>
         )
       ) : (
-        <span>사용하실 닉네입을 입력해주세요</span>
+        <span>사용하실 닉네임을 입력해주세요</span>
       )}
       <Input
         name="nickname"

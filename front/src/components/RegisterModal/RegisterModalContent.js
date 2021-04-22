@@ -67,6 +67,7 @@ const RegisterModalContent = ({
       userNickName === undefined ||
       userNickName === "" ||
       password === "" ||
+      password.length < 8 ||
       isDoubleNickName ||
       !isMatchPassword
     ) {
@@ -84,6 +85,9 @@ const RegisterModalContent = ({
       }
       if (!isMatchPassword || userNickName === "" || password === "") {
         errorMsg = "닉네임 또는 비밀번호를 확인해주세요";
+      }
+      if (password.length < 8){
+        errorMsg = "비밀번호는 8글자 이상으로 입력해주세요.";
       }
       CreateNotification("error")(errorMsg);
       return;

@@ -8,7 +8,7 @@ const CreateNotification = (type) => {
         NotificationManager.info("Info message");
         break;
       case "success":
-        NotificationManager.success(msg,"",2000);
+        NotificationManager.success(msg, "", 2000);
         break;
       case "warning":
         NotificationManager.warning(

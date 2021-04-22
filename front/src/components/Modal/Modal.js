@@ -22,7 +22,7 @@ const ModalContent = styled.div`
   transform: translate(-50%, -50%);
   background-color: white;
   max-width: 50vw;
-  min-height: 455px;
+  min-height: 400px;
   border-radius: 5px;
 
   @media (max-width: 576px) {
