@@ -51,6 +51,10 @@ const LoginModalContent = ({ onToggleLoginModal, onToggleRegisterModal }) => {
   const onHandlePassword = (e) => {
     setPassword(e.target.value);
   };
+  const isLogined = useSelector((state) => state.loginReducer.isLogined);
+
+
+
   const onLogin = (e) => {
     e.preventDefault();
     if (nickName === "" || password === "") {
@@ -62,7 +66,7 @@ const LoginModalContent = ({ onToggleLoginModal, onToggleRegisterModal }) => {
         data: {
           user_nickname: nickName,
           user_password: password,
-          isLogined: "REQUEST",
+          isLogined: false,
         },
       });
     }

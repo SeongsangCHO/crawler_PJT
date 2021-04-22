@@ -11,6 +11,7 @@ const initialState = {
   data: null,
   message: "",
   isCalled:false,
+  isDeleted:false,
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
@@ -39,10 +40,18 @@ const linkDataApiCallReducer = (state = initialState, action) => {
     }
 
     case DELETE_CARD_REQUEST: {
-      return {...state};
+      return {...state, isDeleted:false, currentCategory:action.currentCategory};
     }
     case DELETE_CARD_SUCCESS: {
       
+      const currentCategory = state.currentCategory
+      let result = state.data.category.map((category) =>{
+        if(Object.keys(category)[0] === currentCategory){
+          return {[currentCategory]: category[currentCategory].filter((item) => item.id !== action.deletedId)}
+        }
+        return category;
+      })
+      return {...state, data:{category:result}, isDeleted:true}
     }
     case DELETE_CARD_FAILURE: {
     }

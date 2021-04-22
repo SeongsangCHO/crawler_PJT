@@ -41,16 +41,14 @@ const AddProductButton = styled.button`
 const ProductStoreSection = ({ categoryItems }) => {
   const [productModalShow, setProductModalShow] = useState(false);
   const [linkModalShow, setLinkModalShow] = useState(false);
+
   const bottomScrollRef = useRef(null);
   const isCalled = useSelector(
     (state) => state.linkDataApiCallReducer.isCalled
   );
+
   const isAddLink = useSelector((state) => state.addLinkReducer.isAddLink);
-  useEffect(() => {
-    if (isAddLink === true) {
-      CreateNotification("success")("카드 추가");
-    }
-  }, [isAddLink]);
+
   return (
     <StoreSectionWrapper id="StoreSectionWrapper">
       <AddButtonWrapper>
@@ -62,6 +60,7 @@ const ProductStoreSection = ({ categoryItems }) => {
       <ProductStoredList>
         {categoryItems[Object.keys(categoryItems)]?.map((categoryItem, idx) => (
           <ProductCard
+
             bottomScrollRef={bottomScrollRef}
             key={idx}
             categoryItem={categoryItem}

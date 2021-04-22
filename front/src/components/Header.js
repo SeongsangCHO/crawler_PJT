@@ -88,15 +88,18 @@ function NavBar() {
 }
 //새로고침해도 유저의 닉네임을 가져올 수 있도록 하기.
 function Header() {
-  const isLogined = useSelector((state) => state.loginReducer.isLogined);
   const token = useSelector((state) => state.loginReducer.token);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const dispatch = useDispatch();
+  const isLogined = useSelector((state) => state.loginReducer.isLogined);
   useEffect(() => {
     if (isLogined === true) {
       CreateNotification("success")("로그인 성공");
+    }
+    if (isLogined === false) {
+      CreateNotification("error")("로그인 실패");
     }
     //cookies는 객체니까 이전상태랑 레퍼런스가 달라지지 않는구나
   }, [isLogined, cookies]);

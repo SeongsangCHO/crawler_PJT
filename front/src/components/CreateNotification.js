@@ -5,7 +5,7 @@ const CreateNotification = (type) => {
   return (msg) => {
     switch (type) {
       case "info":
-        NotificationManager.info("Info message");
+        NotificationManager.info(msg, "", 3000);
         break;
       case "success":
         NotificationManager.success(msg, "", 2000);

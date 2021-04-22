@@ -14,12 +14,13 @@ import {
   RUN_CRAWLER_REQUEST,
   RELOAD_REQUEST,
   LOGOUT_REQUEST,
+  DELETE_CARD_REQUEST,
 } from "./actions/Action";
 import { logoutRequest } from "./Logout/saga";
 import { runCrawler } from "./RunCrawler/saga";
 import { addLink } from "./AddLink/saga";
 import { reloadCrawler } from "./ReloadCrawl/saga";
-import { getLinkData } from "./LinkData/saga";
+import { getLinkData, deleteCardRequest } from "./LinkData/saga";
 import { loginRequest } from "./Login/saga";
 import { signUp } from "./SignUp/saga";
 import { nickNameDoubleCheck } from "./DoubleCheck/saga";
@@ -93,6 +94,11 @@ function* watchReloading() {
   yield takeLatest(RELOAD_REQUEST, reloadCrawler);
 }
 
+function* watchDeleteCard() {
+  console.log("watch deleteCard");
+  yield takeLatest(DELETE_CARD_REQUEST, deleteCardRequest);
+}
+
 function* watchLogout() {
   console.log("watch reloading");
   yield takeLatest(LOGOUT_REQUEST, logoutRequest);
@@ -111,5 +117,6 @@ export default function* rootSaga() {
     fork(watchRunCrawler),
     fork(watchReloading),
     fork(watchLogout),
+    fork(watchDeleteCard),
   ]);
 }

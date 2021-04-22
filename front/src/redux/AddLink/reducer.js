@@ -24,7 +24,7 @@ const addLinkReducer = (state = initialState, action) => {
   switch (action?.type) {
     case ADD_LINK_REQUEST: {
       console.log("add 링크 REQUEST_리듀서");
-      return { ...state };
+      return { ...state, isAddLink: action.isAddLink};
     }
     case ADD_LINK_SUCCESS: {
       console.log("add 링크 SUCCESS_리듀서");

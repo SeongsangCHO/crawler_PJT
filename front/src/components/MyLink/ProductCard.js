@@ -111,13 +111,7 @@ const DropDownMenu = styled.div`
   `}
 `;
 
-const parseLink = (link) => {
-  if (~link.indexOf("https")) {
-    return link;
-  } else {
-    return "https://" + link;
-  }
-};
+
 
 function ProductCard({ bottomScrollRef, categoryItem }) {
   const [isDelete, setIsDelete] = useState(false);
@@ -128,12 +122,21 @@ function ProductCard({ bottomScrollRef, categoryItem }) {
   const handleCardClick = (e) => {
     bottomScrollRef.current.scrollIntoView();
   };
+  const parseLink = (link) => {
+    if (~link.indexOf("https")) {
+      return link;
+    } else {
+      return "https://" + link;
+    }
+    onDropDownToggle();
+  };
   const handleReload = (title) => {
     dispatch({
       type: "RELOAD_REQUEST",
       isReloaded: false,
       linkTitle: title,
     });
+    onDropDownToggle();
   };
   const priceComma = (price) => {
     if (price === "") {
@@ -141,9 +144,7 @@ function ProductCard({ bottomScrollRef, categoryItem }) {
     }
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
   };
-  // let KST = timeSource.toLocaleString("ko-KR", {
-  //   timeZone: "Asia/Seoul",
-  // });
+
   const getDays = (year, month, day) => {
     for (let i = 1; i < month; i++) {
       day += new Date(year, i, 0).getDate();
@@ -176,25 +177,17 @@ function ProductCard({ bottomScrollRef, categoryItem }) {
     //(현재년도 - 작성년도) * 365 + (햔재월 일까지의 days)
     return daysDiff == 0 ? "오늘 작성" : daysDiff + "일전에 작성";
   };
-
+  const currentCategory = useSelector(
+    (state) => state.currentCategoryReducer.currentCategory
+  );
   const onDeleteCard = async (id) => {
     console.log('onDeleteCard');
     dispatch({
       type:"DELETE_CARD_REQUEST",
-      deleteId : id
-    })
-    try {
-      const res = await axios.delete(`${END_POINT}/postdelete/${id}`, {
-        withCredentials: true,
-      });
-      if (!res.data.ok) {
-        throw new Error("delete Request Error");
-      } else {
-        setIsDelete((prev) => !prev);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+      deleteId : id,
+      currentCategory: currentCategory
+    });
+    onDropDownToggle();
   };
   useEffect(() => {}, []);
   //새로운 카드가 등록되었을 때 리랜더링
@@ -208,7 +201,7 @@ function ProductCard({ bottomScrollRef, categoryItem }) {
               <Button onClick={() => onDeleteCard(categoryItem.id)}>
                 삭제
               </Button>
-              <Button>수정</Button>
+              {/* <Button>수정</Button> */}
               <CardLink target="_blank" href={parseLink(categoryItem.link)}>
                 링크
               </CardLink>

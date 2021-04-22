@@ -78,7 +78,6 @@ const LoginButton = styled.button`
   margin-top: 5px;
 `;
 const Modal = ({ children, modalId, onToggleModal }) => {
-  console.log(children);
   //모달창의 X버튼 또는 밖 영역 클릭시 발생
   //onToggleModal은 boolean state로 부모에서 조건부랜더링 수행
 

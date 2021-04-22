@@ -111,6 +111,7 @@ const CrawledCard = ({ crawledData }) => {
 };
 
 const CrawlCardList = ({ item }) => {
+  
   return (
     <CrawledCardBox key={item.title}>
       <BadgeDiv>
@@ -129,7 +130,6 @@ function CrawledCardSection({ obj }) {
   const [reloadTitle, setReloadTitle] = useState("");
   useEffect(() => {
     if (isReloaded) {
-      console.log('reload했음.');
       
       setReloadTitle(linkTitle);
     }
@@ -153,7 +153,7 @@ function CrawledCardSection({ obj }) {
       parsePrice(item);
     });
   };
-
+  
   return (
     <>
       {obj[Object.keys(obj)]?.map((element, idx) => (

@@ -16,21 +16,23 @@ const ModalWrapper = styled.div`
 const ProductAddingModal = (props) => {
   // Custom hook으로 onChange하는 거 다 묶어야겠다.
   const dispatch = useDispatch();
-  const linkCardData = useSelector((state) => state.linkDataApiCallReducer.data.category);//array
+  const linkCardData = useSelector(
+    (state) => state.linkDataApiCallReducer.data.category
+  ); //array
   const checkIsCardTitle = (title) => {
-    for(let categories of linkCardData){
-      for(let item of categories[Object.keys(categories)]){
-        if(item.title === title){
+    for (let categories of linkCardData) {
+      for (let item of categories[Object.keys(categories)]) {
+        if (item.title === title) {
           return true;
         }
       }
     }
     return false;
-  }
+  };
   const currentCategory = useSelector(
     (state) => state.currentCategoryReducer.currentCategory
   );
-  const addLinkCard = ({title, price, link, info}) => {
+  const addLinkCard = ({ title, price, link, info }) => {
     dispatch({
       type: "ADD_LINK_REQUEST",
       data: {
@@ -42,14 +44,14 @@ const ProductAddingModal = (props) => {
         registerTime: moment()._d,
       },
     });
-  }
-  const doCrawl = (title) =>{
+  };
+  const doCrawl = (title) => {
     dispatch({
       type: "RUN_CRAWLER_REQUEST",
       currentLinkTitle: title,
       isCrawled: false,
     });
-  }
+  };
   const isVaildFormData = (data) => {
     //입력 form데이터 유효성체크 조건 추가필요.
     if (data.title.value === "") {
@@ -66,14 +68,14 @@ const ProductAddingModal = (props) => {
       addLinkCard(formData);
       doCrawl(formData.title.value);
       props.onHide();
+      CreateNotification("info")(`${formData.title.value}에 대한 검색을 시작합니다.`);
     } else {
-      if(isDouble){
+      if (isDouble) {
         CreateNotification("error")("상품명이 이미 카테고리에 있습니다.");
       }
-      if(!isVaild){
+      if (!isVaild) {
         CreateNotification("error")("입력을 확인해주세요.");
       }
-      
     }
     //여기서 dispatch 수행해서 post요청해야함
   };
