@@ -8,7 +8,7 @@ function Jumbotron() {
   return (
     <div id="jumbotron-section">
       <JumbotronImage />
-      <span>자주 사는 상품을 링크로 관리하세요</span>
+      <h3>자주 사는 상품을 링크로 관리하세요</h3>
     </div>
   );
 }

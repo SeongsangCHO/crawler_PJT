@@ -128,7 +128,6 @@ function ProductCard({ bottomScrollRef, categoryItem }) {
     } else {
       return "https://" + link;
     }
-    onDropDownToggle();
   };
   const handleReload = (title) => {
     dispatch({
