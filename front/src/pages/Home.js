@@ -1,7 +1,5 @@
 import React from "react";
 import { ReactComponent as JumbotronImage } from "assets/jumbotron.svg";
-import MainContent from '../components/MainContent';
-import Header from '../components/Header';
 
 function Home() {
   return (

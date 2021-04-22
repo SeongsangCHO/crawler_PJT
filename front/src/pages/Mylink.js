@@ -4,8 +4,7 @@ import Tab from "react-bootstrap/Tab";
 import CategoryTab from "../components/MyLink/CategoryTab";
 import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
-import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
+
 const ContentWrapper = styled.div`
   margin-top: 10px;
   display: flex;
@@ -22,41 +21,41 @@ const SearchSectionWrapper = styled.div`
     display: none;
   }
 `;
-const Search = () => {
-  //제일 마지막에 구매한 순서대로 캐러셀 표현.
-  //필요한 데이터 전체 카테고리
-  const data = useSelector(
-    (state) => state.linkDataApiCallReducer.data.category
-  );
-  console.log(data); // 카테고리를 추가했을 때
-  return (
-    <SearchSectionWrapper>
-      <Accordion defaultActiveKey="0">
-        <Card>
-          <Card.Header>
-            <Accordion.Toggle as="button" variant="link" eventKey="0">
-              Click me!
-            </Accordion.Toggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey="0">
-            <Card.Body>Hello! I'm the body</Card.Body>
-          </Accordion.Collapse>
-        </Card>
-        <Card>
-          <Card.Header>
-            <Accordion.Toggle as="button" variant="link" eventKey="1">
-              Click me!
-            </Accordion.Toggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey="1">
-            <Card.Body>Hello! I'm another body</Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      </Accordion>
-      <div>나만의 링크를 저장하세요</div>
-    </SearchSectionWrapper>
-  );
-};
+// const Search = () => {
+//   //제일 마지막에 구매한 순서대로 캐러셀 표현.
+//   //필요한 데이터 전체 카테고리
+//   const data = useSelector(
+//     (state) => state.linkDataApiCallReducer.data.category
+//   );
+//   console.log(data); // 카테고리를 추가했을 때
+//   return (
+//     <SearchSectionWrapper>
+//       <Accordion defaultActiveKey="0">
+//         <Card>
+//           <Card.Header>
+//             <Accordion.Toggle as="button" variant="link" eventKey="0">
+//               Click me!
+//             </Accordion.Toggle>
+//           </Card.Header>
+//           <Accordion.Collapse eventKey="0">
+//             <Card.Body>Hello! I'm the body</Card.Body>
+//           </Accordion.Collapse>
+//         </Card>
+//         <Card>
+//           <Card.Header>
+//             <Accordion.Toggle as="button" variant="link" eventKey="1">
+//               Click me!
+//             </Accordion.Toggle>
+//           </Card.Header>
+//           <Accordion.Collapse eventKey="1">
+//             <Card.Body>Hello! I'm another body</Card.Body>
+//           </Accordion.Collapse>
+//         </Card>
+//       </Accordion>
+//       <div>나만의 링크를 저장하세요</div>
+//     </SearchSectionWrapper>
+//   );
+// };
 
 const MyLink = () => {
   const dispatch = useDispatch();

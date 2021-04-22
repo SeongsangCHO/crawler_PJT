@@ -18,7 +18,7 @@ import logoutReducer from './Logout/reducer';
 
 import rootSaga from "./saga";
 const initialState = {
-  data: {},
+  
 };
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();

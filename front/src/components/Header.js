@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, forwardRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { NavLink, Link, useHistory } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import "./css/Header.css";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
 import CreateNotification from "./CreateNotification";
@@ -10,7 +10,6 @@ import RegisterModalContent from "./RegisterModal/RegisterModalContent";
 import LoginModalContent from "./LoginModal/LoginModalContent";
 import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
-import { Redirect } from "react-router-dom";
 const NavBarWrapper = styled.div``;
 
 const SignUpButton = styled.button`
@@ -87,7 +86,7 @@ function NavBar() {
   );
 }
 //새로고침해도 유저의 닉네임을 가져올 수 있도록 하기.
-function Header() {
+const Header= forwardRef((props, ref) => {
   const token = useSelector((state) => state.loginReducer.token);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -176,6 +175,6 @@ function Header() {
       <NavBar />
     </HeaderWrapper>
   );
-}
+});
 
 export default React.memo(Header);
