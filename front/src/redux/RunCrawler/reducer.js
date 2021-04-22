@@ -23,7 +23,7 @@ const runCrawlerReducer = (state = initialState, action) => {
     }
     case RUN_CRAWLER_SUCCESS: {
       console.log("크롤러 SUCCESS_리듀서");
-      return { ...state,  currentLinkTitle: action.currentLinkTitle,isCrawled:true };
+      return { ...state,  currentLinkTitle: action.currentLinkTitle,isCrawled:action.isCrawled };
     }
     case RUN_CRAWLER_FAILURE: {
       console.log("크롤러 FAILURE_리듀서");

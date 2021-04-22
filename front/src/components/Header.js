@@ -97,10 +97,6 @@ function Header() {
   useEffect(() => {
     if (isLogined === true) {
       CreateNotification("success")("로그인 성공");
-      console.log(token);
-    }
-    if (isLogined === false) {
-      CreateNotification("error")("로그인 실패");
     }
     //cookies는 객체니까 이전상태랑 레퍼런스가 달라지지 않는구나
   }, [isLogined, cookies]);

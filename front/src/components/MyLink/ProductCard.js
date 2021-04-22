@@ -186,21 +186,15 @@ function ProductCard({ bottomScrollRef, categoryItem }) {
     try {
       const res = await axios.delete(`${END_POINT}/postdelete/${id}`, {
         withCredentials: true,
-        
       });
       if (!res.data.ok) {
         throw new Error("delete Request Error");
       } else {
-        console.log('setIsDelete');
-        
         setIsDelete((prev) => !prev);
       }
     } catch (err) {
       console.error(err);
-
-      
     }
-    console.log(id);
   };
   useEffect(() => {}, []);
   //새로운 카드가 등록되었을 때 리랜더링

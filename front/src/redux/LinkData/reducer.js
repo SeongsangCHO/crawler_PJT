@@ -8,22 +8,23 @@ import {
 } from "../actions/Action";
 
 const initialState = {
-  data: "",
+  data: null,
   message: "",
+  isCalled:false,
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
   switch (action?.type) {
     case LINK_DATA_REQUEST: {
       console.log("링크API REQUEST_리듀서");
-      return { ...state };
+      return { ...state,isCalled:action.isCalled };
     }
     case LINK_DATA_SUCCESS: {
       console.log("링크API SUCCESS_리듀서");
       return {
         ...state,
         data: { ...action.data },
-        isCalled: true,
+        isCalled: action.isCalled,
         message: "success",
       };
     }

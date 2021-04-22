@@ -11,17 +11,17 @@ const ProductCrawledSectionWrapper = styled.div`
 
 
 const ProductCrawledSection = ({obj}) => {
-
+console.log(obj);
   const linkDataIsCalled = useSelector(
     (state) => state.linkDataApiCallReducer.isCalled
   );
-
+  const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled);
   return (
     <ProductCrawledSectionWrapper id="card-tab-right-section">
-    {linkDataIsCalled == true ? (
+    {linkDataIsCalled ? (
       <CrawledCardSection obj={obj} />
     ) : (
-      <Spinner animation="border" variant="primary" />
+      <h5>검색결과를 받아오는 중 입니다..</h5>
     )}
     
   </ProductCrawledSectionWrapper>

@@ -74,30 +74,32 @@ const MyLink = () => {
   //상품카드 추가
   //카테고리 추가
   const sectionRef = useRef(null);
-  const linkApiResult = useSelector(
-    (state) => state.linkDataApiCallReducer.message
-  );
+  const cardData = useSelector((state) => state.addLinkReducer.data.title);
+  const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
   const isLogined = useSelector((state) => state.loginReducer.isLogined); //로그인이 되었을 때
   const isAddCategory = useSelector(
     (state) => state.addCategoryReducer.isAddCategory
   ); // 카테고리를 추가했을 때
-  const linkCardData = useSelector((state) => state.addLinkReducer.data); // 상품카드를 저장했을 때
+  const isReloaded = useSelector((state) => state.reloadReducer.isReloaded); // 상품카드를 저장했을 때
   const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled); // 크롤링을 수행했을 때
-  const scrollToTop = () =>{
-    console.log('click');
+  const scrollToTop = () => {
+    console.log("click");
     sectionRef.current.scrollIntoView();
-  }
+  };
   useEffect(() => {
-    dispatch({
-      type: "LINK_DATA_REQUEST",
-      data: {},
-      message: "request",
-    });
-  }, [isLogined, linkCardData, isAddCategory, isCrawled]);
+    if(linkData === null || isCrawled || isAddCategory || isReloaded)
+      dispatch({
+        type: "LINK_DATA_REQUEST",
+        data: {},
+        isCalled: false,
+        message: "request",
+      });
+  }, [isLogined, isAddCategory, isCrawled, isReloaded]);
+  
   return (
     <MyLinkSection id="MyLinkSection" ref={sectionRef}>
       {/* <Search /> */}
-      <Tab.Container id="left-tabs" defaultactiveKey="All">
+      <Tab.Container id="left-tabs" defaultActiveKey={cardData}>
         <ContentWrapper id="ContentWrapper">
           <CategoryTab />
           <ProductTab />

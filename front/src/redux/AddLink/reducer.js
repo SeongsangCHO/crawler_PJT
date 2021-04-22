@@ -7,13 +7,14 @@ import {
 
 const initialState = {
   data:{
-    title : '',
-    price : '',
-    link :  '',
-    info :  '',
+    title : null,
+    price : null,
+    link :  null,
+    info :  null,
     currentCategory: '',
     registerTime: '',
   },
+  isAddLink:false,
 };
 
 //상태가 변화할 때 수행되는 함수
@@ -27,7 +28,7 @@ const addLinkReducer = (state = initialState, action) => {
     }
     case ADD_LINK_SUCCESS: {
       console.log("add 링크 SUCCESS_리듀서");
-      return { ...state, data: action.data};
+      return { ...state, data: action.data, isAddLink:action.isAddLink};
     }
     case ADD_LINK_FAILURE: {
       console.log("add 링크 FAILURE_리듀서");

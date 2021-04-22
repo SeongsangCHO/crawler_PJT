@@ -17,7 +17,7 @@ function* addLink(action) {
     const result = yield call(addLinkAPI, action.data);
     if (result.status == 200) {
       console.log("addLink 성공");
-      yield put({ type: ADD_LINK_SUCCESS, data: action.data });
+      yield put({ type: ADD_LINK_SUCCESS, data: action.data,isAddLink:true });
     }
   } catch (error) {
     console.error(error);

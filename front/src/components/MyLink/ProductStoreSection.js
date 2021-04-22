@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import ProductAddingModal from "./ProductAddingModal";
 import LinkAddingModal from "./LinkAddingModal";
-import { ReactComponent as AddLinkImage } from "assets/addLink.svg";
 import ProductCard from "./ProductCard";
+import CreateNotification from "../CreateNotification";
 
 const ProductStoredList = styled.div`
   display: grid;
@@ -42,7 +42,15 @@ const ProductStoreSection = ({ categoryItems }) => {
   const [productModalShow, setProductModalShow] = useState(false);
   const [linkModalShow, setLinkModalShow] = useState(false);
   const bottomScrollRef = useRef(null);
-  
+  const isCalled = useSelector(
+    (state) => state.linkDataApiCallReducer.isCalled
+  );
+  const isAddLink = useSelector((state) => state.addLinkReducer.isAddLink);
+  useEffect(() => {
+    if (isAddLink === true) {
+      CreateNotification("success")("카드 추가");
+    }
+  }, [isAddLink]);
   return (
     <StoreSectionWrapper id="StoreSectionWrapper">
       <AddButtonWrapper>
@@ -68,15 +76,12 @@ const ProductStoreSection = ({ categoryItems }) => {
         show={linkModalShow}
         onHide={() => setLinkModalShow(false)}
       />
-
-  <ScrollBottom id="scroll-bottom" ref={bottomScrollRef}></ScrollBottom>
-
+      <ScrollBottom id="scroll-bottom" ref={bottomScrollRef}></ScrollBottom>
     </StoreSectionWrapper>
   );
 };
 
 export default ProductStoreSection;
 const ScrollBottom = styled.div`
-  visibility:hidden;
+  visibility: hidden;
 `;
-

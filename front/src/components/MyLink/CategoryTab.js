@@ -3,6 +3,7 @@ import styled from "styled-components";
 import CategoryModal from "./CategoryAddingModal";
 import Nav from "react-bootstrap/Nav";
 import "../css/Contentc.css";
+import CreateNotification from "../CreateNotification";
 import { useDispatch, useSelector } from "react-redux";
 
 const CategoryWrapper = styled.div`
@@ -17,8 +18,9 @@ const CategoryWrapper = styled.div`
 const CategoryTab = ({ obj }) => {
   const dispatch = useDispatch();
   const data = useSelector(
-    (state) => state.linkDataApiCallReducer.data.category
+    (state) => state.linkDataApiCallReducer.data?.category
   ); //이건 초기값만 불러옴.
+  const isAddCategory = useSelector((state) => state.addCategoryReducer.isAddCategory);
   const [modalShow, setModalShow] = useState(false);
   const handleCateClick = (e) => {
     //현재 클릭되었을 때 innerHTML로 값을 얻을 수 있음
@@ -29,7 +31,11 @@ const CategoryTab = ({ obj }) => {
       currentCategory: e.currentTarget.innerHTML,
     });
   };
-
+  useEffect(()=>{
+    if(isAddCategory === true){
+      CreateNotification("success")("카테고리 추가");
+    }
+  },[isAddCategory])
   return (
     <CategoryWrapper id="category-wrapper">
       <button className="add-button" onClick={() => setModalShow(true)}>

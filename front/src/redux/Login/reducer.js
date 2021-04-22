@@ -8,7 +8,7 @@ import {
 
 const initialState = {
   user_nickname: '',
-  isLogined: '',
+  isLogined: false,
   token:document.cookie.slice(document.cookie.indexOf('=')),
 };
 

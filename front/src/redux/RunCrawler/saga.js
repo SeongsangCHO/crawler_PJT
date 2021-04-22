@@ -28,6 +28,7 @@ function* runCrawler(action) {
       yield put({
         type: RUN_CRAWLER_SUCCESS,
         currentLinkTitle: action.currentLinkTitle,
+        isCrawled: true,
       });
     }
   } catch (error) {
