@@ -1,3 +1,5 @@
+- 
+
 # :shopping_cart: 다링
 
 
@@ -23,17 +25,58 @@
 
 
 
-### 업데이트 내역
+### Example
 
----
-
-
-
-### 정보
-
----
-
-이름 - 이메일 주소
+![demo](https://user-images.githubusercontent.com/55486644/115733118-8e858f80-a3c3-11eb-8f6e-cdb47f80c479.gif)
 
 
+- 약 1.5배속
+- 영상 속 크롤링 시간 : 총 6.532s
+  - naver : 4.741s
+  - coupang: 4.794s
+  - Sag: 6.532s
+
+
+
+### Sequence
+
+Register, Login
+
+![스크린샷 2021-04-22 오후 3 49 56](https://user-images.githubusercontent.com/55486644/115668775-79d4d780-a382-11eb-9ea3-b387554f5f9c.png)
+
+
+
+Insert data, doing crawler
+
+![스크린샷 2021-04-22 오후 3 50 15](https://user-images.githubusercontent.com/55486644/115668766-780b1400-a382-11eb-9412-f5174dd2d352.png)
+
+
+
+### Install
+
+
+
+```shell
+$ git clone https://github.com/SeongsangCHO/crawler_PJT.git
+//front server
+$ cd front
+$ npm i
+$ npm start
+//back server
+$ cd back
+$ npm i
+$ nodemon app.js
+```
+
+
+
+### 확인 사항
+
+- dotenv로 db config, secret key 환경변수 설정
+
+
+
+### 개발 일지
+
+https://www.notion.so/88a83386702a440d84b622d2bf9f6e20
 
