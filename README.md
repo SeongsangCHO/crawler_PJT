@@ -26,7 +26,8 @@
 
 ### Example
 
-![demo](https://user-images.githubusercontent.com/55486644/115733118-8e858f80-a3c3-11eb-8f6e-cdb47f80c479.gif)
+![Demo](https://user-images.githubusercontent.com/55486644/115817951-bc57ec00-a436-11eb-96a6-efad3bc1b718.gif)
+
 
 
 - 약 1.5배속
