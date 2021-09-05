@@ -38,42 +38,31 @@ const RegisterModalContent = ({
       nickName === "" ||
       password === "" ||
       password.length < 8 ||
-      // isDouble ||
+      isDouble ||
       !isMatchPassword
     ) {
       return true;
     }
     return false;
   };
+  const errorMsg = () => {
+    if (nickName === undefined) {
+      return "닉네임 중복";
+    }
+    if (!isMatchPassword || nickName === "" || password === "") {
+      return "닉네임 또는 비밀번호를 확인해주세요";
+    }
+    if (password.length < 8) {
+      return "비밀번호는 8글자 이상으로 입력해주세요.";
+    }
+  };
   const onSignUp = (e) => {
     e.preventDefault();
-    //예외 핸들링
     if (signUpVaildCheck()) {
-      let errorMsg;
-      if (nickName === undefined) {
-        console.log(nickName);
-
-        errorMsg = "닉네임 중복";
-      }
-      if (!isMatchPassword || nickName === "" || password === "") {
-        console.log(nickName, password);
-
-        errorMsg = "닉네임 또는 비밀번호를 확인해주세요";
-      }
-      if (password.length < 8) {
-        errorMsg = "비밀번호는 8글자 이상으로 입력해주세요.";
-      }
-      CreateNotification("error")(errorMsg);
+      CreateNotification("error")(errorMsg());
       return;
     } else {
       dispatch(requestSignUp({ nickName, password }));
-      // dispatch({
-      //   type: "SIGN_UP_REQUEST",
-      //   data: {
-      //     user_nickname: nickName,
-      //     user_password: password,
-      //   },
-      // });
       CreateNotification("success")("가입 성공");
       setIsSignUp(true);
     }
@@ -101,6 +90,7 @@ const RegisterModalContent = ({
 };
 
 export default React.memo(RegisterModalContent);
+
 const RegisterForm = styled.form`
   display: flex;
   flex-direction: column;

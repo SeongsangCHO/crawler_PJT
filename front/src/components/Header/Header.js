@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import CreateNotification from "../CreateNotification";
-import Modal from "../Modal/Modal";
+import FormModal from "components/Modal/FormModal";
 import RegisterModalContent from "components/Modal/RegisterModal/RegisterModalContent";
 import LoginModalContent from "components/Modal/LoginModal/LoginModalContent";
 import jwt_decode from "jwt-decode";
@@ -65,20 +65,20 @@ const Header = () => {
         )}
       </RightSideContainer>
       {isRegisterModalOpen && (
-        <Modal modalId="Register" onToggleModal={onToggleRegisterModal}>
+        <FormModal modalId="Register" onToggleModal={onToggleRegisterModal}>
           <RegisterModalContent
             onToggleRegisterModal={onToggleRegisterModal}
             onToggleLoginModal={onToggleLoginModal}
           />
-        </Modal>
+        </FormModal>
       )}
       {isLoginModalOpen && !isLogined && (
-        <Modal modalId="Login" onToggleModal={onToggleLoginModal}>
+        <FormModal modalId="Login" onToggleModal={onToggleLoginModal}>
           <LoginModalContent
             onToggleRegisterModal={onToggleRegisterModal}
             onToggleLoginModal={onToggleLoginModal}
           />
-        </Modal>
+        </FormModal>
       )}
     </HeaderWrapper>
   );

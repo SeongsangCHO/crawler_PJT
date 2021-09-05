@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import CategoryModal from "./CategoryAddingModal";
+import CategoryAddModal from "components/Modal/CategoryAddModal/CategoryAddModal";
 import Nav from "react-bootstrap/Nav";
-import "../../css/Contentc.css";
+// import "../../css/Contentc.css";
+import useModal from "hooks/useModal";
 import CreateNotification from "../../CreateNotification";
 import { useDispatch, useSelector } from "react-redux";
+import Button from "components/common/Button";
 
 const CategoryWrapper = styled.div`
   margin-left: 5px;
@@ -15,7 +17,9 @@ const CategoryWrapper = styled.div`
   }
 `;
 
-const CategoryTab = ({ obj }) => {
+const CategoryTab = () => {
+  const { modalOpen, modalClose, isOpen } = useModal();
+
   const dispatch = useDispatch();
   const data = useSelector(
     (state) => state.linkDataApiCallReducer.data?.category
@@ -37,9 +41,7 @@ const CategoryTab = ({ obj }) => {
   }, [isAddCategory]);
   return (
     <CategoryWrapper id="category-wrapper">
-      <button className="add-button" onClick={() => setModalShow(true)}>
-        카테고리 추가
-      </button>
+      <CategoryAddButton onClick={modalOpen}>카테고리 추가</CategoryAddButton>
       <hr />
       <Nav variant="pills" className="flex-sm-column nav-wrapper">
         {data?.map((cate, idx) => (
@@ -58,14 +60,18 @@ const CategoryTab = ({ obj }) => {
           </Nav.Item>
         ))}
       </Nav>
-      <CategoryModal show={modalShow} onHide={() => setModalShow(false)} />
+      {isOpen && (
+        <CategoryAddModal modalOpen={modalOpen} modalClose={modalClose} />
+      )}
     </CategoryWrapper>
   );
 };
 
 export default CategoryTab;
 
-
+const CategoryAddButton = styled(Button)`
+  margin-bottom: 5px;
+`;
 // #nav-item #nav-link{
 //   text-align: center;
 //   font-size: 14px;
@@ -74,7 +80,6 @@ export default CategoryTab;
 //   text-decoration: none;
 //   transition: .4s;
 // }
-
 
 // #nav-item a#nav-link:hover{
 //   background-color: #df7861;
@@ -87,7 +92,6 @@ export default CategoryTab;
 //   background-color: #df7861;
 //   color: #ffffff;
 // }
-
 
 // .title {
 //   font-size: 25px;
