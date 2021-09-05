@@ -9,25 +9,59 @@ import {
   GET_LINK_CARD_LIST_REQUEST,
   GET_LINK_CARD_LIST_SUCCESS,
   GET_LINK_CARD_LIST_FAILURE,
+  GET_PRODUCTS_LIST_REQUEST,
+  GET_PRODUCTS_LIST_SUCCESS,
+  GET_PRODUCTS_LIST_FAILURE,
+  GET_CARDS_FAILURE,
+  GET_CARDS_SUCCESS,
+  GET_CARDS_REQUEST,
 } from "../actions/ActionType";
 
 const initialState = {
-  data: [],
+  products: [],
   message: "",
   isCalled: false,
   isDeleted: false,
   status: "",
-  cardList: [],
+  cards: [],
+  selectedCardId: 0,
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
   switch (action?.type) {
+    case GET_CARDS_REQUEST: {
+      return { ...state, status: STATUS.request };
+    }
+    case GET_CARDS_SUCCESS: {
+      return {
+        ...state,
+        status: STATUS.success,
+        cards: [...action.cards],
+      };
+    }
+    case GET_CARDS_FAILURE: {
+      return { ...state, status: STATUS.failure };
+    }
+    case GET_PRODUCTS_LIST_REQUEST: {
+      return { ...state, status: STATUS.request };
+    }
+    case GET_PRODUCTS_LIST_SUCCESS: {
+      return {
+        ...state,
+        products: [...action.products],
+        status: STATUS.success,
+      };
+    }
+    case GET_PRODUCTS_LIST_FAILURE: {
+      return { ...state, status: STATUS.failure };
+    }
     case GET_LINK_CARD_LIST_REQUEST: {
       return { ...state, status: STATUS.request };
     }
     case GET_LINK_CARD_LIST_SUCCESS: {
       return {
         ...state,
+        selectedCardId: action.selectedCardId,
         cardList: action.data,
         status: STATUS.success,
       };
@@ -36,28 +70,6 @@ const linkDataApiCallReducer = (state = initialState, action) => {
       return {
         ...state,
         status: STATUS.failure,
-      };
-    }
-    case LINK_DATA_REQUEST: {
-      console.log("링크API REQUEST_리듀서");
-      return { ...state, isCalled: action.isCalled };
-    }
-    case LINK_DATA_SUCCESS: {
-      console.log("링크API SUCCESS_리듀서");
-      return {
-        ...state,
-        data: { ...action.data },
-        isCalled: action.isCalled,
-        message: "success",
-      };
-    }
-    case LINK_DATA_FAILURE: {
-      console.log("링크API FAILURE_리듀서");
-      return {
-        ...state,
-        error: action?.err,
-        isCalled: false,
-        message: "failure",
       };
     }
 

@@ -6,50 +6,52 @@ import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
 import { requestGetCategoires } from "redux/actions/Category";
 import CategoryList from "components/Category/CategoryList";
-import { requestGetLinkCardList } from "redux/actions/LinkCard";
+import {
+  requestGetCards,
+  requestGetLinkCardList,
+  requestGetProductsList,
+} from "redux/actions/LinkCard";
+import ProductList from "components/Product/ProductList";
+import StoredCardList from "components/Product/StoredCardList";
 
 const MyLink = () => {
   const dispatch = useDispatch();
   const sectionRef = useRef(null);
   const cardData = useSelector((state) => state.addLinkReducer.data.title);
-  const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
-  // const isLogined = useSelector((state) => state.loginReducer.isLogined); //로그인이 되었을 때
-  const isAddCategory = useSelector(
-    (state) => state.categoryReducer.isAddCategory
-  ); // 카테고리를 추가했을 때
-  const isReloaded = useSelector((state) => state.reloadReducer.isReloaded); // 상품카드를 저장했을 때
-  const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled); // 크롤링을 수행했을 때
+  const { products } = useSelector(
+    (state) => state.linkDataApiCallReducer.products
+  );
   const scrollToTop = () => {
     sectionRef.current.scrollIntoView();
   };
-  // const { categories } = useSelector((state) => state.categoryReducer);
-
+  const { categories, status } = useSelector((state) => state.categoryReducer);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(0);
+  const { cards } = useSelector((state) => state.linkDataApiCallReducer);
+  const { isLogined } = useSelector((state) => state.loginReducer);
   useEffect(() => {
-    dispatch(requestGetCategoires());
-  }, []);
-  useEffect(() => {
-    // dispatch(requestGetLinkCardList(102));
-    if (linkData === null || isCrawled || isAddCategory || isReloaded) {
-      // console.log(categories);
-      // dispatch({
-      //   type: "LINK_DATA_REQUEST",
-      //   data: {},
-      //   isCalled: false,
-      //   message: "request",
-      // });
+    if (isLogined) {
+      dispatch(requestGetCategoires());
     }
-  }, [isAddCategory, isCrawled, isReloaded]);
+  }, [isLogined]);
 
+  useEffect(() => {
+    if (status === "GET_CATEGORY_SUCCESS") {
+      setSelectedCategoryId(categories[0].id);
+      // dispatch(requestGetProductsList());
+      dispatch(requestGetCards());
+    }
+  }, [status]);
   return (
     <MyLinkSection id="MyLinkSection" ref={sectionRef}>
-      {/* <div>뭔데시</div> */}
       <Tab.Container id="left-tabs" defaultActiveKey={cardData}>
         <ContentWrapper id="ContentWrapper">
           <CategoryTab />
           <ProductTab />
         </ContentWrapper>
       </Tab.Container>
-      <CategoryList />
+      <CategoryList categories={categories} />
+      <StoredCardList cards={cards} />
+      <ProductList products={products} />
       <ScrollTopButton onClick={scrollToTop}>맨 위로</ScrollTopButton>
     </MyLinkSection>
   );

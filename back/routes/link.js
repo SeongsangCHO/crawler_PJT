@@ -10,14 +10,11 @@ const db = require("../config/db_config");
 const {
   selectCategories,
   selectLinkCardList,
+  selectProducts,
+  selectCards,
 } = require("../query/selectQuery");
 
 const router = require("express").Router();
-
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
 
 router.get("/linkcardlist/:id", cors(accecptURL), verifyToken, (req, res) => {
   const { id } = req.params;
@@ -70,4 +67,27 @@ router.post("/categories", cors(accecptURL), verifyToken, (req, res) => {
   return res.status(500);
 });
 
+router.get("/products", cors(accecptURL), verifyToken, (req, res) => {
+  const clientToken = req.headers.authorization.substring(7);
+  let { id } = jwt.decode(clientToken, "piTeam");
+
+  const sql = selectProducts(36);
+  db.query(sql, (dbError, result) => {
+    if (dbError) throw dbError;
+
+    return res.status(200).json({ products: result });
+  });
+});
+
+router.get("/cards", cors(accecptURL), verifyToken, (req, res) => {
+  const clientToken = req.headers.authorization.substring(7);
+  console.log("cards");
+
+  let { id } = jwt.decode(clientToken, "piTeam");
+  const sql = selectCards(36);
+  db.query(sql, (dbError, result) => {
+    if (dbError) throw dbError;
+    return res.status(200).json({ cards: result });
+  });
+});
 module.exports = router;

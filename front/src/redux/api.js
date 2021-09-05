@@ -5,6 +5,8 @@ const ENDPOINT = `http://localhost:8080`;
 const headers = {
   "Content-Type": "application/json",
 };
+export const getCardsURL = `${ENDPOINT}/link/cards`;
+export const getProductsListURL = `${ENDPOINT}/link/products`;
 export const getlinkCardListURL = `${ENDPOINT}/link/linkcardlist`;
 export const getCategoriesURL = `${ENDPOINT}/link/categories`;
 export const addCategoryURL = `${ENDPOINT}/link/categories`;
@@ -36,8 +38,6 @@ export const requestGet = async ({ url, accessToken }) => {
 
 export const requestPost = async ({ url, body, accessToken }) => {
   const accessTokenHeader = getAccessTokenHeder(accessToken);
-  console.log(accessToken, body);
-
   const res = await axios.post(url, body, {
     headers: {
       ...headers,

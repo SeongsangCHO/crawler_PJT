@@ -33,7 +33,6 @@ function addCategoryAPI(category) {
 function* addCategory(action) {
   try {
     const result = yield call(addCategoryAPI, action.category);
-    console.log(result);
 
     if (result.status == 200) {
       yield put({
@@ -43,7 +42,6 @@ function* addCategory(action) {
       });
     }
   } catch (err) {
-    alert("로그인이 필요합니다");
     yield put({ type: ADD_CATEGORY_FAILURE, err: err });
     console.error(err);
   }

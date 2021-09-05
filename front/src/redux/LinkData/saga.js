@@ -3,6 +3,8 @@ import {
   deleteCardURL,
   requestGet,
   getlinkCardListURL,
+  getProductsListURL,
+  getCardsURL,
 } from "../api";
 import { put, call } from "redux-saga/effects";
 import axios from "axios";
@@ -12,6 +14,10 @@ import {
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
   GET_LINK_CARD_LIST_SUCCESS,
+  GET_PRODUCTS_LIST_SUCCESS,
+  GET_PRODUCTS_LIST_FAILURE,
+  GET_CARDS_SUCCESS,
+  GET_CARDS_FAILURE,
 } from "../actions/ActionType";
 
 function getLinkCardAPI(id) {
@@ -21,7 +27,7 @@ function getLinkCardAPI(id) {
   });
 }
 function* getLinkCardList(action) {
-  console.log(action);
+  console.log("getlinkCardList", action);
 
   try {
     const res = yield call(getLinkCardAPI, action.id);
@@ -29,6 +35,7 @@ function* getLinkCardList(action) {
     yield put({
       type: GET_LINK_CARD_LIST_SUCCESS,
       data: res.data.linkCardList,
+      selectedCardId: action.id,
     });
   } catch (e) {
     console.error(e);
@@ -93,4 +100,62 @@ function* deleteCardRequest(action) {
   }
 }
 
-export { getLinkData, deleteCardRequest, getLinkCardList };
+function getProductsListAPI() {
+  return requestGet({
+    url: getProductsListURL,
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
+  });
+}
+function* getProductsList() {
+  console.log("getProductsList");
+
+  try {
+    const result = yield call(getProductsListAPI);
+    console.log(result);
+
+    if (result.status == 200) {
+      yield put({
+        type: GET_PRODUCTS_LIST_SUCCESS,
+        products: result.data.products,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: GET_PRODUCTS_LIST_FAILURE,
+    });
+
+    console.error(error);
+  }
+}
+
+function getCardsAPI() {
+  return requestGet({
+    url: getCardsURL,
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
+  });
+}
+function* getCards() {
+  try {
+    const result = yield call(getCardsAPI);
+    if (result.status == 200) {
+      yield put({
+        type: GET_CARDS_SUCCESS,
+        cards: result.data.cards,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: GET_CARDS_FAILURE,
+    });
+
+    console.error(error);
+  }
+}
+
+export {
+  getCards,
+  getLinkData,
+  deleteCardRequest,
+  getLinkCardList,
+  getProductsList,
+};

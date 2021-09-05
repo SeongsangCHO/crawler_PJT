@@ -22,11 +22,9 @@ const categoryReducer = (state = initialState, action) => {
       return { ...state, isAddCategory: action.isAddCategory };
     }
     case ADD_CATEGORY_SUCCESS: {
-      console.log("actioncateog", action.category, state.categories);
-
       return {
         ...state,
-        categories: state.categories.concat(action.category),
+        categories: [...state.categories, action.category],
         isAddCategory: action.isAddCategory,
       };
     }
@@ -36,19 +34,20 @@ const categoryReducer = (state = initialState, action) => {
     case GET_CATEGORY_REQUEST: {
       return {
         ...state,
-        // categories: action.data,
-        status: STATUS.request,
+        status: "GET_CATEGORY_" + STATUS.request,
       };
     }
     case GET_CATEGORY_SUCCESS: {
+      console.log(action.categories);
+
       return {
         ...state,
-        status: STATUS.success,
-        categories: action.categories,
+        status: "GET_CATEGORY_" + STATUS.success,
+        categories: [...action.categories],
       };
     }
     case GET_CATEGORY_FAILURE: {
-      return { ...state, status: STATUS.failure };
+      return { ...state, status: "GET_CATEGORY_" + STATUS.failure };
     }
     default:
       return state;

@@ -16,6 +16,8 @@ import {
   LOGOUT_REQUEST,
   DELETE_CARD_REQUEST,
   GET_LINK_CARD_LIST_REQUEST,
+  GET_PRODUCTS_LIST_REQUEST,
+  GET_CARDS_REQUEST,
 } from "./actions/ActionType";
 import { logoutRequest, loginRequest } from "./Login/saga";
 import { runCrawler } from "./RunCrawler/saga";
@@ -25,6 +27,9 @@ import {
   getLinkData,
   deleteCardRequest,
   getLinkCardList,
+  getProductsListAPI,
+  getProductsList,
+  getCards,
 } from "./LinkData/saga";
 import { nickNameDoubleCheck, signUp } from "./Register/saga";
 import { addCategory, getCategories } from "./Category/saga";
@@ -91,6 +96,13 @@ function* watchGetCategories() {
 function* watchGetLinkCardList() {
   yield takeLatest(GET_LINK_CARD_LIST_REQUEST, getLinkCardList);
 }
+function* watchGetProductsList() {
+  yield takeLatest(GET_PRODUCTS_LIST_REQUEST, getProductsList);
+}
+
+function* watchGetCards() {
+  yield takeLatest(GET_CARDS_REQUEST, getCards);
+}
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
   yield all([
@@ -107,5 +119,7 @@ export default function* rootSaga() {
     fork(watchDeleteCard),
     fork(watchGetCategories),
     fork(watchGetLinkCardList),
+    fork(watchGetProductsList),
+    fork(watchGetCards),
   ]);
 }

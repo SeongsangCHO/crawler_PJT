@@ -1,19 +1,11 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { requestGetLinkCardList } from "redux/actions/LinkCard";
+import CategoryItem from "./CategoryItem";
 
-const CategoryList = (props) => {
-  const { categories } = useSelector((state) => state.categoryReducer);
-  const dispatch = useDispatch();
-
+const CategoryList = ({ categories }) => {
   return (
     <div>
       {categories?.map((category) => (
-        <button onClick={() => dispatch(requestGetLinkCardList(category.id))}>
-          {category.title}
-        </button>
+        <CategoryItem category={category} />
       ))}
     </div>
   );
