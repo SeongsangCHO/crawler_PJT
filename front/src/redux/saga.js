@@ -16,14 +16,13 @@ import {
   LOGOUT_REQUEST,
   DELETE_CARD_REQUEST,
 } from "./actions/Action";
-import { logoutRequest } from "./Logout/saga";
+import { logoutRequest, loginRequest } from "./Login/saga";
 import { runCrawler } from "./RunCrawler/saga";
 import { addLink } from "./AddLink/saga";
 import { reloadCrawler } from "./ReloadCrawl/saga";
 import { getLinkData, deleteCardRequest } from "./LinkData/saga";
-import { loginRequest } from "./Login/saga";
 import { signUp } from "./SignUp/saga";
-import { nickNameDoubleCheck } from "./DoubleCheck/saga";
+import { nickNameDoubleCheck } from "./Register/saga";
 import { addCategory } from "./AddCategory/saga";
 
 //비동기 작업을 3단계로 세분화하는 것 = > 리액트 사가
