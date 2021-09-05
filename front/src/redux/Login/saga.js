@@ -26,7 +26,7 @@ function* loginRequest(action) {
     if (result.status == 200) {
       yield put({
         type: LOGIN_SUCCESS,
-        user_nickname: action.data.user_nickname,
+        nickName: action.data.nickName,
         isLogined: true,
         token: result.data.token,
       });

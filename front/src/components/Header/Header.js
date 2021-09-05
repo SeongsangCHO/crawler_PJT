@@ -27,9 +27,6 @@ const Header = () => {
         console.error(e);
       }
     }
-    if (!token && isLogined === false) {
-      CreateNotification("error")("로그인 실패");
-    }
   };
   useEffect(() => {
     loginChecker();

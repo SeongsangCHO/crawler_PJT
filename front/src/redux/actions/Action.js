@@ -1,4 +1,3 @@
-
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
 export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
@@ -18,8 +17,6 @@ export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
-
-
 
 export const ADD_CATEGORY_REQUEST = "ADD_CATEGORY_REQUEST";
 export const ADD_CATEGORY_SUCCESS = "ADD_CATEGORY_SUCCESS";
@@ -44,28 +41,3 @@ export const RUN_CRAWLER_FAILURE = "RUN_CRAWLER_FAILURE";
 export const RELOAD_REQUEST = "RELOAD_REQUEST";
 export const RELOAD_SUCCESS = "RELOAD_SUCCESS";
 export const RELOAD_FAILURE = "RELOAD_FAILURE";
-
-export function registerRequest(data) {
-  console.log("액션 생성함수");
-  console.log(data);
-  return {
-    type: SIGN_UP_REQUEST,
-    data: data,
-  };
-}
-export function registerSuccess(data) {
-  console.log("액션 success");
-  console.log(data);
-  console.log("액션 success return");
-
-  return {
-    type: SIGN_UP_SUCCESS,
-    data: data,
-  };
-}
-export function registerFailure(error) {
-  return {
-    type: SIGN_UP_FAILURE,
-    error,
-  };
-}

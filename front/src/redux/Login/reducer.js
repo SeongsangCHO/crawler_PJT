@@ -1,3 +1,4 @@
+import { STATUS } from "components/utils/constants";
 import {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
@@ -7,14 +8,8 @@ import {
   LOGIN_FAILURE,
 } from "../actions/Action";
 
-export const STATUS = {
-  request: "REQUEST",
-  success: "SUCCESS",
-  failure: "FAILURE",
-};
-
 const initialState = {
-  user_nickname: "",
+  nickName: "",
   isLogined: sessionStorage.getItem("token") ? true : "",
   token: sessionStorage.getItem("token"),
   message: "",
@@ -29,7 +24,7 @@ const loginReducer = (state = initialState, action) => {
     case LOGIN_SUCCESS: {
       return {
         ...state,
-        user_nickname: action.user_nickname,
+        nickName: action.nickName,
         isLogined: action.isLogined,
         token: action.token,
         status: STATUS.success,
@@ -48,7 +43,7 @@ const loginReducer = (state = initialState, action) => {
       return {
         ...state,
         isLogined: false,
-        user_nickname: "",
+        nickName: "",
         token: "",
         status: STATUS.success,
       };

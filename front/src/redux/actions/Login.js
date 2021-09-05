@@ -4,8 +4,8 @@ export const requestLogin = ({ nickName, password }) => {
   return {
     type: LOGIN_REQUEST,
     data: {
-      user_nickname: nickName,
-      user_password: password,
+      nickName,
+      password,
     },
   };
 };

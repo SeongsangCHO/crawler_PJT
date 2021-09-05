@@ -3,12 +3,11 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Button from "components/common/Button";
+import { requestNicknameDoubleCheck } from "redux/actions/Register";
 
 const NickNameInput = () => {
   const dispatch = useDispatch();
-  const { isDouble, loading } = useSelector(
-    (state) => state.doubleCheckReducer
-  );
+  const { isDouble, loading } = useSelector((state) => state.registerReducer);
   const [nickName, setNickName] = useState("");
   const [validText, setValidText] = useState("사용하실 닉네임을 입력해주세요.");
   const [isValid, setIsValid] = useState(true);
@@ -27,11 +26,6 @@ const NickNameInput = () => {
     return regex.test(nickName);
   };
 
-  const nickNameAction = (nickName) => ({
-    type: "NICK_DOUBLE_CHECK_REQUEST",
-    nickName,
-    isDouble: isDouble,
-  });
   const onNickNameDoubleCheck = (e) => {
     const { value } = e.target;
     if (nickNameValidTest(value)) {
@@ -59,7 +53,7 @@ const NickNameInput = () => {
         ></Input>
         <NickNameDoubleCheckButton
           disabled={nickName.length === 0 && isValid && !isDouble}
-          onClick={() => dispatch(nickNameAction(nickName))}
+          onClick={() => dispatch(requestNicknameDoubleCheck(nickName))}
           type="button"
         >
           중복확인

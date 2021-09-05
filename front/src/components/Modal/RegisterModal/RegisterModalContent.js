@@ -5,6 +5,7 @@ import NickNameInput from "./NickNameInput";
 import PasswordInput from "./PasswordInput";
 import "react-notifications/lib/notifications.css";
 import CreateNotification from "components/CreateNotification";
+import { requestSignUp } from "redux/actions/Register";
 
 const RegisterModalContent = ({
   onToggleRegisterModal,
@@ -15,8 +16,7 @@ const RegisterModalContent = ({
   const [isSignUp, setIsSignUp] = useState(false);
 
   const [isMatchPassword, setIsMatchPassword] = useState(false);
-  const isDouble = useSelector((state) => state.doubleCheckReducer.isDouble);
-  const nickName = useSelector((state) => state.doubleCheckReducer.nickName);
+  const { isDouble, nickName } = useSelector((state) => state.registerReducer);
 
   // useCallback으로 변경하기
   const handlePassword = (inputPassword) => {
@@ -38,7 +38,7 @@ const RegisterModalContent = ({
       nickName === "" ||
       password === "" ||
       password.length < 8 ||
-      isDouble ||
+      // isDouble ||
       !isMatchPassword
     ) {
       return true;
@@ -50,8 +50,8 @@ const RegisterModalContent = ({
     //예외 핸들링
     if (signUpVaildCheck()) {
       let errorMsg;
-      if (isDouble || nickName === undefined) {
-        console.log(nickName, isDouble);
+      if (nickName === undefined) {
+        console.log(nickName);
 
         errorMsg = "닉네임 중복";
       }
@@ -66,13 +66,14 @@ const RegisterModalContent = ({
       CreateNotification("error")(errorMsg);
       return;
     } else {
-      dispatch({
-        type: "SIGN_UP_REQUEST",
-        data: {
-          user_nickname: nickName,
-          user_password: password,
-        },
-      });
+      dispatch(requestSignUp({ nickName, password }));
+      // dispatch({
+      //   type: "SIGN_UP_REQUEST",
+      //   data: {
+      //     user_nickname: nickName,
+      //     user_password: password,
+      //   },
+      // });
       CreateNotification("success")("가입 성공");
       setIsSignUp(true);
     }

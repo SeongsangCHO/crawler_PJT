@@ -2,12 +2,17 @@ import {
   NICK_DOUBLE_CHECK_REQUEST,
   NICK_DOUBLE_CHECK_SUCCESS,
   NICK_DOUBLE_CHECK_FAILURE,
+  SIGN_UP_REQUEST,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE,
 } from "../actions/Action";
+import { STATUS } from "components/utils/constants";
 
 const initialState = {
   isDouble: true,
   Loading: true,
   nickName: "",
+  status: "",
 };
 
 //상태가 변화할 때 수행되는 함수
@@ -23,6 +28,7 @@ const registerReducer = (state = initialState, action) => {
         isDouble: false,
         Loading: false,
         nickName: action.nickName,
+        status: STATUS.success,
       };
     }
     case NICK_DOUBLE_CHECK_FAILURE: {
@@ -31,6 +37,22 @@ const registerReducer = (state = initialState, action) => {
         isDouble: true,
         Loading: false,
         nickName: "",
+        status: STATUS.failure,
+      };
+    }
+    case SIGN_UP_REQUEST: {
+      return { ...state, isSigningUp: true, isSignedUp: false };
+    }
+    case SIGN_UP_SUCCESS: {
+      return {
+        ...state,
+        status: STATUS.success,
+      };
+    }
+    case SIGN_UP_FAILURE: {
+      return {
+        ...state,
+        status: STATUS.failure,
       };
     }
     default:

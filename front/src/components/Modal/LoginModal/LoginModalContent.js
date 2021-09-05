@@ -10,6 +10,7 @@ const LoginModalContent = ({ onToggleLoginModal, onToggleRegisterModal }) => {
   const dispatch = useDispatch();
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
+  const { status } = useSelector((state) => state.loginReducer);
 
   const onMoveRegisterModal = () => {
     onToggleLoginModal();
@@ -22,8 +23,14 @@ const LoginModalContent = ({ onToggleLoginModal, onToggleRegisterModal }) => {
     setPassword(e.target.value);
   };
 
+  useEffect(() => {
+    if (status === "FAILURE") {
+      CreateNotification("error")("닉네임 또는 비밀번호가 틀렸습니다.");
+    }
+  }, [status]);
   const onLogin = (e) => {
     e.preventDefault();
+    console.log(status);
     if (nickName === "" || password === "") {
       CreateNotification("error")("입력을 확인하세요.");
       return;

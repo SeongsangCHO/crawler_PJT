@@ -1,10 +1,7 @@
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
-// 여기서 부터 미들웨어/데브툴 관련 임포트
 import { composeWithDevTools } from "redux-devtools-extension";
-import signUpReducer from "./SignUp/reducer";
 import registerReducer from "./Register/reducer";
-// import loginReducer from "./Login/reducer";
 import addCategoryReducer from "./AddCategory/reducer";
 import linkDataApiCallReducer from "./LinkData/reducer";
 import createSagaMiddleware from "redux-saga";
@@ -25,7 +22,6 @@ const configureStore = () => {
   // 스토어 생성
   const store = createStore(
     combineReducers({
-      signUpReducer,
       registerReducer,
       addCategoryReducer,
       linkDataApiCallReducer,
