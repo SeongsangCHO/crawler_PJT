@@ -5,7 +5,6 @@ import registerReducer from "./Register/reducer";
 import categoryReducer from "./Category/reducer";
 import linkDataApiCallReducer from "./LinkData/reducer";
 import createSagaMiddleware from "redux-saga";
-import currentCategoryReducer from "./CurrentCategory/reducer";
 import addLinkReducer from "./AddLink/reducer";
 import runCrawlerReducer from "./RunCrawler/reducer";
 import reloadReducer from "./ReloadCrawl/reducer";
@@ -25,7 +24,6 @@ const configureStore = () => {
       registerReducer,
       categoryReducer,
       linkDataApiCallReducer,
-      currentCategoryReducer,
       addLinkReducer,
       runCrawlerReducer,
       reloadReducer,

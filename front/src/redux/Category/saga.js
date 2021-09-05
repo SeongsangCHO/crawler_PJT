@@ -1,7 +1,24 @@
-import { addCategoryURL, requestPost } from "../api";
+import {
+  addCategoryURL,
+  requestPost,
+  getCategoriesURL,
+  requestGet,
+} from "../api";
 import { put, call } from "redux-saga/effects";
-import axios from "axios";
-import { ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAILURE } from "../actions/Action";
+import {
+  ADD_CATEGORY_SUCCESS,
+  ADD_CATEGORY_FAILURE,
+  GET_CATEGORY_FAILURE,
+  GET_CATEGORY_SUCCESS,
+} from "../actions/ActionType";
+
+function getCategoriesAPI(id) {
+  return requestGet({
+    url: getCategoriesURL,
+    body: { id },
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
+  });
+}
 
 function addCategoryAPI(category) {
   console.log("addCategoryAPI in saga");
@@ -31,4 +48,20 @@ function* addCategory(action) {
   }
 }
 
-export { addCategory };
+function* getCategories(action) {
+  try {
+    const result = yield call(getCategoriesAPI, action.id);
+    console.log(result);
+
+    if (result.status === 200) {
+      yield put({
+        type: GET_CATEGORY_SUCCESS,
+        categories: result.data.categories,
+      });
+    }
+  } catch (e) {
+    yield put({ type: GET_CATEGORY_FAILURE });
+  }
+}
+
+export { addCategory, getCategories };

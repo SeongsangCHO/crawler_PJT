@@ -6,7 +6,7 @@ import {
   LINK_DATA_FAILURE,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 
 function getLinkDataAPI() {
   return requestGet({

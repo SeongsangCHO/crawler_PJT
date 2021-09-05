@@ -5,7 +5,7 @@ import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 import { STATUS } from "components/utils/constants";
 
 const initialState = {

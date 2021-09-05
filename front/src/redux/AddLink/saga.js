@@ -2,7 +2,7 @@ import { addLinkURL } from "../api";
 import { put, call } from "redux-saga/effects";
 import axios from "axios";
 
-import { ADD_LINK_SUCCESS, ADD_LINK_FAILURE } from "../actions/Action";
+import { ADD_LINK_SUCCESS, ADD_LINK_FAILURE } from "../actions/ActionType";
 
 function addLinkAPI(linkData) {
   console.log("call addLinkAPI");

@@ -45,7 +45,13 @@ const selectUserDataQuery = (req) => {
  ORDER BY registerTime DESC`;
 };
 
+const selectCategories = (id) => {
+  return `select title, id from categories where users_id = ${id}
+  `;
+};
+
 exports.selectCrawlTargetLinkCardIdQuery = selectCrawlTargetLinkCardIdQuery;
 exports.selectCardCrawledDataQuery = selectCardCrawledDataQuery;
 exports.selectLinkCardIdQuery = selectLinkCardIdQuery;
 exports.selectUserDataQuery = selectUserDataQuery;
+exports.selectCategories = selectCategories;

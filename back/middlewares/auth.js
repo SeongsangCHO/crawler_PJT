@@ -30,12 +30,6 @@ const createToken = async function (req, res, next) {
                 expiresIn: "1d",
               }
             );
-            // res.cookie("user", token, {
-            //   httpOnly: false,
-            //   expires: new Date(Date.now() + 1 * 3600000), // cookie will be removed after 8 hours
-            // });
-            console.log("성공", token);
-
             return res.json({
               status: 200,
               result: "ok",

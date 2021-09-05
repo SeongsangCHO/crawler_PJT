@@ -6,7 +6,7 @@ import {
   LOGOUT_FAILURE,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 
 function loginAPI(loginData) {
   console.log(loginData);

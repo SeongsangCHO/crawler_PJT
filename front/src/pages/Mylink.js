@@ -4,6 +4,7 @@ import Tab from "react-bootstrap/Tab";
 import CategoryTab from "../components/MyLink/Category/CategoryTab";
 import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
+import { requestGetCategoires } from "redux/actions/Category";
 
 const MyLink = () => {
   const dispatch = useDispatch();
@@ -19,14 +20,21 @@ const MyLink = () => {
   const scrollToTop = () => {
     sectionRef.current.scrollIntoView();
   };
+  const { categories } = useSelector((state) => state.categoryReducer);
+  console.log(categories);
+
   useEffect(() => {
-    if (linkData === null || isCrawled || isAddCategory || isReloaded)
+    dispatch(requestGetCategoires(72));
+    if (linkData === null || isCrawled || isAddCategory || isReloaded) {
+      console.log(categories);
+
       dispatch({
         type: "LINK_DATA_REQUEST",
         data: {},
         isCalled: false,
         message: "request",
       });
+    }
   }, [isAddCategory, isCrawled, isReloaded]);
 
   return (

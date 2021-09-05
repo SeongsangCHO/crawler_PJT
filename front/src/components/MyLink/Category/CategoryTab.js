@@ -28,10 +28,10 @@ const CategoryTab = () => {
     (state) => state.categoryReducer.isAddCategory
   );
   const handleCateClick = (e) => {
-    dispatch({
-      type: "GET_CATEGORY_REQUEST",
-      currentCategory: e.currentTarget.innerHTML,
-    });
+    // dispatch({
+    //   type: "GET_CATEGORY_REQUEST",
+    //   currentCategory: e.currentTarget.innerHTML,
+    // });
   };
   useEffect(() => {
     if (isAddCategory === true) {

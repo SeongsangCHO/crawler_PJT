@@ -6,7 +6,7 @@ import {
   RUN_CRAWLER_REQUEST,
   RUN_CRAWLER_SUCCESS,
   RUN_CRAWLER_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 
 function runCrawlerAPI(currentLinkTitle) {
   //여기까지 잘 전달되는데..

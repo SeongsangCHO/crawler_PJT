@@ -1,4 +1,4 @@
-import { NICK_DOUBLE_CHECK_REQUEST, SIGN_UP_REQUEST } from "./Action";
+import { NICK_DOUBLE_CHECK_REQUEST, SIGN_UP_REQUEST } from "./ActionType";
 
 export const requestSignUp = ({ nickName, password }) => {
   return {

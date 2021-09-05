@@ -6,7 +6,7 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 
 const initialState = {
   nickName: "",

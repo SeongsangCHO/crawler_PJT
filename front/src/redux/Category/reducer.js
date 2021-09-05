@@ -1,12 +1,17 @@
+import { STATUS } from "components/utils/constants";
 import {
   ADD_CATEGORY_REQUEST,
   ADD_CATEGORY_SUCCESS,
   ADD_CATEGORY_FAILURE,
-} from "../actions/Action";
+  GET_CATEGORY_REQUEST,
+  GET_CATEGORY_SUCCESS,
+  GET_CATEGORY_FAILURE,
+} from "../actions/ActionType";
 
 const initialState = {
-  category: [],
+  categories: [],
   isAddCategory: false,
+  status: STATUS.request,
 };
 
 //상태가 변화할 때 수행되는 함수
@@ -21,14 +26,30 @@ const categoryReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        category: [...state.category, action.category],
+        categories: [...state.category, action.category],
         isAddCategory: action.isAddCategory,
       };
     }
     case ADD_CATEGORY_FAILURE: {
       return { ...state, isAddCategory: false };
     }
-
+    case GET_CATEGORY_REQUEST: {
+      return {
+        ...state,
+        // categories: action.data,
+        status: STATUS.request,
+      };
+    }
+    case GET_CATEGORY_SUCCESS: {
+      return {
+        ...state,
+        status: STATUS.success,
+        categories: action.categories,
+      };
+    }
+    case GET_CATEGORY_FAILURE: {
+      return { ...state, status: STATUS.failure };
+    }
     default:
       return state;
   }

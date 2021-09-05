@@ -2,7 +2,7 @@ import { reloadURL } from "../api";
 import { put, call } from "redux-saga/effects";
 import axios from "axios";
 
-import { RELOAD_SUCCESS, RELOAD_FAILURE } from "../actions/Action";
+import { RELOAD_SUCCESS, RELOAD_FAILURE } from "../actions/ActionType";
 function reloadCrawlerAPI(linkTitle) {
   //여기까지 잘 전달되는데..
   //객체형태로 전달해주어야하는군,.

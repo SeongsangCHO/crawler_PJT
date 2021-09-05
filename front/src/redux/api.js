@@ -5,8 +5,8 @@ const ENDPOINT = `http://localhost:8080`;
 const headers = {
   "Content-Type": "application/json",
 };
-export const addCategoryURL = `${ENDPOINT}/addcategory`;
-// export const addCategoryURL = `${ENDPOINT}/link/categories`;
+export const getCategoriesURL = `${ENDPOINT}/link/categories`;
+export const addCategoryURL = `${ENDPOINT}/link/categories`;
 export const linkDataApiCallURL = `${ENDPOINT}/api/mylink`;
 export const addLinkURL = `${ENDPOINT}/link/addlink`;
 export const crawlURL = `${ENDPOINT}/crawler`;
@@ -16,7 +16,6 @@ export const deleteCardURL = `${ENDPOINT}/postdelete`;
 export const registerURL = `${ENDPOINT}/user/register`;
 export const loginURL = `${ENDPOINT}/user/login`;
 export const doubleCheckURL = `${ENDPOINT}/user/doublecheck`;
-
 const getAccessTokenHeder = (accessToken) => {
   return {
     Authorization: `Bearer ${accessToken}`,

@@ -33,47 +33,6 @@ const routes = require("./routes");
 app.use("/", routes);
 
 const port = process.env.PORT || 8080;
-//템플릿엔진 ejs 설정 __dirname +'views'랑 같음
-
-//가입버튼 클릭시 - 가입요청을 받는 부분
-// app.post("/register", cors(accecptURL), (req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-//   const { nickName, password } = req.body;
-//   try {
-//     bcrypt.hash(password, HASH_ROUND, (bcryptError, hashPassword) => {
-//       let sql = `insert into users (nickname, password) values(?, ?)`;
-//       db.query(sql, [nickName, hashPassword], (dbError, result) => {
-//         if (dbError) {
-//           throw dbError;
-//         }
-//       });
-//     });
-//   } catch (error) {
-//     console.error(error);
-//   }
-//   return res.status(200).json({ message: "가입 success" });
-// });
-
-// app.post("/login", cors(accecptURL), createToken, (req, res, next) => {
-//   return res.status(400);
-// });
-
-app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
-  const clientToken = req.headers.authorization.substring(7);
-  const { category } = req.body;
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  let { id, nickname } = jwt.decode(clientToken, "piTeam");
-
-  console.log("전달받은 카테고리 명 : " + req.body.category, id);
-  let sql = insertCategoryQuery(id, category);
-  db.query(sql, (dbError, result) => {
-    if (dbError) {
-      throw dbError;
-    }
-  });
-
-  return res.status(200).json({ message: "카테고리 추가  success" });
-});
 
 app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");

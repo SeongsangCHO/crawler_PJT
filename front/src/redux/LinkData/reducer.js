@@ -5,7 +5,7 @@ import {
   DELETE_CARD_REQUEST,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 
 const initialState = {
   data: null,

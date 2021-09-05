@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGOUT_REQUEST } from "./Action";
+import { LOGIN_REQUEST, LOGOUT_REQUEST } from "./ActionType";
 
 export const requestLogin = ({ nickName, password }) => {
   return {

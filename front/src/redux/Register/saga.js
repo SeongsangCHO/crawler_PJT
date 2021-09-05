@@ -6,7 +6,7 @@ import {
   NICK_DOUBLE_CHECK_FAILURE,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 
 function doubleCheckAPI(data) {
   console.log(data);

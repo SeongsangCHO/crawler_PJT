@@ -3,7 +3,7 @@ import {
   ADD_LINK_REQUEST,
   ADD_LINK_SUCCESS,
   ADD_LINK_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 
 const initialState = {
   data:{
