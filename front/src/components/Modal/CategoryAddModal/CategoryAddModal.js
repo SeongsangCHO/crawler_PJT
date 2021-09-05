@@ -6,22 +6,35 @@ import Portal from "components/Portal/Portal";
 import Button from "components/common/Button";
 
 const CategoryAddModal = ({ modalClose, modalOpen, isOpen }) => {
-  const [categoryData, setCategoryData] = useState("");
+  const [categoryTitle, setCategoryTitle] = useState("");
   const dispatch = useDispatch();
   const handleSetCategory = (e) => {
-    setCategoryData(e.target.value);
+    setCategoryTitle(e.target.value);
   };
   const handleAddCategory = (e) => {
-    e.preventDefault();
     dispatch({
       type: "ADD_CATEGORY_REQUEST",
-      category: categoryData,
+      category: categoryTitle,
       isAddCategory: false,
     });
+    modalClose();
   };
   const handleClose = (e) => {
     const { id } = e.target;
     if (id === "dim") {
+      modalClose();
+    }
+  };
+  const handleInputKey = (e) => {
+    if (e.key === "Escape") {
+      modalClose();
+    }
+    if (e.key === "Enter" && categoryTitle) {
+      dispatch({
+        type: "ADD_CATEGORY_REQUEST",
+        category: categoryTitle,
+        isAddCategory: false,
+      });
       modalClose();
     }
   };
@@ -32,6 +45,7 @@ const CategoryAddModal = ({ modalClose, modalOpen, isOpen }) => {
           <h4>관리할 링크의 카테고리를 만드세요</h4>
         </h1>
         <CategoryInput
+          onKeyDown={handleInputKey}
           onChange={handleSetCategory}
           autoFocus
           type="text"

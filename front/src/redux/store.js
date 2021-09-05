@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 import { composeWithDevTools } from "redux-devtools-extension";
 import registerReducer from "./Register/reducer";
-import addCategoryReducer from "./AddCategory/reducer";
+import categoryReducer from "./Category/reducer";
 import linkDataApiCallReducer from "./LinkData/reducer";
 import createSagaMiddleware from "redux-saga";
 import currentCategoryReducer from "./CurrentCategory/reducer";
@@ -23,7 +23,7 @@ const configureStore = () => {
   const store = createStore(
     combineReducers({
       registerReducer,
-      addCategoryReducer,
+      categoryReducer,
       linkDataApiCallReducer,
       currentCategoryReducer,
       addLinkReducer,

@@ -22,7 +22,7 @@ import { addLink } from "./AddLink/saga";
 import { reloadCrawler } from "./ReloadCrawl/saga";
 import { getLinkData, deleteCardRequest } from "./LinkData/saga";
 import { nickNameDoubleCheck, signUp } from "./Register/saga";
-import { addCategory } from "./AddCategory/saga";
+import { addCategory } from "./Category/saga";
 
 function* getCategory(action) {
   try {

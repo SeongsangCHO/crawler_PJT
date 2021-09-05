@@ -8,34 +8,36 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const createToken = async function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const { nickName, password } = req.body;
-  console.log(nickName, password);
-
   try {
-    //front에서 보낸요청과 db에서 꺼낸 데이터가 일치하는지 확인하고
-    //일치하면 토큰발행
     let sql = `select * from users where nickname = '${nickName}'`;
-
     db.query(sql, (error, result) => {
-      console.log(result, password);
+      const {
+        id: dbId,
+        nickname: dbNickname,
+        password: dbPassword,
+      } = result[0];
 
-      if (result[0] && result[0].nickname === nickName) {
-        bcrypt.compare(password, result[0].password, function (err, hash) {
+      if (result && dbNickname === nickName) {
+        bcrypt.compare(password, dbPassword, (err, hash) => {
           if (hash) {
             const token = jwt.sign(
               {
+                id: dbId,
                 nickname: nickName,
               },
               "piTeam",
               {
-                expiresIn: "1h",
+                expiresIn: "1d",
               }
             );
-            res.cookie("user", token, {
-              httpOnly: false,
-              expires: new Date(Date.now() + 1 * 3600000), // cookie will be removed after 8 hours
-            });
+            // res.cookie("user", token, {
+            //   httpOnly: false,
+            //   expires: new Date(Date.now() + 1 * 3600000), // cookie will be removed after 8 hours
+            // });
+            console.log("성공", token);
 
-            return res.status(200, {}).json({
+            return res.json({
+              status: 200,
               result: "ok",
               token,
             });

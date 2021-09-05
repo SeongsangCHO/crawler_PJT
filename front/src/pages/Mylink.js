@@ -12,7 +12,7 @@ const MyLink = () => {
   const linkData = useSelector((state) => state.linkDataApiCallReducer.data);
   // const isLogined = useSelector((state) => state.loginReducer.isLogined); //로그인이 되었을 때
   const isAddCategory = useSelector(
-    (state) => state.addCategoryReducer.isAddCategory
+    (state) => state.categoryReducer.isAddCategory
   ); // 카테고리를 추가했을 때
   const isReloaded = useSelector((state) => state.reloadReducer.isReloaded); // 상품카드를 저장했을 때
   const isCrawled = useSelector((state) => state.runCrawlerReducer.isCrawled); // 크롤링을 수행했을 때

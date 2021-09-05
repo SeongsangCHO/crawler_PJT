@@ -1,19 +1,22 @@
-import { linkDataApiCallURL, deleteCardURL } from "../api";
+import { linkDataApiCallURL, deleteCardURL, requestGet } from "../api";
 import { put, call } from "redux-saga/effects";
 import axios from "axios";
-import { LINK_DATA_SUCCESS, LINK_DATA_FAILURE, DELETE_CARD_SUCCESS, DELETE_CARD_FAILURE } from "../actions/Action";
+import {
+  LINK_DATA_SUCCESS,
+  LINK_DATA_FAILURE,
+  DELETE_CARD_SUCCESS,
+  DELETE_CARD_FAILURE,
+} from "../actions/Action";
 
 function getLinkDataAPI() {
-  console.log("getLinkDataAPI in saga");
-
-  return axios.get(linkDataApiCallURL, {
-    withCredentials: true,
+  return requestGet({
+    url: linkDataApiCallURL,
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
   });
 }
 
 function* getLinkData(action) {
   try {
-    console.log("getlinkData");
     const result = yield call(getLinkDataAPI, action.data);
     if (result.status == 200) {
       yield put({
@@ -35,13 +38,13 @@ function* getLinkData(action) {
   }
 }
 
-function deleteCardAPI(deleteId){
+function deleteCardAPI(deleteId) {
   return axios.delete(`${deleteCardURL}/${deleteId}`, {
     withCredentials: true,
   });
 }
 
-function* deleteCardRequest(action){
+function* deleteCardRequest(action) {
   try {
     const res = yield call(deleteCardAPI, action.deleteId);
 
@@ -51,7 +54,7 @@ function* deleteCardRequest(action){
       yield put({
         type: DELETE_CARD_SUCCESS,
         isDeleted: true,
-        deletedId : action.deleteId,
+        deletedId: action.deleteId,
       });
     }
   } catch (err) {
@@ -63,5 +66,4 @@ function* deleteCardRequest(action){
   }
 }
 
-
-export {getLinkData, deleteCardRequest};
+export { getLinkData, deleteCardRequest };

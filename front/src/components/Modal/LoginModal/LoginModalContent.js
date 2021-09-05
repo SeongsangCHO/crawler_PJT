@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import CreateNotification from "components/CreateNotification";
+import CreateNotification from "components/common/CreateNotification";
 import Button from "components/common/Button";
 import InputLabel from "components/common/InputLabel";
 import { requestLogin } from "redux/actions/Login";

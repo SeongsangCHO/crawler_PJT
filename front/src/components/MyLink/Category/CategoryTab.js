@@ -4,7 +4,7 @@ import CategoryAddModal from "components/Modal/CategoryAddModal/CategoryAddModal
 import Nav from "react-bootstrap/Nav";
 // import "../../css/Contentc.css";
 import useModal from "hooks/useModal";
-import CreateNotification from "../../CreateNotification";
+import CreateNotification from "../../common/CreateNotification";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "components/common/Button";
 
@@ -25,9 +25,8 @@ const CategoryTab = () => {
     (state) => state.linkDataApiCallReducer.data?.category
   );
   const isAddCategory = useSelector(
-    (state) => state.addCategoryReducer.isAddCategory
+    (state) => state.categoryReducer.isAddCategory
   );
-  const [modalShow, setModalShow] = useState(false);
   const handleCateClick = (e) => {
     dispatch({
       type: "GET_CATEGORY_REQUEST",
@@ -39,6 +38,7 @@ const CategoryTab = () => {
       CreateNotification("success")("카테고리 추가");
     }
   }, [isAddCategory]);
+
   return (
     <CategoryWrapper id="category-wrapper">
       <CategoryAddButton onClick={modalOpen}>카테고리 추가</CategoryAddButton>

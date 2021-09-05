@@ -1,7 +1,6 @@
 import { logoutURL, loginURL } from "../api";
 import { put, call } from "redux-saga/effects";
-import axios from "axios";
-
+import { requestPost } from "redux/api";
 import {
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
@@ -9,14 +8,13 @@ import {
   LOGIN_FAILURE,
 } from "../actions/Action";
 
-function logoutAPI() {
-  return axios.get(logoutURL, {
-    withCredentials: true,
-  });
-}
 function loginAPI(loginData) {
-  return axios.post(loginURL, loginData, {
-    withCredentials: true,
+  console.log(loginData);
+
+  return requestPost({
+    url: loginURL,
+    body: loginData,
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
   });
 }
 
@@ -39,18 +37,15 @@ function* loginRequest(action) {
 }
 function* logoutRequest() {
   try {
-    const result = yield logoutAPI(logoutAPI);
-    if (result.status == 200) {
-      yield put({
-        type: LOGOUT_SUCCESS,
-        message: "SUCCESS",
-      });
-      sessionStorage.removeItem("token");
-    }
+    yield put({
+      type: LOGOUT_SUCCESS,
+      message: "SUCCESS",
+    });
+    sessionStorage.clear("token");
   } catch (err) {
     yield put({ type: LOGOUT_FAILURE, message: err.message });
     console.error(err);
   }
 }
 
-export { logoutAPI, logoutRequest, loginRequest };
+export { logoutRequest, loginRequest };

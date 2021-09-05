@@ -3,9 +3,8 @@ const insertLinkCardQuery = (req, currentCategory) => {
   and users_id = (select id from users where nickname = '${req.currentUserNickname}')),
   (select id from users where nickname = '${req.currentUserNickname}'), ?)`;
 };
-const insertCategoryQuery = () => {
-  return `insert into categories (users_id, title) values 
-  ((SELECT id from users WHERE nickname = ?), ?);
+const insertCategoryQuery = (id, title) => {
+  return `insert into categories (users_id, title) values ("${id}","${title}")
   `;
 };
 

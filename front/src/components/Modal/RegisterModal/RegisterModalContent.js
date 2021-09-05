@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import NickNameInput from "./NickNameInput";
 import PasswordInput from "./PasswordInput";
 import "react-notifications/lib/notifications.css";
-import CreateNotification from "components/CreateNotification";
+import CreateNotification from "components/common/CreateNotification";
 import { requestSignUp } from "redux/actions/Register";
 
 const RegisterModalContent = ({

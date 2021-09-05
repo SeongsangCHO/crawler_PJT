@@ -1,4 +1,4 @@
-import { addCategoryURL } from "../api";
+import { addCategoryURL, requestPost } from "../api";
 import { put, call } from "redux-saga/effects";
 import axios from "axios";
 import { ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAILURE } from "../actions/Action";
@@ -6,19 +6,15 @@ import { ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAILURE } from "../actions/Action";
 function addCategoryAPI(category) {
   console.log("addCategoryAPI in saga");
 
-  return axios.post(
-    addCategoryURL,
-    { category },
-    {
-      withCredentials: true,
-    }
-  );
+  return requestPost({
+    url: addCategoryURL,
+    body: { category },
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
+  });
 }
 
 function* addCategory(action) {
   try {
-    console.log("addCategory in saga");
-    console.log(action.category);
     const result = yield call(addCategoryAPI, action.category);
 
     if (result.status == 200) {
