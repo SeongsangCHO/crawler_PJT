@@ -85,12 +85,16 @@ const Header = forwardRef((props, ref) => {
         </ButtonWrapper>
       </div> */}
       <HomeLogo />
-      <Navbar />
+      <ModalButtonContainer>
+        <button>signup</button>
+        <button>login</button>
+      </ModalButtonContainer>
     </HeaderWrapper>
   );
 });
 
 export default React.memo(Header);
+const ModalButtonContainer = styled.div``;
 
 const SignUpButton = styled.button`
   background-color: tomato;
@@ -131,9 +135,10 @@ const LogoutButton = styled.button`
 `;
 
 const HeaderWrapper = styled.div`
-  width: 90%;
-  margin: 0 auto;
-  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 1em 0 1em;
 `;
 
 const ButtonWrapper = styled.div`

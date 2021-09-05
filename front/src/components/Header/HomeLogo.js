@@ -6,8 +6,8 @@ import { ReactComponent as Logo } from "assets/logoimage.svg";
 const HomeLogo = () => {
   return (
     <LogoWrapper>
-      <NavLink style={{ textDecoration: "none" }} to={"/"}>
-        <Logo id="LogoImage" width="50px" height="50px" alt="LOGO" />
+      <NavLink to={"/"}>
+        <Logo alt="LOGO" id="home-logo" />
         <TitleLink>다링</TitleLink>
       </NavLink>
     </LogoWrapper>
@@ -19,7 +19,14 @@ export default HomeLogo;
 const TitleLink = styled.span`
   color: black;
   text-decoration: "none";
-  margin-left: 10px;
+  font-size: 1em;
+  position: absolute;
+  top: 2em;
 `;
 
-const LogoWrapper = styled.div``;
+const LogoWrapper = styled.div`
+  & #home-logo {
+    width: 50px;
+    height: 50px;
+  }
+`;

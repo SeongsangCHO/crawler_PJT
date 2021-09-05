@@ -5,11 +5,13 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "pages/Home";
 import MyLink from "pages/Mylink";
 import NotificationContainer from "react-notifications/lib/NotificationContainer";
+import Navbar from "components/Header/Navbar";
 
 function App() {
   return (
     <Router>
       <Header />
+      <Navbar />
       <NotificationContainer />
       <Switch>
         <Route exact path={"/"} component={Home} />
