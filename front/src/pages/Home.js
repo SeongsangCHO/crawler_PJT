@@ -8,7 +8,6 @@ function Home() {
         <JumbotronImage id="jumbotron" />
         <span id="jumbotron-sentence">자주 사는 상품을 링크로 관리하세요</span>
       </div>
-      {/* <MainContent/> */}
     </div>
   );
 }

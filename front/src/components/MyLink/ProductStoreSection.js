@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import ProductAddingModal from "./ProductAddingModal";
 import LinkAddingModal from "./LinkAddingModal";
 import ProductCard from "./ProductCard";
-import CreateNotification from "../CreateNotification";
 
 const ProductStoredList = styled.div`
   display: grid;

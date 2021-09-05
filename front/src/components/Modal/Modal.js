@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "components/css/RegisterModal.module.css";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "assets/logoimage.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
 import "react-notifications/lib/notifications.css";
-import CreateNotification from "components/CreateNotification";
 
 const ModalWrapper = styled.div`
   position: absolute;
@@ -83,18 +80,15 @@ const Modal = ({ children, modalId, onToggleModal }) => {
 
   // useCallback으로 변경하기
   const onClose = (e) => {
-    if(e.target.id === modalId ||
-    e.target.id === "Close"+modalId)
-    onToggleModal();
-  }
+    if (e.target.id === modalId || e.target.id === "Close" + modalId)
+      onToggleModal();
+  };
   return (
-    <ModalWrapper id={modalId}
-    onClick={onClose}
-    >
-      <ModalContent id="ModalContent" >
+    <ModalWrapper id={modalId} onClick={onClose}>
+      <ModalContent id="ModalContent">
         <CloseButton>
           <FontAwesomeIcon
-            id={"Close"+modalId}
+            id={"Close" + modalId}
             size="2x"
             icon={faTimesCircle}
           />

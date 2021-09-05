@@ -7,13 +7,7 @@ import Moment from "react-moment";
 import moment from "moment";
 import "moment-timezone";
 
-const ModalWrapper = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
 const LinkAddingModal = (props) => {
-  // Custom hook으로 onChange하는 거 다 묶어야겠다.
   const dispatch = useDispatch();
   const currentCategory = useSelector(
     (state) => state.currentCategoryReducer.currentCategory
@@ -33,7 +27,7 @@ const LinkAddingModal = (props) => {
         type: "ADD_LINK_REQUEST",
         data: {
           title: formData.title.value,
-          price: '',
+          price: "",
           link: formData.link.value,
           info: formData.info.value,
           currentCategory: currentCategory,
@@ -45,7 +39,6 @@ const LinkAddingModal = (props) => {
     } else {
       CreateNotification("error")("제목 또는 링크를 입력해주세요.");
     }
-    //여기서 dispatch 수행해서 post요청해야함
   };
   return (
     <Modal
@@ -63,7 +56,11 @@ const LinkAddingModal = (props) => {
         <ModalWrapper>
           <form onSubmit={handleAddLink}>
             <input type="hidden" placeholder={currentCategory}></input>
-            <input name="title" type="text" placeholder="북마크할 링크 제목"></input>
+            <input
+              name="title"
+              type="text"
+              placeholder="북마크할 링크 제목"
+            ></input>
             <input name="link" type="text" placeholder="저장 링크"></input>
             <input name="info" type="text" placeholder="메모"></input>
             <button type="submit">저장하기</button>
@@ -75,3 +72,7 @@ const LinkAddingModal = (props) => {
 };
 
 export default LinkAddingModal;
+const ModalWrapper = styled.div`
+  display: flex;
+  width: 100%;
+`;

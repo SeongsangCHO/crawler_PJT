@@ -4,10 +4,10 @@ const FAILURE = 0;
 
 function dataInsert(crawlerData, linkId) {
   crawlerData
-    .filter(obj => {
+    .filter((obj) => {
       return obj.priority <= 8;
     })
-    .forEach(filtered => {
+    .forEach((filtered) => {
       db.query(
         //insert time, update time 넣기, now()
         `
@@ -21,7 +21,7 @@ function dataInsert(crawlerData, linkId) {
           filtered.priority,
           "naver",
           filtered.link,
-          filtered.imgsrc
+          filtered.imgsrc,
         ],
         function (error, result) {
           if (error) {
@@ -32,6 +32,6 @@ function dataInsert(crawlerData, linkId) {
       );
     });
   return SUCCESS;
-};
+}
 
 exports.dataInsert = dataInsert;

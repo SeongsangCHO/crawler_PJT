@@ -6,32 +6,6 @@ import PasswordInput from "./PasswordInput";
 import "react-notifications/lib/notifications.css";
 import CreateNotification from "components/CreateNotification";
 
-const RegisterForm = styled.form`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  padding: 15px;
-  @media (max-width: 576px) {
-    padding: 15px;
-  }
-`;
-
-const SubmitButton = styled.button`
-  border: 1px solid;
-  background-color: ${(props) => (props.isDisabled ? "green" : "gray")};
-  transition: 0.5s;
-  color: white;
-`;
-
-const LoginButton = styled.button`
-  border: 1px solid;
-  background-color: ${(props) => (props.isSignUp ? "#2196F3" : "gray")};
-  color: white;
-  transition: 0.5s;
-  margin-top: 5px;
-`;
-
 const RegisterModalContent = ({
   onToggleRegisterModal,
   onToggleLoginModal,
@@ -86,13 +60,12 @@ const RegisterModalContent = ({
       if (!isMatchPassword || userNickName === "" || password === "") {
         errorMsg = "닉네임 또는 비밀번호를 확인해주세요";
       }
-      if (password.length < 8){
+      if (password.length < 8) {
         errorMsg = "비밀번호는 8글자 이상으로 입력해주세요.";
       }
       CreateNotification("error")(errorMsg);
       return;
     } else {
-      // 가입 실행
       dispatch({
         type: "SIGN_UP_REQUEST",
         data: {
@@ -127,3 +100,28 @@ const RegisterModalContent = ({
 };
 
 export default React.memo(RegisterModalContent);
+const RegisterForm = styled.form`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  padding: 15px;
+  @media (max-width: 576px) {
+    padding: 15px;
+  }
+`;
+
+const SubmitButton = styled.button`
+  border: 1px solid;
+  background-color: ${(props) => (props.isDisabled ? "green" : "gray")};
+  transition: 0.5s;
+  color: white;
+`;
+
+const LoginButton = styled.button`
+  border: 1px solid;
+  background-color: ${(props) => (props.isSignUp ? "#2196F3" : "gray")};
+  color: white;
+  transition: 0.5s;
+  margin-top: 5px;
+`;

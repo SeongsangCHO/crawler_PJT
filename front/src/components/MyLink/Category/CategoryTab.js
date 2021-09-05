@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import CategoryModal from "./CategoryAddingModal";
 import Nav from "react-bootstrap/Nav";
-import "../css/Contentc.css";
-import CreateNotification from "../CreateNotification";
+import "../../css/Contentc.css";
+import CreateNotification from "../../CreateNotification";
 import { useDispatch, useSelector } from "react-redux";
 
 const CategoryWrapper = styled.div`
@@ -19,23 +19,22 @@ const CategoryTab = ({ obj }) => {
   const dispatch = useDispatch();
   const data = useSelector(
     (state) => state.linkDataApiCallReducer.data?.category
-  ); //이건 초기값만 불러옴.
-  const isAddCategory = useSelector((state) => state.addCategoryReducer.isAddCategory);
+  );
+  const isAddCategory = useSelector(
+    (state) => state.addCategoryReducer.isAddCategory
+  );
   const [modalShow, setModalShow] = useState(false);
   const handleCateClick = (e) => {
-    //현재 클릭되었을 때 innerHTML로 값을 얻을 수 있음
-    //클릭된 값을 saga로 던져주면서 링크카드에서 useSelector로 가져오면 되겠다.
-    //여기서 dispatch 수행해서 카테고리 상태값 지정, default는 없게하면 될듯 or 초기페이지 설정? => 언제하냐
     dispatch({
       type: "GET_CATEGORY_REQUEST",
       currentCategory: e.currentTarget.innerHTML,
     });
   };
-  useEffect(()=>{
-    if(isAddCategory === true){
+  useEffect(() => {
+    if (isAddCategory === true) {
       CreateNotification("success")("카테고리 추가");
     }
-  },[isAddCategory])
+  }, [isAddCategory]);
   return (
     <CategoryWrapper id="category-wrapper">
       <button className="add-button" onClick={() => setModalShow(true)}>
@@ -65,3 +64,88 @@ const CategoryTab = ({ obj }) => {
 };
 
 export default CategoryTab;
+
+
+// #nav-item #nav-link{
+//   text-align: center;
+//   font-size: 14px;
+//   color: #df7861;
+//   background-color: #ffeeea;
+//   text-decoration: none;
+//   transition: .4s;
+// }
+
+
+// #nav-item a#nav-link:hover{
+//   background-color: #df7861;
+//   text-decoration: none;
+//   color: #ffffff;
+// }
+
+// #nav-item a#nav-link.active {
+//   text-decoration: none;
+//   background-color: #df7861;
+//   color: #ffffff;
+// }
+
+
+// .title {
+//   font-size: 25px;
+//   padding-top: 40px;
+// }
+
+// .add-button {
+//   width: 100%;
+//   background-color: #ffeeea;
+//   color: #df7861;
+//   border-radius: 9px;
+//   border: none;
+// }
+
+// .add-button :hover {
+//   background-color: #fff;
+//   color: #ffffff;
+// }
+
+// #category-wrapper div {
+//   display: flex;
+//   justify-items: center;
+// }
+
+// .redo-image{
+// }
+
+// #category-wrapper a {
+//   margin: 3px;
+//   width: 100%;
+//   text-align: center;
+//   font-size: 12px;
+//   background-color: #ffeeea;
+//   color: #df7861;
+// }
+
+// #category-wrapper a.active {
+//   margin: 3px;
+//   width: 100%;
+//   text-align: center;
+//   font-size: 12px;
+//   background-color: #df7861;
+//   color: #ffffff;
+// }
+
+// #AddLinkImage{
+//   width: 100%;
+//   height: 60px;
+// }
+
+// .redo-button{
+//   cursor: pointer;
+//   background-color: #fff;
+//   border: none;
+//   outline: 0;
+// }
+
+// .redo-button :hover{
+//   outline: 0;
+//   background-color: #ffeeea;
+// }

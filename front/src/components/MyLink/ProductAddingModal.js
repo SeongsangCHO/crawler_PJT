@@ -3,10 +3,8 @@ import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import CreateNotification from "components/CreateNotification";
-import Moment from "react-moment";
 import moment from "moment";
 import "moment-timezone";
-import runCrawlerReducer from "redux/RunCrawler/reducer";
 
 const ModalWrapper = styled.div`
   display: flex;
@@ -53,7 +51,6 @@ const ProductAddingModal = (props) => {
     });
   };
   const isVaildFormData = (data) => {
-    //입력 form데이터 유효성체크 조건 추가필요.
     if (data.title.value === "") {
       return false;
     }
@@ -77,7 +74,6 @@ const ProductAddingModal = (props) => {
         CreateNotification("error")("입력을 확인해주세요.");
       }
     }
-    //여기서 dispatch 수행해서 post요청해야함
   };
   return (
     <Modal

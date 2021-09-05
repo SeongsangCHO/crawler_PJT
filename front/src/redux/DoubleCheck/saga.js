@@ -7,8 +7,6 @@ import {
 } from "../actions/Action";
 
 function doubleCheckAPI(nickNameData) {
-  console.log("doubleCheckAPI in saga");
-
   return axios.post(doubleCheckURL, nickNameData, {
     withCredentials: true,
   });
@@ -16,7 +14,6 @@ function doubleCheckAPI(nickNameData) {
 
 function* nickNameDoubleCheck(action) {
   try {
-    console.log("getNickName in saga");
     const result = yield call(doubleCheckAPI, action.data);
     if (result.status === 200) {
       yield put({

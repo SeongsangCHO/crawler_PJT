@@ -11,7 +11,6 @@ const ProductTabWrapper = styled.div`
   flex: 4;
 `;
 
-const CardTabWrapper = styled.div``;
 
 
 function CardTab({ categoryItems }) {

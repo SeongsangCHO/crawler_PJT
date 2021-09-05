@@ -37,10 +37,7 @@ const port = process.env.PORT || 8080;
 //템플릿엔진 ejs 설정 __dirname +'views'랑 같음
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-app.get("/", (req, res) => {
-  
-});
-
+app.get("/", (req, res) => {});
 
 app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
   //res.set이아닌 setHeader로 했어야함.
@@ -303,16 +300,16 @@ app.get("/api/logout", verifyToken, (req, res) => {
 app.delete("/postdelete/:id", verifyToken, (req, res) => {
   const deleteId = req.params.id;
   console.log(deleteId);
-  
+
   const sql = deleteProductCardQuery(deleteId);
   try {
     db.query(sql, (err, result) => {
-      if(err) throw err;
+      if (err) throw err;
     });
   } catch (err) {
-    return res.status(404).json({ok : false});
+    return res.status(404).json({ ok: false });
   }
-  return res.status(200).json({ok : true});
+  return res.status(200).json({ ok: true });
 });
 
 app.listen(port, () => {

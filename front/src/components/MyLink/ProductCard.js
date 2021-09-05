@@ -189,7 +189,6 @@ function ProductCard({ bottomScrollRef, categoryItem }) {
     onDropDownToggle();
   };
   useEffect(() => {}, []);
-  //새로운 카드가 등록되었을 때 리랜더링
   return (
     <ProductCardWrapper id="ProductCardWrapper">
       {categoryItem.title != null ? (
@@ -200,7 +199,6 @@ function ProductCard({ bottomScrollRef, categoryItem }) {
               <Button onClick={() => onDeleteCard(categoryItem.id)}>
                 삭제
               </Button>
-              {/* <Button>수정</Button> */}
               <CardLink target="_blank" href={parseLink(categoryItem.link)}>
                 링크
               </CardLink>

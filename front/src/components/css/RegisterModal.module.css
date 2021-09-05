@@ -1,7 +1,0 @@
-form input[type=text]{
-  flex:1;
-}
-
-form > span:nth-child(1){
-  margin-bottom: 20px;
-}

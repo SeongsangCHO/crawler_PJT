@@ -1,17 +1,15 @@
 import React, { useEffect, useRef } from "react";
-import "./App.css";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import Home from "./pages/Home";
-import MyLink from "./pages/MyLink";
+import Home from "pages/Home";
+import MyLink from "pages/Mylink";
 import NotificationContainer from "react-notifications/lib/NotificationContainer";
 
 function App() {
-  const headerRef = useRef(null);
   return (
     <Router>
-      <Header ref={headerRef} />
+      <Header />
       <NotificationContainer />
       <Switch>
         <Route exact path={"/"} component={Home} />

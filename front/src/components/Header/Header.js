@@ -1,16 +1,96 @@
-import React, { useEffect, useState, forwardRef} from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { NavLink} from "react-router-dom";
-import "./css/Header.css";
-import { ReactComponent as Logo } from "assets/logoimage.svg";
-import CreateNotification from "./CreateNotification";
-import Modal from "./Modal/Modal";
-import RegisterModalContent from "./RegisterModal/RegisterModalContent";
-import LoginModalContent from "./LoginModal/LoginModalContent";
+import CreateNotification from "../CreateNotification";
+import Modal from "../Modal/Modal";
+import RegisterModalContent from "../Modal/RegisterModal/RegisterModalContent";
+import LoginModalContent from "../LoginModal/LoginModalContent";
 import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
-const NavBarWrapper = styled.div``;
+import Navbar from "./Navbar";
+import HomeLogo from "./HomeLogo";
+
+const Header = forwardRef((props, ref) => {
+  const token = useSelector((state) => state.loginReducer.token);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const dispatch = useDispatch();
+  const isLogined = useSelector((state) => state.loginReducer.isLogined);
+  useEffect(() => {
+    if (isLogined === true) {
+      CreateNotification("success")("로그인 성공");
+    }
+    if (isLogined === false) {
+      CreateNotification("error")("로그인 실패");
+    }
+  }, [isLogined, cookies]);
+  const onToggleRegisterModal = () => {
+    setIsRegisterModalOpen((prev) => !prev);
+  };
+  const onToggleLoginModal = () => {
+    setIsLoginModalOpen((prev) => !prev);
+  };
+  const doLogOut = () => {
+    dispatch({
+      type: "LOGOUT_REQUEST",
+      message: "LOGOUT REQUEST",
+    });
+  };
+  const onLogout = () => {
+    doLogOut();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+    CreateNotification("success")("로그아웃 되었습니다.");
+  };
+
+  return (
+    <HeaderWrapper>
+      {/* {isRegisterModalOpen == true ? (
+        <Modal modalId="Register" onToggleModal={onToggleRegisterModal}>
+          <RegisterModalContent
+            onToggleRegisterModal={onToggleRegisterModal}
+            onToggleLoginModal={onToggleLoginModal}
+          />
+        </Modal>
+      ) : (
+        false
+      )}
+      {isLoginModalOpen && !isLogined ? (
+        <Modal modalId="Login" onToggleModal={onToggleLoginModal}>
+          <LoginModalContent
+            onToggleRegisterModal={onToggleRegisterModal}
+            onToggleLoginModal={onToggleLoginModal}
+          />
+        </Modal>
+      ) : (
+        false
+      )}
+      <div id="Top-header">
+        <ButtonWrapper>
+          {cookies.user === undefined && !isLogined ? (
+            <>
+              <SignUpButton onClick={onToggleRegisterModal}>
+                Sign Up
+              </SignUpButton>
+              <LoginButton onClick={onToggleLoginModal}>Log In</LoginButton>
+            </>
+          ) : (
+            <>
+              <span>{jwt_decode(token).nickname}님 안녕하세요</span>
+              <LogoutButton onClick={onLogout}>Logout</LogoutButton>
+            </>
+          )}
+        </ButtonWrapper>
+      </div> */}
+      <HomeLogo />
+      <Navbar />
+    </HeaderWrapper>
+  );
+});
+
+export default React.memo(Header);
 
 const SignUpButton = styled.button`
   background-color: tomato;
@@ -50,10 +130,10 @@ const LogoutButton = styled.button`
   }
 `;
 
-const HeaderWrapper = styled.div``;
-
-const LogoWrapper = styled.div`
-  margin-left: 12px;
+const HeaderWrapper = styled.div`
+  width: 90%;
+  margin: 0 auto;
+  border: 1px solid black;
 `;
 
 const ButtonWrapper = styled.div`
@@ -62,119 +142,3 @@ const ButtonWrapper = styled.div`
   align-items: center;
   margin-right: 10px;
 `;
-
-const TitleLink = styled.span`
-  color: black;
-`;
-
-function NavBar() {
-  return (
-    <NavBarWrapper id="NavBarWrapper">
-      <ul id="nav-bar-ul">
-        <li>
-          <NavLink to={"/"} className="nav-item" exact>
-            Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to={"/mylink"} className="nav-item">
-            mylink
-          </NavLink>
-        </li>
-      </ul>
-    </NavBarWrapper>
-  );
-}
-//새로고침해도 유저의 닉네임을 가져올 수 있도록 하기.
-const Header= forwardRef((props, ref) => {
-  const token = useSelector((state) => state.loginReducer.token);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  const dispatch = useDispatch();
-  const isLogined = useSelector((state) => state.loginReducer.isLogined);
-  useEffect(() => {
-    if (isLogined === true) {
-      CreateNotification("success")("로그인 성공");
-    }
-    if (isLogined === false) {
-      CreateNotification("error")("로그인 실패");
-    }
-    //cookies는 객체니까 이전상태랑 레퍼런스가 달라지지 않는구나
-  }, [isLogined, cookies]);
-
-  //custom hooks로 뺴기 => useCallback으로 변경하기
-  const onToggleRegisterModal = () => {
-    setIsRegisterModalOpen((prev) => !prev);
-  };
-  const onToggleLoginModal = () => {
-    setIsLoginModalOpen((prev) => !prev);
-  };
-  const doLogOut = () => {
-    dispatch({
-      type: "LOGOUT_REQUEST",
-      message: "LOGOUT REQUEST",
-    });
-  };
-  const onLogout = () => {
-    doLogOut();
-    // removeCookie("user");
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-    CreateNotification("success")("로그아웃 되었습니다.");
-  };
-
-  return (
-    <HeaderWrapper>
-      {isRegisterModalOpen == true ? (
-        <Modal modalId="Register" onToggleModal={onToggleRegisterModal}>
-          <RegisterModalContent
-            onToggleRegisterModal={onToggleRegisterModal}
-            onToggleLoginModal={onToggleLoginModal}
-          />
-        </Modal>
-      ) : (
-        false
-      )}
-      {isLoginModalOpen && !isLogined ? (
-        <Modal modalId="Login" onToggleModal={onToggleLoginModal}>
-          <LoginModalContent
-            onToggleRegisterModal={onToggleRegisterModal}
-            onToggleLoginModal={onToggleLoginModal}
-          />
-        </Modal>
-      ) : (
-        false
-      )}
-      <div id="Top-header">
-        <LogoWrapper>
-          <NavLink style={{ textDecoration: "none" }} to={"/"}>
-            <Logo id="LogoImage" width="100px" height="50px" alt="LOGO" />
-            <TitleLink style={{ textDecoration: "none" }} id="TitleLink">
-              다링
-            </TitleLink>
-          </NavLink>
-        </LogoWrapper>
-        <ButtonWrapper>
-          {cookies.user === undefined && !isLogined ? (
-            <>
-              <SignUpButton onClick={onToggleRegisterModal}>
-                Sign Up
-              </SignUpButton>
-              <LoginButton onClick={onToggleLoginModal}>Log In</LoginButton>
-            </>
-          ) : (
-            <>
-              <span>{jwt_decode(token).nickname}님 안녕하세요</span>
-              <LogoutButton onClick={onLogout}>Logout</LogoutButton>
-            </>
-          )}
-        </ButtonWrapper>
-      </div>
-      <NavBar />
-    </HeaderWrapper>
-  );
-});
-
-export default React.memo(Header);
