@@ -15,12 +15,8 @@ const RegisterModalContent = ({
   const [isSignUp, setIsSignUp] = useState(false);
 
   const [isMatchPassword, setIsMatchPassword] = useState(false);
-  const isDoubleNickName = useSelector(
-    (state) => state.doubleCheckReducer.isDouble
-  );
-  const userNickName = useSelector(
-    (state) => state.doubleCheckReducer.data.user_nickname
-  );
+  const isDouble = useSelector((state) => state.doubleCheckReducer.isDouble);
+  const nickName = useSelector((state) => state.doubleCheckReducer.nickName);
 
   // useCallback으로 변경하기
   const handlePassword = (inputPassword) => {
@@ -38,11 +34,11 @@ const RegisterModalContent = ({
   };
   const signUpVaildCheck = () => {
     if (
-      userNickName === undefined ||
-      userNickName === "" ||
+      nickName === undefined ||
+      nickName === "" ||
       password === "" ||
       password.length < 8 ||
-      isDoubleNickName ||
+      isDouble ||
       !isMatchPassword
     ) {
       return true;
@@ -54,10 +50,14 @@ const RegisterModalContent = ({
     //예외 핸들링
     if (signUpVaildCheck()) {
       let errorMsg;
-      if (isDoubleNickName || userNickName === undefined) {
+      if (isDouble || nickName === undefined) {
+        console.log(nickName, isDouble);
+
         errorMsg = "닉네임 중복";
       }
-      if (!isMatchPassword || userNickName === "" || password === "") {
+      if (!isMatchPassword || nickName === "" || password === "") {
+        console.log(nickName, password);
+
         errorMsg = "닉네임 또는 비밀번호를 확인해주세요";
       }
       if (password.length < 8) {
@@ -69,7 +69,7 @@ const RegisterModalContent = ({
       dispatch({
         type: "SIGN_UP_REQUEST",
         data: {
-          user_nickname: userNickName,
+          user_nickname: nickName,
           user_password: password,
         },
       });
@@ -80,7 +80,7 @@ const RegisterModalContent = ({
 
   return (
     <RegisterForm onSubmit={onSignUp}>
-      <span>Create Account</span>
+      <ModalTitle>Create Account</ModalTitle>
       <NickNameInput />
       <PasswordInput
         isMatchPassword={isMatchPassword}
@@ -102,12 +102,11 @@ const RegisterModalContent = ({
 export default React.memo(RegisterModalContent);
 const RegisterForm = styled.form`
   display: flex;
-  width: 100%;
-  height: 100%;
   flex-direction: column;
-  padding: 15px;
-  @media (max-width: 576px) {
-    padding: 15px;
+  width: 100%;
+  padding: 20px;
+  & input + input {
+    margin-top: 15px;
   }
 `;
 
@@ -124,4 +123,9 @@ const LoginButton = styled.button`
   color: white;
   transition: 0.5s;
   margin-top: 5px;
+`;
+
+const ModalTitle = styled.h1`
+  font-size: 1.5em;
+  margin-bottom: 15px;
 `;
