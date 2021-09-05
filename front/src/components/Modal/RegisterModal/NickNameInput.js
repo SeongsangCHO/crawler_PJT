@@ -1,33 +1,35 @@
+import InputLabel from "components/common/InputLabel";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import Button from "components/common/Button";
 
 const NickNameInput = () => {
   const dispatch = useDispatch();
-  const isDouble = useSelector((state) => state.doubleCheckReducer.isDouble);
+  const { isDouble, loading } = useSelector(
+    (state) => state.doubleCheckReducer
+  );
   const [nickName, setNickName] = useState("");
   const [validText, setValidText] = useState("사용하실 닉네임을 입력해주세요.");
-  const [isValid, setIsValid] = useState(false);
-  const checkSpc = /[~!@#$%^&*()_+|<>?:{}]/;
-  const checkKor = /[ㄱ-ㅎ|ㅏ-ㅣ]/;
+  const [isValid, setIsValid] = useState(true);
+  const regex = /[^ㄱ-ㅎ|^가-힣|^a-z|^A-Z]/;
 
-  const nickNameValidTest = (nickName) => {
-    return checkKor.test(nickName) || checkSpc.test(nickName);
-  };
-  const setNickNameValidText = () => {
-    if (isDouble) {
-      setValidText("닉네임 중복입니다.");
-    } else if (!isDouble && nickName.length > 0 && isValid) {
-      setValidText("사용가능한 닉네임입니다.");
-    } else if (!isValid) {
-      setValidText("영문, 한글만 사용할 수 있습니다");
+  useEffect(() => {
+    if (isDouble && isValid) {
+      setValidText("닉네임을 확인해주세요.");
+      setIsValid(false);
+    } else {
+      setValidText("사용가능");
+      setIsValid(true);
     }
+  }, [isDouble]);
+  const nickNameValidTest = (nickName) => {
+    return regex.test(nickName);
   };
+
   const nickNameAction = (nickName) => ({
     type: "NICK_DOUBLE_CHECK_REQUEST",
-    data: {
-      user_nickname: nickName,
-    },
+    nickName,
     isDouble: isDouble,
   });
   const onNickNameDoubleCheck = (e) => {
@@ -36,23 +38,18 @@ const NickNameInput = () => {
       setIsValid(false);
       setValidText("영문, 한글만 사용할 수 있습니다");
     } else {
-      if (isDouble) {
-        setValidText("닉네임 중복입니다.");
-      } else {
-        setValidText("사용가능한 닉네임입니다.");
-      }
+      setValidText("중복확인을 해주세요.");
       setIsValid(true);
     }
-    // setNickNameValidText();
     setNickName(value);
-    dispatch(nickNameAction(value));
   };
   return (
     <>
-      <InputTitle>Your Nickname</InputTitle>
-      <span>{validText}</span>
+      <InputLabel>Your Nickname</InputLabel>
+      <ValidationNotification>{validText}</ValidationNotification>
       <InputContainer>
         <Input
+          isValid={isValid}
           name="nickname"
           onChange={onNickNameDoubleCheck}
           type="text"
@@ -60,12 +57,13 @@ const NickNameInput = () => {
           maxlength="8"
           value={nickName}
         ></Input>
-        <button
-          disabled={nickName.length === 0}
+        <NickNameDoubleCheckButton
+          disabled={nickName.length === 0 && isValid && !isDouble}
           onClick={() => dispatch(nickNameAction(nickName))}
+          type="button"
         >
           중복확인
-        </button>
+        </NickNameDoubleCheckButton>
       </InputContainer>
     </>
   );
@@ -73,15 +71,30 @@ const NickNameInput = () => {
 
 export default React.memo(NickNameInput);
 
-const Input = styled.input`
-  margin-bottom: 15px;
+const ValidationNotification = styled.span``;
+const NickNameDoubleCheckButton = styled(Button)`
+  transition: 0.2s;
+  line-height: 10px;
+  color: white;
+  width: 20%;
+  border: none;
+  font-size: 0.8em;
+  padding: 0;
+  background-color: ${({ theme }) => theme.colors.primary};
+  margin-left: 10px;
+  &:disabled {
+    opacity: 0.4;
+  }
 `;
-
-const InputTitle = styled.span`
-  margin: 0px 0 5px 0;
-  font-size: 10px;
+const Input = styled.input`
+  width: 100%;
+  border: 1px solid ${(props) => (!props.isValid ? "red" : "green")};
+  &:focus-visible {
+    outline: none;
+  }
 `;
 
 const InputContainer = styled.div`
   display: flex;
+  margin-bottom: 15px;
 `;

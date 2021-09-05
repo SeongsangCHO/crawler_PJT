@@ -1,107 +1,102 @@
-import React, { useEffect, useState, forwardRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import styled from "styled-components";
 import CreateNotification from "../CreateNotification";
 import Modal from "../Modal/Modal";
-import RegisterModalContent from "../Modal/RegisterModal/RegisterModalContent";
-import LoginModalContent from "../LoginModal/LoginModalContent";
-import { useCookies } from "react-cookie";
+import RegisterModalContent from "components/Modal/RegisterModal/RegisterModalContent";
+import LoginModalContent from "components/Modal/LoginModal/LoginModalContent";
 import jwt_decode from "jwt-decode";
-import Navbar from "./Navbar";
 import HomeLogo from "./HomeLogo";
+import Button from "components/common/Button";
+import { requestLogout } from "redux/actions/Login";
 
-const Header = forwardRef((props, ref) => {
-  const token = useSelector((state) => state.loginReducer.token);
+const Header = () => {
+  const [displayUserName, setDisplayUserName] = useState("");
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const dispatch = useDispatch();
-  const isLogined = useSelector((state) => state.loginReducer.isLogined);
-  useEffect(() => {
-    if (isLogined === true) {
+  const { isLogined, token } = useSelector((state) => state.loginReducer);
+  const loginChecker = () => {
+    if (isLogined) {
       CreateNotification("success")("로그인 성공");
+      try {
+        const userName = jwt_decode(token).nickname;
+        setDisplayUserName(userName);
+      } catch (e) {
+        console.error(e);
+      }
     }
-    if (isLogined === false) {
+    if (!token && isLogined === false) {
       CreateNotification("error")("로그인 실패");
     }
-  }, [isLogined, cookies]);
+  };
+  useEffect(() => {
+    loginChecker();
+  }, [isLogined]);
   const onToggleRegisterModal = () => {
     setIsRegisterModalOpen((prev) => !prev);
   };
   const onToggleLoginModal = () => {
     setIsLoginModalOpen((prev) => !prev);
   };
-  const doLogOut = () => {
-    dispatch({
-      type: "LOGOUT_REQUEST",
-      message: "LOGOUT REQUEST",
-    });
-  };
-  const onLogout = () => {
-    doLogOut();
+  const onLogout = (e) => {
+    e.stopPropagation();
+    dispatch(requestLogout());
     setTimeout(() => {
       window.location.reload();
     }, 1000);
     CreateNotification("success")("로그아웃 되었습니다.");
+    setIsLoginModalOpen(false);
+    setIsRegisterModalOpen(false);
   };
 
   return (
     <HeaderWrapper>
-      {/* {isRegisterModalOpen == true ? (
+      <HomeLogo />
+      <RightSideContainer>
+        {!isLogined ? (
+          <>
+            <SignUpButton onClick={onToggleRegisterModal}>Sign up</SignUpButton>
+            <LoginButton onClick={onToggleLoginModal}>Login</LoginButton>
+          </>
+        ) : (
+          <>
+            <span>{displayUserName}님 안녕하세요</span>
+            <LogoutButton onClick={onLogout}>Logout</LogoutButton>
+          </>
+        )}
+      </RightSideContainer>
+      {isRegisterModalOpen && (
         <Modal modalId="Register" onToggleModal={onToggleRegisterModal}>
           <RegisterModalContent
             onToggleRegisterModal={onToggleRegisterModal}
             onToggleLoginModal={onToggleLoginModal}
           />
         </Modal>
-      ) : (
-        false
       )}
-      {isLoginModalOpen && !isLogined ? (
+      {isLoginModalOpen && !isLogined && (
         <Modal modalId="Login" onToggleModal={onToggleLoginModal}>
           <LoginModalContent
             onToggleRegisterModal={onToggleRegisterModal}
             onToggleLoginModal={onToggleLoginModal}
           />
         </Modal>
-      ) : (
-        false
       )}
-      <div id="Top-header">
-        <ButtonWrapper>
-          {cookies.user === undefined && !isLogined ? (
-            <>
-              <SignUpButton onClick={onToggleRegisterModal}>
-                Sign Up
-              </SignUpButton>
-              <LoginButton onClick={onToggleLoginModal}>Log In</LoginButton>
-            </>
-          ) : (
-            <>
-              <span>{jwt_decode(token).nickname}님 안녕하세요</span>
-              <LogoutButton onClick={onLogout}>Logout</LogoutButton>
-            </>
-          )}
-        </ButtonWrapper>
-      </div> */}
-      <HomeLogo />
-      <ModalButtonContainer>
-        <button>signup</button>
-        <button>login</button>
-      </ModalButtonContainer>
     </HeaderWrapper>
   );
-});
+};
 
 export default React.memo(Header);
-const ModalButtonContainer = styled.div``;
+const RightSideContainer = styled.div`
+  display: flex;
+  width: 150px;
+`;
 
-const SignUpButton = styled.button`
+const SignUpButton = styled(Button)`
   background-color: tomato;
   color: white;
-  border: none;
-  height: 50%;
-  width: 100px;
+  width: 100%;
   border-radius: 5px;
   margin-right: 15px;
   transition: 0.4s;
@@ -110,20 +105,19 @@ const SignUpButton = styled.button`
     color: tomato;
   }
 `;
-const LoginButton = styled.button`
-  border: none;
+const LoginButton = styled(Button)`
+  width: 100%;
   background-color: white;
-  height: 50%;
   transition: 0.4s;
+  border: 1px solid rgba(0, 0, 0, 0.3);
   :hover {
     color: gray;
   }
 `;
 
-const LogoutButton = styled.button`
-  border: none;
+const LogoutButton = styled(Button)`
   margin-left: 10px;
-  min-width: 70px;
+  width: 100%;
   border-radius: 5px;
   color: white;
   background-color: coral;

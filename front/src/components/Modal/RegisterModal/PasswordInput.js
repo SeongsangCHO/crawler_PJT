@@ -1,3 +1,4 @@
+import InputLabel from "components/common/InputLabel";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
@@ -16,12 +17,17 @@ const PasswordInput = ({
 }) => {
   const [firstPassword, setFirstPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState("");
+  const [validText, setValidText] = useState(
+    "8글자 이상 비밀번호를 입력해주세요."
+  );
 
   const onMatchPassword = (password, target) => {
     if (password === target) {
       handleMatchPassword(true);
+      setValidText("비밀번호가 일치합니다");
     } else {
       handleMatchPassword(false);
+      setValidText("비밀번호가 일치하지 않습니다.");
     }
   };
 
@@ -36,7 +42,7 @@ const PasswordInput = ({
   };
   return (
     <>
-      <InputTitle>Password</InputTitle>
+      <InputLabel>Password</InputLabel>
       <Input
         value={firstPassword}
         onChange={onChangePassword}
@@ -44,20 +50,13 @@ const PasswordInput = ({
         placeholder="Password"
       ></Input>
 
-      <InputTitle>Check Password</InputTitle>
+      <InputLabel>Check Password</InputLabel>
       <Input
         onChange={onCheckPassword}
         type="password"
         placeholder="Check Password"
       ></Input>
-      {isMatchPassword ? (
-        // text가 return되는 함수를 추가해야한다.
-        <span>비밀번호가 일치합니다</span>
-      ) : firstPassword.length == 0 ? (
-        <span>비밀번호를 입력해주세요.</span>
-      ) : (
-        <span>비밀번호가 다릅니다</span>
-      )}
+      <span>{validText}</span>
     </>
   );
 };

@@ -30,7 +30,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
   }
-
+  button{
+    border: none;
+  }
 
   @font-face {
     font-family: "paybooc-Bold";
