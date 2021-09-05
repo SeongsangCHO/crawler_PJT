@@ -40,72 +40,48 @@ app.set("view engine", "ejs");
 app.get("/", (req, res) => {});
 
 app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
-  //res.set이아닌 setHeader로 했어야함.
-  console.log("double check post request 받음");
-  console.log(req.body.user_nickname);
-  let sql = `select * from users where nickname = '${req.body.user_nickname}'`;
-  //setHeader를 이미 선언하면, body를 다 작성했다는 의미
-  //그리고나서 res.status로 상태코드를 지정하면 에러가 발생할 것
-  //
+  const { nickName } = req.body;
+  let sql = `select * from users where nickname = '${nickName}'`;
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   db.query(sql, (error, result) => {
     console.log(result);
     if (result == "") {
       return res.status(200).json({ message: "중복체크 success" });
     }
-    if (result[0].nickname == req.body.user_nickname) {
+    if (result[0].nickname == nickName) {
       console.log("select한 결과 있음");
       console.log(result);
       return res.status(400).json({ error: "message" });
     }
   });
-  //res.statusCode = 400, 401로 상태코드응답
-  //userData의 password를 bcrpt로 해싱
 });
 
 //가입버튼 클릭시 - 가입요청을 받는 부분
 app.post("/register", cors(accecptURL), (req, res, next) => {
-  //res.set이아닌 setHeader로 했어야함.
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  console.log(req.body);
+  const { nickName, password } = req.body;
   try {
-    bcrypt.hash(
-      req.body.user_password,
-      HASH_ROUND,
-      (bcryptError, hashPassword) => {
-        let sql = `insert into users (nickname, password) values(?, ?)`;
-        db.query(
-          sql,
-          [req.body.user_nickname, hashPassword],
-          (dbError, result) => {
-            if (dbError) {
-              throw dbError;
-            }
-          }
-        );
-      }
-    );
+    bcrypt.hash(password, HASH_ROUND, (bcryptError, hashPassword) => {
+      let sql = `insert into users (nickname, password) values(?, ?)`;
+      db.query(sql, [nickName, hashPassword], (dbError, result) => {
+        if (dbError) {
+          throw dbError;
+        }
+      });
+    });
   } catch (error) {
     console.error(error);
   }
   return res.status(200).json({ message: "가입 success" });
 });
 
-function test(req, res, next) {
-  console.log("로그인 성공 후 next");
-}
-app.post("/login", cors(accecptURL), createToken, test, (req, res, next) => {
-  test();
+app.post("/login", cors(accecptURL), createToken, (req, res, next) => {
   return res.status(400);
 });
 
 app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
   console.log("전달받은 카테고리 명 : " + req.body.category);
-  //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
-  //front에서 전달받은 category명을 테이블에 삽입함
-  //카테고리 id도 외래키 userId로 얻을 수 있음
   let sql = insertCategoryQuery();
   db.query(
     sql,
