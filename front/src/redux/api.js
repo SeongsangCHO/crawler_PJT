@@ -5,6 +5,7 @@ const ENDPOINT = `http://localhost:8080`;
 const headers = {
   "Content-Type": "application/json",
 };
+export const getlinkCardListURL = `${ENDPOINT}/link/linkcardlist`;
 export const getCategoriesURL = `${ENDPOINT}/link/categories`;
 export const addCategoryURL = `${ENDPOINT}/link/categories`;
 export const linkDataApiCallURL = `${ENDPOINT}/api/mylink`;

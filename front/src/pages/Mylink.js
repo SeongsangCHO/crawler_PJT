@@ -5,6 +5,8 @@ import CategoryTab from "../components/MyLink/Category/CategoryTab";
 import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
 import { requestGetCategoires } from "redux/actions/Category";
+import CategoryList from "components/Category/CategoryList";
+import { requestGetLinkCardList } from "redux/actions/LinkCard";
 
 const MyLink = () => {
   const dispatch = useDispatch();
@@ -20,31 +22,34 @@ const MyLink = () => {
   const scrollToTop = () => {
     sectionRef.current.scrollIntoView();
   };
-  const { categories } = useSelector((state) => state.categoryReducer);
-  console.log(categories);
+  // const { categories } = useSelector((state) => state.categoryReducer);
 
   useEffect(() => {
-    dispatch(requestGetCategoires(72));
+    dispatch(requestGetCategoires());
+  }, []);
+  useEffect(() => {
+    // dispatch(requestGetLinkCardList(102));
     if (linkData === null || isCrawled || isAddCategory || isReloaded) {
-      console.log(categories);
-
-      dispatch({
-        type: "LINK_DATA_REQUEST",
-        data: {},
-        isCalled: false,
-        message: "request",
-      });
+      // console.log(categories);
+      // dispatch({
+      //   type: "LINK_DATA_REQUEST",
+      //   data: {},
+      //   isCalled: false,
+      //   message: "request",
+      // });
     }
   }, [isAddCategory, isCrawled, isReloaded]);
 
   return (
     <MyLinkSection id="MyLinkSection" ref={sectionRef}>
+      {/* <div>뭔데시</div> */}
       <Tab.Container id="left-tabs" defaultActiveKey={cardData}>
         <ContentWrapper id="ContentWrapper">
           <CategoryTab />
           <ProductTab />
         </ContentWrapper>
       </Tab.Container>
+      <CategoryList />
       <ScrollTopButton onClick={scrollToTop}>맨 위로</ScrollTopButton>
     </MyLinkSection>
   );

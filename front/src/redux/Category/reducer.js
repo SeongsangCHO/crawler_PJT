@@ -22,11 +22,11 @@ const categoryReducer = (state = initialState, action) => {
       return { ...state, isAddCategory: action.isAddCategory };
     }
     case ADD_CATEGORY_SUCCESS: {
-      console.log("actioncateog", action.category);
+      console.log("actioncateog", action.category, state.categories);
 
       return {
         ...state,
-        categories: [...state.category, action.category],
+        categories: state.categories.concat(action.category),
         isAddCategory: action.isAddCategory,
       };
     }

@@ -50,8 +50,14 @@ const selectCategories = (id) => {
   `;
 };
 
+const selectLinkCardList = (id) => {
+  return `
+  select id,title,price,link,info,registerTime from links where categories_id = ${id};`;
+};
+
 exports.selectCrawlTargetLinkCardIdQuery = selectCrawlTargetLinkCardIdQuery;
 exports.selectCardCrawledDataQuery = selectCardCrawledDataQuery;
 exports.selectLinkCardIdQuery = selectLinkCardIdQuery;
 exports.selectUserDataQuery = selectUserDataQuery;
 exports.selectCategories = selectCategories;
+exports.selectLinkCardList = selectLinkCardList;

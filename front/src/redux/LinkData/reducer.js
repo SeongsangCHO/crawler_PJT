@@ -1,3 +1,4 @@
+import { STATUS } from "components/utils/constants";
 import {
   LINK_DATA_REQUEST,
   LINK_DATA_SUCCESS,
@@ -5,20 +6,41 @@ import {
   DELETE_CARD_REQUEST,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
+  GET_LINK_CARD_LIST_REQUEST,
+  GET_LINK_CARD_LIST_SUCCESS,
+  GET_LINK_CARD_LIST_FAILURE,
 } from "../actions/ActionType";
 
 const initialState = {
-  data: null,
+  data: [],
   message: "",
-  isCalled:false,
-  isDeleted:false,
+  isCalled: false,
+  isDeleted: false,
+  status: "",
+  cardList: [],
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
   switch (action?.type) {
+    case GET_LINK_CARD_LIST_REQUEST: {
+      return { ...state, status: STATUS.request };
+    }
+    case GET_LINK_CARD_LIST_SUCCESS: {
+      return {
+        ...state,
+        cardList: action.data,
+        status: STATUS.success,
+      };
+    }
+    case GET_LINK_CARD_LIST_FAILURE: {
+      return {
+        ...state,
+        status: STATUS.failure,
+      };
+    }
     case LINK_DATA_REQUEST: {
       console.log("링크API REQUEST_리듀서");
-      return { ...state,isCalled:action.isCalled };
+      return { ...state, isCalled: action.isCalled };
     }
     case LINK_DATA_SUCCESS: {
       console.log("링크API SUCCESS_리듀서");
@@ -40,18 +62,25 @@ const linkDataApiCallReducer = (state = initialState, action) => {
     }
 
     case DELETE_CARD_REQUEST: {
-      return {...state, isDeleted:false, currentCategory:action.currentCategory};
+      return {
+        ...state,
+        isDeleted: false,
+        currentCategory: action.currentCategory,
+      };
     }
     case DELETE_CARD_SUCCESS: {
-      
-      const currentCategory = state.currentCategory
-      let result = state.data.category.map((category) =>{
-        if(Object.keys(category)[0] === currentCategory){
-          return {[currentCategory]: category[currentCategory].filter((item) => item.id !== action.deletedId)}
+      const currentCategory = state.currentCategory;
+      let result = state.data.category.map((category) => {
+        if (Object.keys(category)[0] === currentCategory) {
+          return {
+            [currentCategory]: category[currentCategory].filter(
+              (item) => item.id !== action.deletedId
+            ),
+          };
         }
         return category;
-      })
-      return {...state, data:{category:result}, isDeleted:true}
+      });
+      return { ...state, data: { category: result }, isDeleted: true };
     }
     case DELETE_CARD_FAILURE: {
     }

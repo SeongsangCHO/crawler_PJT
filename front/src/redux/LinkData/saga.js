@@ -1,4 +1,9 @@
-import { linkDataApiCallURL, deleteCardURL, requestGet } from "../api";
+import {
+  linkDataApiCallURL,
+  deleteCardURL,
+  requestGet,
+  getlinkCardListURL,
+} from "../api";
 import { put, call } from "redux-saga/effects";
 import axios from "axios";
 import {
@@ -6,7 +11,29 @@ import {
   LINK_DATA_FAILURE,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
+  GET_LINK_CARD_LIST_SUCCESS,
 } from "../actions/ActionType";
+
+function getLinkCardAPI(id) {
+  return requestGet({
+    url: getlinkCardListURL + `/${id}`,
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
+  });
+}
+function* getLinkCardList(action) {
+  console.log(action);
+
+  try {
+    const res = yield call(getLinkCardAPI, action.id);
+    console.log(res);
+    yield put({
+      type: GET_LINK_CARD_LIST_SUCCESS,
+      data: res.data.linkCardList,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 function getLinkDataAPI() {
   return requestGet({
@@ -66,4 +93,4 @@ function* deleteCardRequest(action) {
   }
 }
 
-export { getLinkData, deleteCardRequest };
+export { getLinkData, deleteCardRequest, getLinkCardList };

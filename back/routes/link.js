@@ -7,13 +7,25 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const accecptURL = "http:/localhost:3000";
 const db = require("../config/db_config");
-const { selectCategories } = require("../query/selectQuery");
+const {
+  selectCategories,
+  selectLinkCardList,
+} = require("../query/selectQuery");
 
 const router = require("express").Router();
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");
+});
+
+router.get("/linkcardlist/:id", cors(accecptURL), verifyToken, (req, res) => {
+  const { id } = req.params;
+  const sql = selectLinkCardList(id);
+  db.query(sql, (dbError, result) => {
+    if (dbError) throw dbError;
+    return res.status(200).json({ linkCardList: result });
+  });
 });
 
 router.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
@@ -45,14 +57,17 @@ router.post("/categories", cors(accecptURL), verifyToken, (req, res) => {
   const clientToken = req.headers.authorization.substring(7);
   const { category } = req.body;
   let { id } = jwt.decode(clientToken, "piTeam");
-  let sql = insertCategoryQuery(id, category);
-  db.query(sql, (dbError, result) => {
-    if (dbError) {
-      throw dbError;
-    }
-  });
-
-  return res.status(200).json({ message: "카테고리 추가  success" });
+  if (category) {
+    const sql = insertCategoryQuery(id, category);
+    db.query(sql, (dbError, result) => {
+      if (dbError) {
+        throw dbError;
+      }
+      const { insertId } = result;
+      return res.status(200).json({ id: insertId, title: category });
+    });
+  }
+  return res.status(500);
 });
 
 module.exports = router;

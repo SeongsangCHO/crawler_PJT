@@ -33,11 +33,12 @@ function addCategoryAPI(category) {
 function* addCategory(action) {
   try {
     const result = yield call(addCategoryAPI, action.category);
+    console.log(result);
 
     if (result.status == 200) {
       yield put({
         type: ADD_CATEGORY_SUCCESS,
-        category: action.category,
+        category: { ...result.data },
         isAddCategory: true,
       });
     }
