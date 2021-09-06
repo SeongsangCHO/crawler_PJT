@@ -16,6 +16,6 @@ const Container = styled.div`
   padding: 1em;
   position: absolute;
   left: 50%;
-  top: 22%;
+  top: 35%;
   transform: translate(-50%, -50%);
 `;

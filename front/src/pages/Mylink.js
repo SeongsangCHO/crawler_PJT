@@ -5,10 +5,10 @@ import { requestGetCategoires } from "redux/actions/Category";
 import CategoryList from "components/Category/CategoryList";
 import { requestGetCards } from "redux/actions/LinkCard";
 import ProductList from "components/Product/ProductList";
-import StoredCardList from "components/Card/StoredCardList";
 import LinkAddModal from "components/Modal/LinkAddModal/LinkAddModal";
 import useModal from "hooks/useModal";
 import CategoryTab from "components/MyLink/Category/CategoryTab";
+import CardList from "components/Card/CardList";
 
 const MyLink = () => {
   const dispatch = useDispatch();
@@ -40,19 +40,10 @@ const MyLink = () => {
   }, [status]);
   return (
     <MyLinkSection id="MyLinkSection" ref={sectionRef}>
-      <CategoryTab></CategoryTab>
+      <CategoryTab />
       <CategoryList categories={categories} />
-      {selectedCategoryId !== -1 && (
-        <button onClick={modalOpen}>구매했던 상품링크 추가하기</button>
-      )}
-      <StoredCardList cards={cards} />
+      <CardList cards={cards} selectedCategoryId={selectedCategoryId} />
       <ProductList products={products} />
-      {isOpen && (
-        <LinkAddModal
-          selectedCategoryId={selectedCategoryId}
-          modalClose={modalClose}
-        />
-      )}
       <ScrollTopButton onClick={scrollToTop}>맨 위로</ScrollTopButton>
     </MyLinkSection>
   );
@@ -86,4 +77,6 @@ const ContentWrapper = styled.div`
   }
 `;
 
-const MyLinkSection = styled.div``;
+const MyLinkSection = styled.main`
+  margin: 0 15px 0 15px;
+`;

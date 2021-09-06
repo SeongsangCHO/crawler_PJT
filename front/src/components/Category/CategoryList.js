@@ -12,12 +12,12 @@ const CategoryList = ({ categories }) => {
   const [focusIdx, setFocusIdx] = useState("All");
   const dispatch = useDispatch();
   const handleAllClick = () => {
-    dispatch({ type: SET_FILTERED_CARDS, id : -1 });
+    dispatch({ type: SET_FILTERED_CARDS, id: -1 });
     dispatch({ type: SET_SELECTED_CATEGORY_ID, id: -1 });
     setFocusIdx("All");
   };
   return (
-    <ul>
+    <Wrapper>
       <li>
         <TotalCategory
           onClick={handleAllClick}
@@ -35,7 +35,7 @@ const CategoryList = ({ categories }) => {
           category={category}
         />
       ))}
-    </ul>
+    </Wrapper>
   );
 };
 
@@ -47,5 +47,23 @@ const TotalCategory = styled(Button)`
   &.focus {
     background-color: ${({ theme }) => theme.colors.primary};
     color: white;
+  }
+`;
+
+const Wrapper = styled.ul`
+  display: flex;
+  max-height: 150px;
+  /* margin: 10px 10px 10px 15px; */
+  overflow-y: scroll;
+  scrollbar-width: auto;
+  ::-webkit-scrollbar {
+    width: 10px; /* 세로축 스크롤바 길이 */
+    height: 20px; /* 가로축 스크롤바 길이 */
+  }
+  & li + li {
+    margin-left: 5px;
+  }
+  & > li {
+    min-width: 50px;
   }
 `;

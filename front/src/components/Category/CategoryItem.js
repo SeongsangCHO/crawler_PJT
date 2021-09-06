@@ -31,7 +31,9 @@ CategoryItem.propTypes = {};
 
 export default CategoryItem;
 
-const Item = styled.li``;
+const Item = styled.li`
+  min-width: 50px;
+`;
 
 const TitleButton = styled(Button)`
   &.focus {
