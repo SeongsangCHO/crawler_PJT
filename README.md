@@ -95,12 +95,14 @@ https://www.notion.so/88a83386702a440d84b622d2bf9f6e20
   
 ### 리팩토링 대상 (프로젝트 전체 대상)
 
-- 컴포넌트단위로 분리해서 재사용성을 높임
-- Modal을 Portal로 구현해 재사용성을 높임
-- styled-components로 스타일링 통일화
-- theme-provider로 자주 사용하는 스타일 속성 재사용
-- bootstarp 사용하지 않고 UI구현
-- redux, redux-saga구조 개편 - 로그인데이터, 상품데이터만 전역관리
+- [진행중] 컴포넌트단위로 분리해서 재사용성을 높임
+- [x] Modal을 Portal로 구현해 재사용성을 높임
+- [진행중] styled-components로 스타일링 통일화
+- [x] theme-provider로 자주 사용하는 스타일 속성 재사용
+- [x] bootstarp 사용하지 않고 UI구현
+- [진행중] redux, redux-saga 구조 개편
+- [진행중] Authorization Header를 통해 토큰 유효성검사 - 기존 cookie로 사용
+- [진행중] 링크카드, 크롤링데이터 API수정
   
   
   
