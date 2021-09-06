@@ -5,6 +5,8 @@ import {
   getlinkCardListURL,
   getProductsListURL,
   getCardsURL,
+  requestPost,
+  addCardURL,
 } from "../api";
 import { put, call } from "redux-saga/effects";
 import axios from "axios";
@@ -13,31 +15,33 @@ import {
   LINK_DATA_FAILURE,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
-  GET_LINK_CARD_LIST_SUCCESS,
+  // GET_LINK_CARD_LIST_SUCCESS,
   GET_PRODUCTS_LIST_SUCCESS,
   GET_PRODUCTS_LIST_FAILURE,
   GET_CARDS_SUCCESS,
   GET_CARDS_FAILURE,
+  ADD_CARD_SUCCESS,
+  ADD_CARD_FAILURE,
 } from "../actions/ActionType";
 
-function getLinkCardAPI(id) {
-  return requestGet({
-    url: getlinkCardListURL + `/${id}`,
-    accessToken: JSON.parse(sessionStorage.getItem("token")),
-  });
-}
-function* getLinkCardList(action) {
-  try {
-    const res = yield call(getLinkCardAPI, action.id);
-    yield put({
-      type: GET_LINK_CARD_LIST_SUCCESS,
-      data: res.data.linkCardList,
-      selectedCardId: action.id,
-    });
-  } catch (e) {
-    console.error(e);
-  }
-}
+// function getLinkCardAPI(id) {
+//   return requestGet({
+//     url: getlinkCardListURL + `/${id}`,
+//     accessToken: JSON.parse(sessionStorage.getItem("token")),
+//   });
+// }
+// function* getLinkCardList(action) {
+//   try {
+//     const res = yield call(getLinkCardAPI, action.id);
+//     yield put({
+//       type: GET_LINK_CARD_LIST_SUCCESS,
+//       data: res.data.linkCardList,
+//       selectedCardId: action.id,
+//     });
+//   } catch (e) {
+//     console.error(e);
+//   }
+// }
 
 function getLinkDataAPI() {
   return requestGet({
@@ -133,6 +137,8 @@ function getCardsAPI() {
 function* getCards() {
   try {
     const result = yield call(getCardsAPI);
+    console.log(result);
+
     if (result.status == 200) {
       yield put({
         type: GET_CARDS_SUCCESS,
@@ -147,10 +153,33 @@ function* getCards() {
   }
 }
 
+function addCardAPI(linkData) {
+  return requestPost({
+    url: addCardURL,
+    body: { ...linkData },
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
+  });
+}
+
+function* addCard(action) {
+  try {
+    const result = yield call(addCardAPI, action.data);
+    if (result.status == 200) {
+      console.log("addLink 성공");
+      yield put({ type: ADD_CARD_SUCCESS, data: action.data });
+    }
+  } catch (error) {
+    console.error(error);
+    console.log("addLink 실패");
+    yield put({ type: ADD_CARD_FAILURE });
+  }
+}
+
 export {
   getCards,
   getLinkData,
   deleteCardRequest,
-  getLinkCardList,
+  // getLinkCardList,
   getProductsList,
+  addCard,
 };

@@ -1,15 +1,15 @@
 import {
   GET_CARDS_REQUEST,
-  GET_LINK_CARD_LIST_REQUEST,
+  // GET_LINK_CARD_LIST_REQUEST,
   GET_PRODUCTS_LIST_REQUEST,
 } from "./ActionType";
 
-export const requestGetLinkCardList = (id) => {
-  return {
-    type: GET_LINK_CARD_LIST_REQUEST,
-    id,
-  };
-};
+// export const requestGetLinkCardList = (id) => {
+//   return {
+//     type: GET_LINK_CARD_LIST_REQUEST,
+//     id,
+//   };
+// };
 
 export const requestGetProductsList = () => {
   return {

@@ -10,26 +10,25 @@ import {
   GET_CATEGORY_REQUEST,
   GET_CATEGORY_SUCCESS,
   GET_CATEGORY_FAILURE,
-  ADD_LINK_REQUEST,
+  ADD_CARD_REQUEST,
   RUN_CRAWLER_REQUEST,
   RELOAD_REQUEST,
   LOGOUT_REQUEST,
   DELETE_CARD_REQUEST,
-  GET_LINK_CARD_LIST_REQUEST,
+  // GET_LINK_CARD_LIST_REQUEST,
   GET_PRODUCTS_LIST_REQUEST,
   GET_CARDS_REQUEST,
 } from "./actions/ActionType";
 import { logoutRequest, loginRequest } from "./Login/saga";
 import { runCrawler } from "./RunCrawler/saga";
-import { addLink } from "./AddLink/saga";
 import { reloadCrawler } from "./ReloadCrawl/saga";
 import {
   getLinkData,
   deleteCardRequest,
   getLinkCardList,
-  getProductsListAPI,
   getProductsList,
   getCards,
+  addCard,
 } from "./LinkData/saga";
 import { nickNameDoubleCheck, signUp } from "./Register/saga";
 import { addCategory, getCategories } from "./Category/saga";
@@ -69,9 +68,9 @@ function* watchGetCategory() {
   yield takeLatest(GET_CATEGORY_REQUEST, getCategory);
 }
 
-function* watchAddLink() {
-  yield takeLatest(ADD_LINK_REQUEST, addLink);
-}
+// function* watchAddLink() {
+//   yield takeLatest(ADD_LINK_REQUEST, addLink);
+// }
 
 function* watchRunCrawler() {
   yield takeLatest(RUN_CRAWLER_REQUEST, runCrawler);
@@ -93,15 +92,18 @@ function* watchGetCategories() {
   yield takeLatest(GET_CATEGORY_REQUEST, getCategories);
 }
 
-function* watchGetLinkCardList() {
-  yield takeLatest(GET_LINK_CARD_LIST_REQUEST, getLinkCardList);
-}
+// function* watchGetLinkCardList() {
+//   yield takeLatest(GET_LINK_CARD_LIST_REQUEST, getLinkCardList);
+// }
 function* watchGetProductsList() {
   yield takeLatest(GET_PRODUCTS_LIST_REQUEST, getProductsList);
 }
 
 function* watchGetCards() {
   yield takeLatest(GET_CARDS_REQUEST, getCards);
+}
+function* watchAddCard() {
+  yield takeLatest(ADD_CARD_REQUEST, addCard);
 }
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
@@ -112,14 +114,15 @@ export default function* rootSaga() {
     fork(watchAddCategory),
     fork(watchGetLinkData),
     fork(watchGetCategory),
-    fork(watchAddLink),
+    // fork(watchAddLink),
     fork(watchRunCrawler),
     fork(watchReloading),
     fork(watchLogout),
     fork(watchDeleteCard),
     fork(watchGetCategories),
-    fork(watchGetLinkCardList),
+    // fork(watchGetLinkCardList),
     fork(watchGetProductsList),
     fork(watchGetCards),
+    fork(watchAddCard),
   ]);
 }

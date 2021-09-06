@@ -6,7 +6,7 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export const addLinkURL = `${ENDPOINT}/link/addlink`;
+export const addCardURL = `${ENDPOINT}/link/addcard`;
 export const getCardsURL = `${ENDPOINT}/link/cards`;
 export const getProductsListURL = `${ENDPOINT}/link/products`;
 export const getlinkCardListURL = `${ENDPOINT}/link/linkcardlist`;

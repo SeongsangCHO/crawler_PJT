@@ -4,11 +4,15 @@ import { requestGetLinkCardList } from "redux/actions/LinkCard";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Button from "components/common/Button";
-import { SET_SELECTED_CATEGORY_ID } from "redux/actions/ActionType";
+import {
+  SET_FILTERED_CARDS,
+  SET_SELECTED_CATEGORY_ID,
+} from "redux/actions/ActionType";
 const CategoryItem = ({ category, itemIdx, setFocusIdx, focusIdx }) => {
   const dispatch = useDispatch();
   const handleItemClick = () => {
-    dispatch(requestGetLinkCardList(category.id));
+    // dispatch(requestGetLinkCardList(category.id));
+    dispatch({ type: SET_FILTERED_CARDS, id: category.id });
     dispatch({ type: SET_SELECTED_CATEGORY_ID, id: category.id });
     setFocusIdx(itemIdx);
   };

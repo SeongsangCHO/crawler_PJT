@@ -17,14 +17,14 @@ const {
 
 const router = require("express").Router();
 
-router.get("/linkcardlist/:id", cors(accecptURL), verifyToken, (req, res) => {
-  const { id } = req.params;
-  const sql = selectLinkCardList(id);
-  db.query(sql, (dbError, result) => {
-    if (dbError) throw dbError;
-    return res.status(200).json({ linkCardList: result });
-  });
-});
+// router.get("/linkcardlist/:id", cors(accecptURL), verifyToken, (req, res) => {
+//   const { id } = req.params;
+//   const sql = selectLinkCardList(id);
+//   db.query(sql, (dbError, result) => {
+//     if (dbError) throw dbError;
+//     return res.status(200).json({ linkCardList: result });
+//   });
+// });
 
 // router.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
 //   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -83,20 +83,17 @@ router.get("/products", cors(accecptURL), verifyToken, (req, res) => {
 router.get("/cards", cors(accecptURL), verifyToken, (req, res) => {
   const clientToken = req.headers.authorization.substring(7);
   let { id } = jwt.decode(clientToken, "piTeam");
-  const sql = selectCards(36);
+  const sql = selectCards(id);
   db.query(sql, (dbError, result) => {
     if (dbError) throw dbError;
     return res.status(200).json({ cards: result });
   });
 });
 
-router.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
-  console.log("server addlink call");
+router.post("/addcard", cors(accecptURL), verifyToken, (req, res, next) => {
   const clientToken = req.headers.authorization.substring(7);
   let { id } = jwt.decode(clientToken, "piTeam");
   let { title, price, link, info, categoryId, registerTime } = req.body;
-  console.log(categoryId);
-
   let KST = new Date(registerTime.toString());
   KST.setHours(KST.getHours() + 9);
   let sql = insertLinkCard(id, categoryId);

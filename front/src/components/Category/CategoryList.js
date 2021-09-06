@@ -1,7 +1,10 @@
 import Button from "components/common/Button";
 import React, { useDebugValue, useState } from "react";
 import { useDispatch } from "react-redux";
-import { SET_FILTERED_CARDS } from "redux/actions/ActionType";
+import {
+  SET_FILTERED_CARDS,
+  SET_SELECTED_CATEGORY_ID,
+} from "redux/actions/ActionType";
 import styled from "styled-components";
 import CategoryItem from "./CategoryItem";
 
@@ -9,7 +12,8 @@ const CategoryList = ({ categories }) => {
   const [focusIdx, setFocusIdx] = useState("All");
   const dispatch = useDispatch();
   const handleAllClick = () => {
-    dispatch({ type: SET_FILTERED_CARDS });
+    dispatch({ type: SET_FILTERED_CARDS, id : -1 });
+    dispatch({ type: SET_SELECTED_CATEGORY_ID, id: -1 });
     setFocusIdx("All");
   };
   return (

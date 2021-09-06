@@ -21,8 +21,6 @@ function getCategoriesAPI(id) {
 }
 
 function addCategoryAPI(category) {
-  console.log("addCategoryAPI in saga");
-
   return requestPost({
     url: addCategoryURL,
     body: { category },

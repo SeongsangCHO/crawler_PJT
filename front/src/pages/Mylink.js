@@ -8,6 +8,7 @@ import ProductList from "components/Product/ProductList";
 import StoredCardList from "components/Card/StoredCardList";
 import LinkAddModal from "components/Modal/LinkAddModal/LinkAddModal";
 import useModal from "hooks/useModal";
+import CategoryTab from "components/MyLink/Category/CategoryTab";
 
 const MyLink = () => {
   const dispatch = useDispatch();
@@ -22,8 +23,6 @@ const MyLink = () => {
   const { categories, status, selectedCategoryId } = useSelector(
     (state) => state.categoryReducer
   );
-  const state = useSelector((state) => state.categoryReducer);
-  console.log(state);
 
   const { cards } = useSelector((state) => state.linkDataApiCallReducer);
   const { isLogined } = useSelector((state) => state.loginReducer);
@@ -41,12 +40,7 @@ const MyLink = () => {
   }, [status]);
   return (
     <MyLinkSection id="MyLinkSection" ref={sectionRef}>
-      {/* <Tab.Container id="left-tabs" defaultActiveKey={cardData}>
-        <ContentWrapper id="ContentWrapper">
-          <CategoryTab />
-          <ProductTab />
-        </ContentWrapper>
-      </Tab.Container> */}
+      <CategoryTab></CategoryTab>
       <CategoryList categories={categories} />
       {selectedCategoryId !== -1 && (
         <button onClick={modalOpen}>구매했던 상품링크 추가하기</button>

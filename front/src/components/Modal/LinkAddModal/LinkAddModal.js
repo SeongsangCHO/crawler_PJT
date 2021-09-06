@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Button from "components/common/Button";
 import { useDispatch } from "react-redux";
 import moment from "moment";
+import { ADD_CARD_REQUEST } from "redux/actions/ActionType";
 
 const LinkAddModal = ({ modalClose, selectedCategoryId }) => {
   const dispatch = useDispatch();
@@ -26,19 +27,18 @@ const LinkAddModal = ({ modalClose, selectedCategoryId }) => {
   const handleStoreClick = (e) => {
     e.preventDefault();
     const formData = e.target;
-    console.log(formData.title.value);
     dispatch({
-      type: "ADD_LINK_REQUEST",
+      type: ADD_CARD_REQUEST,
       data: {
         title: formData.title.value,
         price: formData.price.value,
         link: formData.link.value,
         info: formData.info.value,
         categoryId: selectedCategoryId,
-        // currentCategory: currentCategory,
         registerTime: moment()._d,
       },
     });
+    modalClose();
   };
   return (
     <Portal onClick={handleClose}>

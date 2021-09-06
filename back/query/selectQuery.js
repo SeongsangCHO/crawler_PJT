@@ -77,7 +77,8 @@ const selectCards = (id) => {
     info,
     price,
     link,
-    registerTime
+    registerTime,
+    categories_id as categoryId
    from links where users_id = ${id}`;
 };
 exports.selectCrawlTargetLinkCardIdQuery = selectCrawlTargetLinkCardIdQuery;

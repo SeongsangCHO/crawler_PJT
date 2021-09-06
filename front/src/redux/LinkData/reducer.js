@@ -3,9 +3,9 @@ import {
   DELETE_CARD_REQUEST,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
-  GET_LINK_CARD_LIST_REQUEST,
-  GET_LINK_CARD_LIST_SUCCESS,
-  GET_LINK_CARD_LIST_FAILURE,
+  // GET_LINK_CARD_LIST_REQUEST,
+  // GET_LINK_CARD_LIST_SUCCESS,
+  // GET_LINK_CARD_LIST_FAILURE,
   GET_PRODUCTS_LIST_REQUEST,
   GET_PRODUCTS_LIST_SUCCESS,
   GET_PRODUCTS_LIST_FAILURE,
@@ -13,6 +13,9 @@ import {
   GET_CARDS_SUCCESS,
   GET_CARDS_REQUEST,
   SET_FILTERED_CARDS,
+  ADD_CARD_REQUEST,
+  ADD_CARD_SUCCESS,
+  ADD_CARD_FAILURE,
 } from "../actions/ActionType";
 
 const initialState = {
@@ -26,7 +29,12 @@ const initialState = {
 const linkDataApiCallReducer = (state = initialState, action) => {
   switch (action?.type) {
     case SET_FILTERED_CARDS: {
-      return { ...state, filteredCards: [...state.cards] };
+      return {
+        ...state,
+        filteredCards: state.cards.filter((card) =>
+          action.id === -1 ? card : action.id === card.categoryId
+        ),
+      };
     }
     case GET_CARDS_REQUEST: {
       return { ...state, status: STATUS.request };
@@ -58,24 +66,21 @@ const linkDataApiCallReducer = (state = initialState, action) => {
     case GET_PRODUCTS_LIST_FAILURE: {
       return { ...state, status: STATUS.failure };
     }
-    case GET_LINK_CARD_LIST_REQUEST: {
+
+    case ADD_CARD_REQUEST: {
       return { ...state, status: STATUS.request };
     }
-    case GET_LINK_CARD_LIST_SUCCESS: {
+    case ADD_CARD_SUCCESS: {
       return {
         ...state,
-        cardList: action.data,
-        filteredCards: state.cards.filter((card) => card.id === 249),
+        cards: [...state.cards, action.data],
+        filteredCards: [...state.filteredCards, action.data],
         status: STATUS.success,
       };
     }
-    case GET_LINK_CARD_LIST_FAILURE: {
-      return {
-        ...state,
-        status: STATUS.failure,
-      };
+    case ADD_CARD_FAILURE: {
+      return { ...state, status: STATUS.failure };
     }
-
     case DELETE_CARD_REQUEST: {
       return {
         ...state,
