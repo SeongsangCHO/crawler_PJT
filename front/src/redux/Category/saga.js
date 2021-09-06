@@ -50,8 +50,6 @@ function* addCategory(action) {
 function* getCategories(action) {
   try {
     const result = yield call(getCategoriesAPI, action.id);
-    console.log(result);
-
     if (result.status === 200) {
       yield put({
         type: GET_CATEGORY_SUCCESS,

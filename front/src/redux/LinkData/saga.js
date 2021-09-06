@@ -27,11 +27,8 @@ function getLinkCardAPI(id) {
   });
 }
 function* getLinkCardList(action) {
-  console.log("getlinkCardList", action);
-
   try {
     const res = yield call(getLinkCardAPI, action.id);
-    console.log(res);
     yield put({
       type: GET_LINK_CARD_LIST_SUCCESS,
       data: res.data.linkCardList,
@@ -92,7 +89,6 @@ function* deleteCardRequest(action) {
       });
     }
   } catch (err) {
-    console.error(err);
     yield put({
       type: DELETE_CARD_FAILURE,
       isDeleted: false,
@@ -147,7 +143,6 @@ function* getCards() {
     yield put({
       type: GET_CARDS_FAILURE,
     });
-
     console.error(error);
   }
 }

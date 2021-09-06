@@ -3,7 +3,6 @@ import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import CreateNotification from "components/common/CreateNotification";
-import Moment from "react-moment";
 import moment from "moment";
 import "moment-timezone";
 

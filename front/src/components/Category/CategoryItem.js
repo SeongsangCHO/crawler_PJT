@@ -2,18 +2,36 @@ import React from "react";
 import PropTypes from "prop-types";
 import { requestGetLinkCardList } from "redux/actions/LinkCard";
 import { useDispatch } from "react-redux";
-
-const CategoryItem = ({ category }) => {
+import styled from "styled-components";
+import Button from "components/common/Button";
+import { SET_SELECTED_CATEGORY_ID } from "redux/actions/ActionType";
+const CategoryItem = ({ category, itemIdx, setFocusIdx, focusIdx }) => {
   const dispatch = useDispatch();
+  const handleItemClick = () => {
+    dispatch(requestGetLinkCardList(category.id));
+    dispatch({ type: SET_SELECTED_CATEGORY_ID, id: category.id });
+    setFocusIdx(itemIdx);
+  };
   return (
-    <div>
-      <button onClick={() => dispatch(requestGetLinkCardList(category.id))}>
+    // <div>
+    <Item onClick={handleItemClick}>
+      <TitleButton className={itemIdx === focusIdx ? "focus" : ""}>
         {category.title}
-      </button>
-    </div>
+      </TitleButton>
+    </Item>
+    // </div>
   );
 };
 
 CategoryItem.propTypes = {};
 
 export default CategoryItem;
+
+const Item = styled.li``;
+
+const TitleButton = styled(Button)`
+  &.focus {
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: white;
+  }
+`;

@@ -8,5 +8,10 @@ const insertCategoryQuery = (id, title) => {
   `;
 };
 
+const insertLinkCard = (userId, categoryId) => {
+  return `insert into links (title, price, link, info, categories_id, users_id, registerTime) value (?, ?, ?, ?, ${categoryId}, ${userId}, ?)`;
+};
+
 exports.insertLinkCardQuery = insertLinkCardQuery;
 exports.insertCategoryQuery = insertCategoryQuery;
+exports.insertLinkCard = insertLinkCard;

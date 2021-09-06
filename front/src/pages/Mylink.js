@@ -1,31 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import Tab from "react-bootstrap/Tab";
-import CategoryTab from "../components/MyLink/Category/CategoryTab";
-import ProductTab from "../components/MyLink/ProductTab";
 import { useDispatch, useSelector } from "react-redux";
 import { requestGetCategoires } from "redux/actions/Category";
 import CategoryList from "components/Category/CategoryList";
-import {
-  requestGetCards,
-  requestGetLinkCardList,
-  requestGetProductsList,
-} from "redux/actions/LinkCard";
+import { requestGetCards } from "redux/actions/LinkCard";
 import ProductList from "components/Product/ProductList";
-import StoredCardList from "components/Product/StoredCardList";
+import StoredCardList from "components/Card/StoredCardList";
+import LinkAddModal from "components/Modal/LinkAddModal/LinkAddModal";
+import useModal from "hooks/useModal";
 
 const MyLink = () => {
   const dispatch = useDispatch();
   const sectionRef = useRef(null);
-  const cardData = useSelector((state) => state.addLinkReducer.data.title);
   const { products } = useSelector(
     (state) => state.linkDataApiCallReducer.products
   );
   const scrollToTop = () => {
     sectionRef.current.scrollIntoView();
   };
-  const { categories, status } = useSelector((state) => state.categoryReducer);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(0);
+  const { modalClose, modalOpen, isOpen } = useModal();
+  const { categories, status, selectedCategoryId } = useSelector(
+    (state) => state.categoryReducer
+  );
+  const state = useSelector((state) => state.categoryReducer);
+  console.log(state);
+
   const { cards } = useSelector((state) => state.linkDataApiCallReducer);
   const { isLogined } = useSelector((state) => state.loginReducer);
   useEffect(() => {
@@ -36,22 +35,30 @@ const MyLink = () => {
 
   useEffect(() => {
     if (status === "GET_CATEGORY_SUCCESS") {
-      setSelectedCategoryId(categories[0].id);
-      // dispatch(requestGetProductsList());
       dispatch(requestGetCards());
     }
+    console.log(selectedCategoryId, status);
   }, [status]);
   return (
     <MyLinkSection id="MyLinkSection" ref={sectionRef}>
-      <Tab.Container id="left-tabs" defaultActiveKey={cardData}>
+      {/* <Tab.Container id="left-tabs" defaultActiveKey={cardData}>
         <ContentWrapper id="ContentWrapper">
           <CategoryTab />
           <ProductTab />
         </ContentWrapper>
-      </Tab.Container>
+      </Tab.Container> */}
       <CategoryList categories={categories} />
+      {selectedCategoryId !== -1 && (
+        <button onClick={modalOpen}>구매했던 상품링크 추가하기</button>
+      )}
       <StoredCardList cards={cards} />
       <ProductList products={products} />
+      {isOpen && (
+        <LinkAddModal
+          selectedCategoryId={selectedCategoryId}
+          modalClose={modalClose}
+        />
+      )}
       <ScrollTopButton onClick={scrollToTop}>맨 위로</ScrollTopButton>
     </MyLinkSection>
   );

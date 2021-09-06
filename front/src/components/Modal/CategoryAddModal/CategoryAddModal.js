@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Modal from "react-bootstrap/Modal";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Portal from "components/Portal/Portal";
 import Button from "components/common/Button";
+import AddModalTemplate from "../AddModalTemplate";
 
 const CategoryAddModal = ({ modalClose, modalOpen, isOpen }) => {
   const [categoryTitle, setCategoryTitle] = useState("");
@@ -40,10 +40,8 @@ const CategoryAddModal = ({ modalClose, modalOpen, isOpen }) => {
   };
   return (
     <Portal onClick={handleClose}>
-      <Container>
-        <h1 id="contained-modal-title-vcenter">
-          <h4>관리할 링크의 카테고리를 만드세요</h4>
-        </h1>
+      <AddModalTemplate>
+        <h4>관리할 링크의 카테고리를 만드세요</h4>
         <CategoryInput
           onKeyDown={handleInputKey}
           onChange={handleSetCategory}
@@ -58,7 +56,7 @@ const CategoryAddModal = ({ modalClose, modalOpen, isOpen }) => {
             저장
           </AddButton>
         </ButtonContainer>
-      </Container>
+      </AddModalTemplate>
     </Portal>
   );
 };

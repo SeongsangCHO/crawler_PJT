@@ -1,4 +1,4 @@
-import { addLinkURL } from "../api";
+import { addLinkURL, requestPost } from "../api";
 import { put, call } from "redux-saga/effects";
 import axios from "axios";
 
@@ -7,9 +7,14 @@ import { ADD_LINK_SUCCESS, ADD_LINK_FAILURE } from "../actions/ActionType";
 function addLinkAPI(linkData) {
   console.log("call addLinkAPI");
 
-  return axios.post(addLinkURL, linkData, {
-    withCredentials: true,
+  return requestPost({
+    url: addLinkURL,
+    body: { ...linkData },
+    accessToken: JSON.parse(sessionStorage.getItem("token")),
   });
+  // return axios.post(addLinkURL, linkData, {
+  //   withCredentials: true,
+  // });
 }
 
 function* addLink(action) {
@@ -17,7 +22,7 @@ function* addLink(action) {
     const result = yield call(addLinkAPI, action.data);
     if (result.status == 200) {
       console.log("addLink 성공");
-      yield put({ type: ADD_LINK_SUCCESS, data: action.data,isAddLink:true });
+      yield put({ type: ADD_LINK_SUCCESS, data: action.data, isAddLink: true });
     }
   } catch (error) {
     console.error(error);

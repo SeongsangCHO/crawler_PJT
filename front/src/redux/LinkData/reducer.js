@@ -1,8 +1,5 @@
 import { STATUS } from "components/utils/constants";
 import {
-  LINK_DATA_REQUEST,
-  LINK_DATA_SUCCESS,
-  LINK_DATA_FAILURE,
   DELETE_CARD_REQUEST,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
@@ -15,20 +12,22 @@ import {
   GET_CARDS_FAILURE,
   GET_CARDS_SUCCESS,
   GET_CARDS_REQUEST,
+  SET_FILTERED_CARDS,
 } from "../actions/ActionType";
 
 const initialState = {
   products: [],
-  message: "",
-  isCalled: false,
-  isDeleted: false,
   status: "",
   cards: [],
-  selectedCardId: 0,
+  selectedCategory: 0,
+  filteredCards: [],
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
   switch (action?.type) {
+    case SET_FILTERED_CARDS: {
+      return { ...state, filteredCards: [...state.cards] };
+    }
     case GET_CARDS_REQUEST: {
       return { ...state, status: STATUS.request };
     }
@@ -37,13 +36,17 @@ const linkDataApiCallReducer = (state = initialState, action) => {
         ...state,
         status: STATUS.success,
         cards: [...action.cards],
+        filteredCards: [...action.cards],
       };
     }
     case GET_CARDS_FAILURE: {
       return { ...state, status: STATUS.failure };
     }
     case GET_PRODUCTS_LIST_REQUEST: {
-      return { ...state, status: STATUS.request };
+      return {
+        ...state,
+        status: STATUS.request,
+      };
     }
     case GET_PRODUCTS_LIST_SUCCESS: {
       return {
@@ -61,8 +64,8 @@ const linkDataApiCallReducer = (state = initialState, action) => {
     case GET_LINK_CARD_LIST_SUCCESS: {
       return {
         ...state,
-        selectedCardId: action.selectedCardId,
         cardList: action.data,
+        filteredCards: state.cards.filter((card) => card.id === 249),
         status: STATUS.success,
       };
     }
