@@ -5,8 +5,7 @@ import registerReducer from "./Register/reducer";
 import categoryReducer from "./Category/reducer";
 import linkDataApiCallReducer from "./LinkData/reducer";
 import createSagaMiddleware from "redux-saga";
-import runCrawlerReducer from "./RunCrawler/reducer";
-import reloadReducer from "./ReloadCrawl/reducer";
+import crawlReducer from "./Crawl/reducer";
 import loginReducer from "./Login/reducer";
 
 import rootSaga from "./saga";
@@ -23,8 +22,7 @@ const configureStore = () => {
       registerReducer,
       categoryReducer,
       linkDataApiCallReducer,
-      runCrawlerReducer,
-      reloadReducer,
+      crawlReducer,
       loginReducer,
     }),
     enhancer

@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { NotificationManager } from "react-notifications";
 
 const CreateNotification = (type) => {
@@ -19,6 +18,8 @@ const CreateNotification = (type) => {
         break;
       case "error":
         NotificationManager.error(msg, "", 2000, () => {});
+        break;
+      default:
         break;
     }
   };

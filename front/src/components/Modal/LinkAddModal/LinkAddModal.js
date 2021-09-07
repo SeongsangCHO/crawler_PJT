@@ -5,7 +5,10 @@ import styled from "styled-components";
 import Button from "components/common/Button";
 import { useDispatch } from "react-redux";
 import moment from "moment";
-import { ADD_CARD_REQUEST } from "redux/actions/ActionType";
+import {
+  ADD_CARD_REQUEST,
+  RUN_CRAWLER_REQUEST,
+} from "redux/actions/ActionType";
 
 const LinkAddModal = ({ modalClose, selectedCategoryId }) => {
   const dispatch = useDispatch();
@@ -37,6 +40,10 @@ const LinkAddModal = ({ modalClose, selectedCategoryId }) => {
         categoryId: selectedCategoryId,
         registerTime: moment()._d,
       },
+    });
+    dispatch({
+      type: RUN_CRAWLER_REQUEST,
+      currentLinkTitle: formData.title.value,
     });
     modalClose();
   };

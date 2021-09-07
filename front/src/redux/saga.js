@@ -1,5 +1,4 @@
-//%s/localhost/34.89..../g
-import { all, fork, put, takeLatest } from "redux-saga/effects";
+import { all, fork, takeLatest } from "redux-saga/effects";
 
 import {
   SIGN_UP_REQUEST,
@@ -8,44 +7,28 @@ import {
   NICK_DOUBLE_CHECK_REQUEST,
   LINK_DATA_REQUEST,
   GET_CATEGORY_REQUEST,
-  GET_CATEGORY_SUCCESS,
-  GET_CATEGORY_FAILURE,
   ADD_CARD_REQUEST,
   RUN_CRAWLER_REQUEST,
   RELOAD_REQUEST,
   LOGOUT_REQUEST,
   DELETE_CARD_REQUEST,
-  // GET_LINK_CARD_LIST_REQUEST,
   GET_PRODUCTS_LIST_REQUEST,
   GET_CARDS_REQUEST,
+  GET_CRAWL_DATA_LIST_REQUEST,
 } from "./actions/ActionType";
 import { logoutRequest, loginRequest } from "./Login/saga";
-import { runCrawler } from "./RunCrawler/saga";
-import { reloadCrawler } from "./ReloadCrawl/saga";
 import {
   getLinkData,
   deleteCardRequest,
-  getLinkCardList,
   getProductsList,
   getCards,
   addCard,
 } from "./LinkData/saga";
 import { nickNameDoubleCheck, signUp } from "./Register/saga";
 import { addCategory, getCategories } from "./Category/saga";
+import { getCrawlList, runCrawler } from "./Crawl/saga";
+import { reloadCrawler } from "./ReloadCrawl/saga";
 
-function* getCategory(action) {
-  try {
-    yield put({
-      type: GET_CATEGORY_SUCCESS,
-      currentCategory: action.currentCategory,
-    });
-  } catch (err) {
-    yield put({
-      type: GET_CATEGORY_FAILURE,
-      currentCategory: action.currentCategory,
-    });
-  }
-}
 function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp); //리듀서 감지
 }
@@ -64,9 +47,9 @@ function* watchLogin() {
 function* watchGetLinkData() {
   yield takeLatest(LINK_DATA_REQUEST, getLinkData);
 }
-function* watchGetCategory() {
-  yield takeLatest(GET_CATEGORY_REQUEST, getCategory);
-}
+// function* watchGetCategory() {
+//   yield takeLatest(GET_CATEGORY_REQUEST, getCategory);
+// }
 
 // function* watchAddLink() {
 //   yield takeLatest(ADD_LINK_REQUEST, addLink);
@@ -105,6 +88,9 @@ function* watchGetCards() {
 function* watchAddCard() {
   yield takeLatest(ADD_CARD_REQUEST, addCard);
 }
+function* watchGetCrawlList() {
+  yield takeLatest(GET_CRAWL_DATA_LIST_REQUEST, getCrawlList);
+}
 //1번 랜더링시 watch Sign up이 수행될떄까지 기다림
 export default function* rootSaga() {
   yield all([
@@ -113,16 +99,14 @@ export default function* rootSaga() {
     fork(watchLogin),
     fork(watchAddCategory),
     fork(watchGetLinkData),
-    fork(watchGetCategory),
-    // fork(watchAddLink),
     fork(watchRunCrawler),
     fork(watchReloading),
     fork(watchLogout),
     fork(watchDeleteCard),
     fork(watchGetCategories),
-    // fork(watchGetLinkCardList),
     fork(watchGetProductsList),
     fork(watchGetCards),
     fork(watchAddCard),
+    fork(watchGetCrawlList),
   ]);
 }

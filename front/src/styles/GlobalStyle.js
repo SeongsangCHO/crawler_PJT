@@ -16,7 +16,9 @@ const GlobalStyle = createGlobalStyle`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   }
-
+  body.scorll-hidden{
+    overflow-y: hidden;
+  }
   a {
     text-decoration: none;
   }

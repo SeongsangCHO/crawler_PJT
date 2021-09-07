@@ -132,9 +132,9 @@ const HeaderWrapper = styled.div`
   padding: 1em 1em 0 1em;
 `;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
-`;
+// const ButtonWrapper = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   margin-right: 10px;
+// `;

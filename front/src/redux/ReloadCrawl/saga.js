@@ -18,7 +18,7 @@ function reloadCrawlerAPI(linkTitle) {
 function* reloadCrawler(action) {
   try {
     const result = yield call(reloadCrawlerAPI, action.linkTitle);
-    if (result.status == 200) {
+    if (result.status === 200) {
       yield put({
         type: RELOAD_SUCCESS,
         isReloaded: true,

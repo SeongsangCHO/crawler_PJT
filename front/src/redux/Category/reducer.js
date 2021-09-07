@@ -24,33 +24,42 @@ const categoryReducer = (state = initialState, action) => {
       return { ...state, selectedCategoryId: action.id };
     }
     case ADD_CATEGORY_REQUEST: {
-      return { ...state, isAddCategory: action.isAddCategory };
+      return {
+        ...state,
+        status: STATUS.request,
+        isAddCategory: action.isAddCategory,
+      };
     }
     case ADD_CATEGORY_SUCCESS: {
       return {
         ...state,
+        status: STATUS.success,
         categories: [...state.categories, action.category],
         isAddCategory: action.isAddCategory,
       };
     }
     case ADD_CATEGORY_FAILURE: {
-      return { ...state, isAddCategory: false };
+      return {
+        ...state,
+        status: STATUS.failure,
+        isAddCategory: false,
+      };
     }
     case GET_CATEGORY_REQUEST: {
       return {
         ...state,
-        status: "GET_CATEGORY_" + STATUS.request,
+        status: STATUS.request,
       };
     }
     case GET_CATEGORY_SUCCESS: {
       return {
         ...state,
-        status: "GET_CATEGORY_" + STATUS.success,
+        status: STATUS.success,
         categories: [...action.categories],
       };
     }
     case GET_CATEGORY_FAILURE: {
-      return { ...state, status: "GET_CATEGORY_" + STATUS.failure };
+      return { ...state, status: STATUS.failure };
     }
     default:
       return state;

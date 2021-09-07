@@ -15,7 +15,7 @@ const Portal = ({ children, ...restProps }) => {
 
 export default Portal;
 const ModalWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;

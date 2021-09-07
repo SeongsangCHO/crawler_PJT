@@ -4,8 +4,10 @@ const useModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const modalOpen = () => {
     setIsOpen(true);
+    document.body.classList.add("scorll-hidden");
   };
   const modalClose = () => {
+    document.body.classList.remove("scorll-hidden");
     setIsOpen(false);
   };
   return {

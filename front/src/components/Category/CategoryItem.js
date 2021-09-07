@@ -1,6 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { requestGetLinkCardList } from "redux/actions/LinkCard";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Button from "components/common/Button";

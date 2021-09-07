@@ -1,6 +1,6 @@
 import LinkAddModal from "components/Modal/LinkAddModal/LinkAddModal";
 import useModal from "hooks/useModal";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import CardItem from "./CardItem";
@@ -9,12 +9,20 @@ const CardList = ({ cards, selectedCategoryId }) => {
   const { filteredCards } = useSelector(
     (state) => state.linkDataApiCallReducer
   );
+  const { selectedCardData } = useSelector(
+    (state) => state.linkDataApiCallReducer
+  );
+
   const { modalOpen, modalClose, isOpen } = useModal();
   return (
     <Wrapper>
       <CardListWrapper>
         {filteredCards?.map((card) => (
-          <CardItem card={card} key={card.id}></CardItem>
+          <CardItem
+            selectedCardData={selectedCardData}
+            card={card}
+            key={card.id}
+          ></CardItem>
         ))}
       </CardListWrapper>
       {isOpen && (
@@ -35,8 +43,7 @@ CardList.propTypes = {};
 export default CardList;
 
 const Wrapper = styled.section`
-  padding: 10px;
-  background-color: aliceblue;
+  padding-top: 10px;
   position: relative;
 `;
 
@@ -52,10 +59,15 @@ const CardListWrapper = styled.ul`
 const AddButton = styled.button`
   position: absolute;
   right: 0px;
-  bottom: 0px;
-  width: 30px;
-  height: 30px;
+  bottom: -50px;
+  width: 50px;
+  height: 50px;
+  font-size: 2em;
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.secondPrimary};
   color: white;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: white;
+  }
 `;

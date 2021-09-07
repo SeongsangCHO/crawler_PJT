@@ -1,10 +1,13 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-const CardItem = ({ card }) => {
+import Button from "components/common/Button";
+import { useDispatch } from "react-redux";
+import { SET_SELECTED_CARD_ID } from "redux/actions/ActionType";
+const CardItem = ({ card, selectedCardData }) => {
+  const dispatch = useDispatch();
   const getFromBoughtDaysDiffToday = () => {
     const diffDays = moment(card.registerTime).diff(new Date(), "days");
     if (diffDays === 0) {
@@ -12,15 +15,31 @@ const CardItem = ({ card }) => {
     }
     return diffDays + "일전 등록";
   };
+  const handleTitleClick = () => {
+    dispatch({
+      type: SET_SELECTED_CARD_ID,
+      id: card.id,
+      title: card.title,
+    });
+    // dispatch(해당하는 카드ID로 select하는 dispatch)
+    // CrawlModal Open
+  };
   return (
     <Container>
-      <ProductText>{card.title}</ProductText>
-      <h2>구매가격 : {parseInt(card.price).toLocaleString()}원</h2>
-      <InfoText>{card.info}</InfoText>
-      <RegisterText>{getFromBoughtDaysDiffToday()}</RegisterText>
-      <ProductLink target="_blank" href={card.link}>
-        <FontAwesomeIcon icon={faLink} />
-      </ProductLink>
+      <ProductTitleButton
+        onClick={handleTitleClick}
+        className={card.id === selectedCardData.id ? "focus" : ""}
+      >
+        {card.title}
+      </ProductTitleButton>
+      <CardInfoContainer>
+        <ProductLink target="_blank" href={card.link}>
+          <FontAwesomeIcon icon={faLink} />
+        </ProductLink>
+        <h2>구매가격 : {parseInt(card.price).toLocaleString()}원</h2>
+        <InfoText>{card.info}라고했음.</InfoText>
+        <RegisterText>{getFromBoughtDaysDiffToday()}</RegisterText>
+      </CardInfoContainer>
     </Container>
   );
 };
@@ -28,15 +47,33 @@ const CardItem = ({ card }) => {
 CardItem.propTypes = {};
 
 export default CardItem;
+
+const CardInfoContainer = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 5px;
+  padding: 5px;
+`;
+
 const ProductLink = styled.a`
   color: black;
   &:visited {
     color: black;
   }
 `;
-const Container = styled.li``;
+const Container = styled.li`
+  padding: 5px;
+`;
 const RegisterText = styled.span`
-  /* position: absolute; */
+  display: block;
 `;
 const InfoText = styled.span``;
-const ProductText = styled.span``;
+const ProductTitleButton = styled(Button)`
+  transition: 0.2s;
+  background-color: ${({ theme }) => theme.colors.secondPrimary};
+  color: white;
+  &:hover,
+  &.focus {
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: white;
+  }
+`;

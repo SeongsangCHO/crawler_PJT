@@ -1,5 +1,5 @@
 import Button from "components/common/Button";
-import React, { useDebugValue, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   SET_FILTERED_CARDS,

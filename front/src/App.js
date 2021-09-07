@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import Header from "./components/Header/Header";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 

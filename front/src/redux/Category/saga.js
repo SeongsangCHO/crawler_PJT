@@ -12,10 +12,9 @@ import {
   GET_CATEGORY_SUCCESS,
 } from "../actions/ActionType";
 
-function getCategoriesAPI(id) {
+function getCategoriesAPI() {
   return requestGet({
     url: getCategoriesURL,
-    body: { id },
     accessToken: JSON.parse(sessionStorage.getItem("token")),
   });
 }
@@ -32,7 +31,7 @@ function* addCategory(action) {
   try {
     const result = yield call(addCategoryAPI, action.category);
 
-    if (result.status == 200) {
+    if (result.status === 200) {
       yield put({
         type: ADD_CATEGORY_SUCCESS,
         category: { ...result.data },
@@ -45,9 +44,9 @@ function* addCategory(action) {
   }
 }
 
-function* getCategories(action) {
+function* getCategories() {
   try {
-    const result = yield call(getCategoriesAPI, action.id);
+    const result = yield call(getCategoriesAPI);
     if (result.status === 200) {
       yield put({
         type: GET_CATEGORY_SUCCESS,

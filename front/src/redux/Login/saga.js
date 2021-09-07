@@ -1,4 +1,4 @@
-import { logoutURL, loginURL } from "../api";
+import { loginURL } from "../api";
 import { put, call } from "redux-saga/effects";
 import { requestPost } from "redux/api";
 import {
@@ -21,7 +21,7 @@ function loginAPI(loginData) {
 function* loginRequest(action) {
   try {
     const result = yield call(loginAPI, action.data);
-    if (result.status == 200) {
+    if (result.status === 200) {
       yield put({
         type: LOGIN_SUCCESS,
         nickName: action.data.nickName,

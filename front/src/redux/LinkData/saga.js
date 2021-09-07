@@ -2,7 +2,6 @@ import {
   linkDataApiCallURL,
   deleteCardURL,
   requestGet,
-  getlinkCardListURL,
   getProductsListURL,
   getCardsURL,
   requestPost,
@@ -53,7 +52,7 @@ function getLinkDataAPI() {
 function* getLinkData(action) {
   try {
     const result = yield call(getLinkDataAPI, action.data);
-    if (result.status == 200) {
+    if (result.status === 200) {
       yield put({
         type: LINK_DATA_SUCCESS,
         data: result.data,
@@ -107,13 +106,9 @@ function getProductsListAPI() {
   });
 }
 function* getProductsList() {
-  console.log("getProductsList");
-
   try {
     const result = yield call(getProductsListAPI);
-    console.log(result);
-
-    if (result.status == 200) {
+    if (result.status === 200) {
       yield put({
         type: GET_PRODUCTS_LIST_SUCCESS,
         products: result.data.products,
@@ -137,9 +132,7 @@ function getCardsAPI() {
 function* getCards() {
   try {
     const result = yield call(getCardsAPI);
-    console.log(result);
-
-    if (result.status == 200) {
+    if (result.status === 200) {
       yield put({
         type: GET_CARDS_SUCCESS,
         cards: result.data.cards,
@@ -164,7 +157,7 @@ function addCardAPI(linkData) {
 function* addCard(action) {
   try {
     const result = yield call(addCardAPI, action.data);
-    if (result.status == 200) {
+    if (result.status === 200) {
       console.log("addLink 성공");
       yield put({ type: ADD_CARD_SUCCESS, data: action.data });
     }

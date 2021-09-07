@@ -7,7 +7,7 @@ import { requestNicknameDoubleCheck } from "redux/actions/Register";
 
 const NickNameInput = () => {
   const dispatch = useDispatch();
-  const { isDouble, loading } = useSelector((state) => state.registerReducer);
+  const { isDouble } = useSelector((state) => state.registerReducer);
   const [nickName, setNickName] = useState("");
   const [validText, setValidText] = useState("사용하실 닉네임을 입력해주세요.");
   const [isValid, setIsValid] = useState(true);

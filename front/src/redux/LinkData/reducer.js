@@ -3,9 +3,6 @@ import {
   DELETE_CARD_REQUEST,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
-  // GET_LINK_CARD_LIST_REQUEST,
-  // GET_LINK_CARD_LIST_SUCCESS,
-  // GET_LINK_CARD_LIST_FAILURE,
   GET_PRODUCTS_LIST_REQUEST,
   GET_PRODUCTS_LIST_SUCCESS,
   GET_PRODUCTS_LIST_FAILURE,
@@ -16,18 +13,28 @@ import {
   ADD_CARD_REQUEST,
   ADD_CARD_SUCCESS,
   ADD_CARD_FAILURE,
+  SET_SELECTED_CARD_ID,
 } from "../actions/ActionType";
 
 const initialState = {
   products: [],
   status: "",
   cards: [],
-  selectedCategory: 0,
+  selectedCardData: {
+    id: -1,
+    title: "",
+  },
   filteredCards: [],
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
   switch (action?.type) {
+    case SET_SELECTED_CARD_ID: {
+      return {
+        ...state,
+        selectedCardData: { id: action.id, title: action.title },
+      };
+    }
     case SET_FILTERED_CARDS: {
       return {
         ...state,
@@ -37,7 +44,10 @@ const linkDataApiCallReducer = (state = initialState, action) => {
       };
     }
     case GET_CARDS_REQUEST: {
-      return { ...state, status: STATUS.request };
+      return {
+        ...state,
+        status: STATUS.request,
+      };
     }
     case GET_CARDS_SUCCESS: {
       return {
@@ -103,6 +113,7 @@ const linkDataApiCallReducer = (state = initialState, action) => {
       return { ...state, data: { category: result }, isDeleted: true };
     }
     case DELETE_CARD_FAILURE: {
+      break;
     }
     default:
       return state;

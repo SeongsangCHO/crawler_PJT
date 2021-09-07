@@ -1,30 +1,36 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { requestGetCategoires } from "redux/actions/Category";
 import CategoryList from "components/Category/CategoryList";
 import { requestGetCards } from "redux/actions/LinkCard";
 import ProductList from "components/Product/ProductList";
-import LinkAddModal from "components/Modal/LinkAddModal/LinkAddModal";
-import useModal from "hooks/useModal";
 import CategoryTab from "components/MyLink/Category/CategoryTab";
 import CardList from "components/Card/CardList";
+import Spinner from "components/common/Spinner";
+import useSpinner from "hooks/useSpinner";
+import useModal from "hooks/useModal";
+import CrawlListModal from "components/Modal/CrawlListModal/CrawlListModal";
+import { GET_CRAWL_DATA_LIST_REQUEST } from "redux/actions/ActionType";
 
 const MyLink = () => {
   const dispatch = useDispatch();
+  const { isLoading } = useSpinner();
   const sectionRef = useRef(null);
   const { products } = useSelector(
     (state) => state.linkDataApiCallReducer.products
   );
+  const { isOpen, modalOpen, modalClose } = useModal();
   const scrollToTop = () => {
     sectionRef.current.scrollIntoView();
   };
-  const { modalClose, modalOpen, isOpen } = useModal();
   const { categories, status, selectedCategoryId } = useSelector(
     (state) => state.categoryReducer
   );
 
-  const { cards } = useSelector((state) => state.linkDataApiCallReducer);
+  const { cards, selectedCardData } = useSelector(
+    (state) => state.linkDataApiCallReducer
+  );
   const { isLogined } = useSelector((state) => state.loginReducer);
   useEffect(() => {
     if (isLogined) {
@@ -33,11 +39,20 @@ const MyLink = () => {
   }, [isLogined]);
 
   useEffect(() => {
-    if (status === "GET_CATEGORY_SUCCESS") {
+    if (status === "SUCCESS") {
       dispatch(requestGetCards());
     }
-    console.log(selectedCategoryId, status);
   }, [status]);
+  useEffect(() => {
+    if (selectedCardData.id !== -1) {
+      console.log("crawlModal Open");
+      dispatch({
+        type: GET_CRAWL_DATA_LIST_REQUEST,
+        id: selectedCardData.id,
+      });
+      modalOpen();
+    }
+  }, [selectedCardData]);
   return (
     <MyLinkSection id="MyLinkSection" ref={sectionRef}>
       <CategoryTab />
@@ -45,6 +60,13 @@ const MyLink = () => {
       <CardList cards={cards} selectedCategoryId={selectedCategoryId} />
       <ProductList products={products} />
       <ScrollTopButton onClick={scrollToTop}>맨 위로</ScrollTopButton>
+      {isLoading && <Spinner />}
+      {isOpen && (
+        <CrawlListModal
+          title={selectedCardData.title}
+          modalClose={modalClose}
+        />
+      )}
     </MyLinkSection>
   );
 };
@@ -66,14 +88,6 @@ const ScrollTopButton = styled.a`
     color: tomato;
     background-color: white;
     text-decoration: none;
-  }
-`;
-
-const ContentWrapper = styled.div`
-  margin-top: 10px;
-  display: flex;
-  @media (max-width: 768px) {
-    flex-direction: column;
   }
 `;
 

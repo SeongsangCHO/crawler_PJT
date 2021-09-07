@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import CategoryAddModal from "components/Modal/CategoryAddModal/CategoryAddModal";
-import Nav from "react-bootstrap/Nav";
-// import "../../css/Contentc.css";
 import useModal from "hooks/useModal";
 import CreateNotification from "../../common/CreateNotification";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Button from "components/common/Button";
 
 const CategoryWrapper = styled.div`

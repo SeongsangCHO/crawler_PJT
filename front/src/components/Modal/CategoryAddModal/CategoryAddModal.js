@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import Portal from "components/Portal/Portal";
 import Button from "components/common/Button";
 import AddModalTemplate from "../AddModalTemplate";
 
-const CategoryAddModal = ({ modalClose, modalOpen, isOpen }) => {
+const CategoryAddModal = ({ modalClose }) => {
   const [categoryTitle, setCategoryTitle] = useState("");
   const dispatch = useDispatch();
   const handleSetCategory = (e) => {
@@ -73,18 +73,18 @@ const AddButton = styled(Button)`
 const CloseButton = styled(Button)`
   width: 50px;
 `;
-const Container = styled.div`
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 1em;
-  position: absolute;
-  left: 50%;
-  top: 22%;
-  transform: translate(-50%, -50%);
-`;
-const InputContainer = styled.div``;
+// const Container = styled.div`
+//   background-color: white;
+//   display: flex;
+//   justify-content: center;
+//   flex-direction: column;
+//   padding: 1em;
+//   position: absolute;
+//   left: 50%;
+//   top: 22%;
+//   transform: translate(-50%, -50%);
+// `;
+// const InputContainer = styled.div``;
 const CategoryInput = styled.input`
   width: 100%;
   margin: 15px 0 15px;
