@@ -1,6 +1,6 @@
-const selectCrawlTargetLinkCardIdQuery = (req, searchTitle) => {
+const selectCrawlTargetLinkCardIdQuery = (id, searchTitle) => {
   return `select id from links where users_id =
-  (select id from users where nickname = '${req.currentUserNickname}'
+  (select id from users where id = '${id}'
   and title ='${searchTitle}'
   )`;
 };
@@ -81,6 +81,10 @@ const selectCards = (id) => {
     categories_id as categoryId
    from links where users_id = ${id}`;
 };
+
+const selectCrawlList = (id) => {
+  return `select * from crawl where links_id = ${id}`;
+};
 exports.selectCrawlTargetLinkCardIdQuery = selectCrawlTargetLinkCardIdQuery;
 exports.selectCardCrawledDataQuery = selectCardCrawledDataQuery;
 exports.selectLinkCardIdQuery = selectLinkCardIdQuery;
@@ -89,3 +93,4 @@ exports.selectCategories = selectCategories;
 exports.selectLinkCardList = selectLinkCardList;
 exports.selectProducts = selectProducts;
 exports.selectCards = selectCards;
+exports.selectCrawlList = selectCrawlList;
