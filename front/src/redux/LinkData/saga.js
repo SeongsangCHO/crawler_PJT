@@ -159,7 +159,10 @@ function* addCard(action) {
     const result = yield call(addCardAPI, action.data);
     if (result.status === 200) {
       console.log("addLink 성공");
-      yield put({ type: ADD_CARD_SUCCESS, data: action.data });
+      yield put({
+        type: ADD_CARD_SUCCESS,
+        data: { ...action.data, id: result.data.id },
+      });
     }
   } catch (error) {
     console.error(error);

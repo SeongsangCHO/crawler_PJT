@@ -12,7 +12,7 @@ import {
 const initialState = {
   categories: [],
   isAddCategory: false,
-  status: STATUS.request,
+  status: "",
   selectedCategoryId: -1,
 };
 

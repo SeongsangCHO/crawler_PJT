@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import CardItem from "./CardItem";
 
-const CardList = ({ cards, selectedCategoryId }) => {
+const CardList = ({ selectedCategoryId }) => {
   const { filteredCards } = useSelector(
     (state) => state.linkDataApiCallReducer
   );

@@ -27,7 +27,6 @@ function getCrawlListAPI(id) {
 function* getCrawlList(action) {
   try {
     const result = yield call(getCrawlListAPI, action.id);
-    console.log(result);
 
     yield put({
       type: GET_CRAWL_DATA_LIST_SUCCESS,

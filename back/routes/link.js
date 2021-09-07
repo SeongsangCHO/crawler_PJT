@@ -99,7 +99,7 @@ router.post("/addcard", cors(accecptURL), verifyToken, (req, res, next) => {
   let sql = insertLinkCard(id, categoryId);
   db.query(sql, [title, price, link, info, KST], (dbError, result) => {
     if (dbError) throw dbError;
+    return res.status(200).json({ id: result.insertId });
   });
-  return res.status(200).json({ message: "링크 추가 SUCCESS" });
 });
 module.exports = router;

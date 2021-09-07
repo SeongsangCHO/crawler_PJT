@@ -1,21 +1,16 @@
 import Portal from "components/Portal/Portal";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_SELECTED_CARD_ID, SET_SELECTED_CATEGORY_ID } from "redux/actions/ActionType";
 import styled from "styled-components";
-// {
-//   "id": 5031,
-//   "links_id": 398,
-//   "title": "32",
-//   "price": "119960",
-//   "priority": "1",
-//   "source": "ssg",
-//   "link": "http://www.ssg.com/item/itemView.ssg?itemId=1000212542683&siteNo=7014&salestrNo=6005&tlidSrchWd=%EC%83%88%EC%95%B6%EC%95%A0%EC%9E%AC32&srchPgNo=1&src_area=ssglist",
-//   "imgsrc": "//item.ssgcdn.com/83/26/54/item/1000212542683_i1_232.jpg"
-// }
+import CrawlItem from "./CrawlItem";
+
 const CrawlListModal = ({ modalClose, title }) => {
+  const dispatch = useDispatch();
   const handleClose = (e) => {
     const { id } = e.target;
     if (id === "dim") {
+      dispatch({ type: SET_SELECTED_CARD_ID, id: -1 });
       modalClose();
     }
   };
@@ -29,11 +24,16 @@ const CrawlListModal = ({ modalClose, title }) => {
   return (
     <Portal onClick={handleClose}>
       <Container className={animation && "animation"}>
-        <div></div>
-        <h1>{title}에 대한 수집정보입니다.</h1>
-        {crawlList.map((item) => (
-          <div key={item.id}>{item.price}</div>
-        ))}
+        <Header>
+          <Title>
+            <span>{title}</span> 상품 수집정보
+          </Title>
+        </Header>
+        <ItemWrapper>
+          {crawlList.map((item) => (
+            <CrawlItem item={item} key={item.id} />
+          ))}
+        </ItemWrapper>
         크롤러모달
       </Container>
     </Portal>
@@ -45,12 +45,43 @@ export default CrawlListModal;
 const Container = styled.aside`
   position: absolute;
   transition: 0.6s;
-  width: 30%;
+  overflow-y: scroll;
+  max-width: 500px;
+  width: 40%;
   height: 100%;
   background-color: white;
   right: -100%;
   padding: 15px;
+  font-size: 24px;
   &.animation {
     right: 0;
   }
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+    width: 50%;
+  }
+`;
+
+const Header = styled.div``;
+const Title = styled.h1`
+  text-align: center;
+  font-size: 1em;
+  border-bottom: 1px solid #888888;
+  padding-bottom: 10px;
+  & > span {
+    font-size: 1.5em;
+    color: ${({ theme }) => theme.colors.primary};
+  }
+  @media screen and (max-width: 768px) {
+    & > span {
+      display: block;
+    }
+  }
+`;
+const ItemWrapper = styled.ul`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
 `;

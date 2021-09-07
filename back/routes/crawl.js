@@ -28,7 +28,6 @@ router.post("/run", cors(accecptURL), verifyToken, (req, res) => {
     //1 : 성공
     //2 : 검색결과 없음
     Promise.all(crawlers).then((result) => {
-      console.log("crawl결과", result);
       return res.status(200).json({ message: "크롤링 성공" });
     });
   });
@@ -36,13 +35,11 @@ router.post("/run", cors(accecptURL), verifyToken, (req, res) => {
 
 router.get("/list/:id", cors(accecptURL), verifyToken, (req, res) => {
   const { id } = req.params; // links Id
-  console.log("crawl/list:id", id, req.params);
   const sql = selectCrawlList(id);
   db.query(sql, (dbErr, result) => {
     if (dbErr) {
       return res.status(500).json({ message: "ListError" });
     }
-    console.log("crawl/list/:id", result);
     return res.status(200).json({ crawlList: result });
   });
 });

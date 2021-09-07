@@ -12,6 +12,7 @@ import useSpinner from "hooks/useSpinner";
 import useModal from "hooks/useModal";
 import CrawlListModal from "components/Modal/CrawlListModal/CrawlListModal";
 import { GET_CRAWL_DATA_LIST_REQUEST } from "redux/actions/ActionType";
+import Badge from "components/common/Badge";
 
 const MyLink = () => {
   const dispatch = useDispatch();
@@ -45,7 +46,6 @@ const MyLink = () => {
   }, [status]);
   useEffect(() => {
     if (selectedCardData.id !== -1) {
-      console.log("crawlModal Open");
       dispatch({
         type: GET_CRAWL_DATA_LIST_REQUEST,
         id: selectedCardData.id,

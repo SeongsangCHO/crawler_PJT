@@ -59,7 +59,7 @@ const Header = () => {
           </>
         ) : (
           <>
-            <span>{displayUserName}님 안녕하세요</span>
+            <UserNameText>{displayUserName}님 안녕하세요</UserNameText>
             <LogoutButton onClick={onLogout}>Logout</LogoutButton>
           </>
         )}
@@ -87,7 +87,8 @@ const Header = () => {
 export default React.memo(Header);
 const RightSideContainer = styled.div`
   display: flex;
-  width: 150px;
+  max-width: 250px;
+  width: 100%;
 `;
 
 const SignUpButton = styled(Button)`
@@ -132,6 +133,10 @@ const HeaderWrapper = styled.div`
   padding: 1em 1em 0 1em;
 `;
 
+const UserNameText = styled.span`
+  white-space: nowrap;
+  line-height: 26px;
+`;
 // const ButtonWrapper = styled.div`
 //   display: flex;
 //   justify-content: center;
