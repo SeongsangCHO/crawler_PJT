@@ -102,7 +102,8 @@ https://www.notion.so/88a83386702a440d84b622d2bf9f6e20
 - [x] bootstarp 사용하지 않고 UI구현
 - [진행중] redux, redux-saga 구조 개편
 - [x] Authorization Header를 통해 토큰 유효성검사 - 기존 cookie로 사용
-- [진행중] 링크카드, 크롤링데이터 API수정
+- [x] 링크카드, 크롤링데이터 API수정
+- [진행중] 크롤결과 카드리스트 스타일링
   
   
   
