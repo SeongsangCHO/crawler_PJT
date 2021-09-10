@@ -54,6 +54,11 @@ function* getCategories() {
       });
     }
   } catch (e) {
+    console.log(e);
+
+    alert("권한이 없습니다.");
+    sessionStorage.clear("token");
+    window.location.href = "http://localhost:3000/";
     yield put({ type: GET_CATEGORY_FAILURE });
   }
 }

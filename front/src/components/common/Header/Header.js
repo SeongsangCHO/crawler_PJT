@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import CreateNotification from "../common/CreateNotification";
+import CreateNotification from "../CreateNotification";
 import FormModal from "components/Modal/FormModal";
 import RegisterModalContent from "components/Modal/RegisterModal/RegisterModalContent";
 import LoginModalContent from "components/Modal/LoginModal/LoginModalContent";

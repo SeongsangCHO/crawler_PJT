@@ -13,13 +13,14 @@ const CardItem = ({ card, selectedCardData }) => {
     if (diffDays === 0) {
       return "오늘 등록";
     }
-    return diffDays + "일전 등록";
+    return Math.abs(diffDays) + "일전 등록";
   };
   const handleTitleClick = () => {
     dispatch({
       type: SET_SELECTED_CARD_ID,
       id: card.id,
       title: card.title,
+      price: card.price,
     });
     // dispatch(해당하는 카드ID로 select하는 dispatch)
     // CrawlModal Open

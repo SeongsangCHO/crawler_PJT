@@ -1,7 +1,7 @@
 import Portal from "components/Portal/Portal";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_SELECTED_CARD_ID, SET_SELECTED_CATEGORY_ID } from "redux/actions/ActionType";
+import { SET_SELECTED_CARD_ID } from "redux/actions/ActionType";
 import styled from "styled-components";
 import CrawlItem from "./CrawlItem";
 
@@ -20,6 +20,10 @@ const CrawlListModal = ({ modalClose, title }) => {
       setAnimation(true);
     }, 0);
   }, []);
+  const { selectedCardData } = useSelector(
+    (state) => state.linkDataApiCallReducer
+  );
+  console.log(selectedCardData);
   const { crawlList } = useSelector((state) => state.crawlReducer);
   return (
     <Portal onClick={handleClose}>
@@ -31,7 +35,11 @@ const CrawlListModal = ({ modalClose, title }) => {
         </Header>
         <ItemWrapper>
           {crawlList.map((item) => (
-            <CrawlItem item={item} key={item.id} />
+            <CrawlItem
+              item={item}
+              key={item.id}
+              selectedCardData={selectedCardData}
+            />
           ))}
         </ItemWrapper>
         크롤러모달
@@ -47,12 +55,13 @@ const Container = styled.aside`
   transition: 0.6s;
   overflow-y: scroll;
   max-width: 500px;
+  min-width: 300px;
   width: 40%;
   height: 100%;
   background-color: white;
   right: -100%;
   padding: 15px;
-  font-size: 24px;
+  font-size: 16px;
   &.animation {
     right: 0;
   }
@@ -69,7 +78,7 @@ const Title = styled.h1`
   border-bottom: 1px solid #888888;
   padding-bottom: 10px;
   & > span {
-    font-size: 1.5em;
+    font-size: 1.2em;
     color: ${({ theme }) => theme.colors.primary};
   }
   @media screen and (max-width: 768px) {
@@ -84,4 +93,7 @@ const ItemWrapper = styled.ul`
   justify-content: center;
   align-items: center;
   margin-top: 15px;
+
+  /* display: grid; */
+  /* grid-template-columns: repeat(2, 1fr); */
 `;

@@ -9,12 +9,10 @@ import {
 } from "../actions/ActionType";
 
 function loginAPI(loginData) {
-  console.log(loginData);
-
   return requestPost({
     url: loginURL,
     body: loginData,
-    accessToken: JSON.parse(sessionStorage.getItem("token")),
+    accessToken: "",
   });
 }
 
@@ -29,6 +27,7 @@ function* loginRequest(action) {
         token: result.data.token,
       });
       sessionStorage.setItem("token", JSON.stringify(result.data.token));
+      window.location.href = "http://localhost:3000/";
     }
   } catch (err) {
     yield put({ type: LOGIN_FAILURE, isLogined: false });

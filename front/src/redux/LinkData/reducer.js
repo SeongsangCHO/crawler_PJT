@@ -23,6 +23,7 @@ const initialState = {
   selectedCardData: {
     id: -1,
     title: "",
+    price: -1,
   },
   filteredCards: [],
 };
@@ -32,7 +33,11 @@ const linkDataApiCallReducer = (state = initialState, action) => {
     case SET_SELECTED_CARD_ID: {
       return {
         ...state,
-        selectedCardData: { id: action.id, title: action.title },
+        selectedCardData: {
+          id: action.id,
+          title: action.title,
+          price: action.price,
+        },
       };
     }
     case SET_FILTERED_CARDS: {
