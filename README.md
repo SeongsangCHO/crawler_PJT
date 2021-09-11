@@ -1,5 +1,5 @@
 
-# :shopping_cart: 다링
+# :shopping_cart: 다링 - 리팩토링 진행중 https://github.dev/SeongsangCHO/crawler_PJT/tree/refactor/style
 
 
 
