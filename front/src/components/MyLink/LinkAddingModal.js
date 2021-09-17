@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import CreateNotification from "components/CreateNotification";
-import Moment from "react-moment";
+import CreateNotification from "components/common/CreateNotification";
 import moment from "moment";
 import "moment-timezone";
 

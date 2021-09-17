@@ -1,15 +1,13 @@
 const express = require("express");
-const path = require("path");
 const ssgCrawler = require("./crawler/ssgCrawler");
 const coupangCrawler = require("./crawler/coupangCrawler");
 const naverCrawler = require("./crawler/naverCrawler");
 const cors = require("cors");
 const accecptURL = "http:/localhost:3000";
 const db = require("./config/db_config");
-const bcrypt = require("bcrypt");
-const { createToken } = require("./middlewares/auth");
-const HASH_ROUND = 10;
 const { verifyToken } = require("./middlewares/verify");
+const jwt = require("jsonwebtoken");
+
 const {
   selectCrawlTargetLinkCardIdQuery,
   selectCardCrawledDataQuery,
@@ -20,7 +18,6 @@ const {
   insertCategoryQuery,
   insertLinkCardQuery,
 } = require("./query/insertQuery");
-
 const { deleteProductCardQuery } = require("./query/deleteQuery");
 
 require("dotenv").config();
@@ -32,93 +29,10 @@ moment.tz.setDefault("Asia/Seoul");
 middlewares(app);
 //raw로 작성된 query module화 해서 가져올 것.
 //URL 환경변수 처리
+const routes = require("./routes");
+app.use("/", routes);
 
 const port = process.env.PORT || 8080;
-//템플릿엔진 ejs 설정 __dirname +'views'랑 같음
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-app.get("/", (req, res) => {});
-
-app.post("/doublecheck", cors(accecptURL), (req, res, next) => {
-  //res.set이아닌 setHeader로 했어야함.
-  console.log("double check post request 받음");
-  console.log(req.body.user_nickname);
-  let sql = `select * from users where nickname = '${req.body.user_nickname}'`;
-  //setHeader를 이미 선언하면, body를 다 작성했다는 의미
-  //그리고나서 res.status로 상태코드를 지정하면 에러가 발생할 것
-  //
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  db.query(sql, (error, result) => {
-    console.log(result);
-    if (result == "") {
-      return res.status(200).json({ message: "중복체크 success" });
-    }
-    if (result[0].nickname == req.body.user_nickname) {
-      console.log("select한 결과 있음");
-      console.log(result);
-      return res.status(400).json({ error: "message" });
-    }
-  });
-  //res.statusCode = 400, 401로 상태코드응답
-  //userData의 password를 bcrpt로 해싱
-});
-
-//가입버튼 클릭시 - 가입요청을 받는 부분
-app.post("/register", cors(accecptURL), (req, res, next) => {
-  //res.set이아닌 setHeader로 했어야함.
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  console.log(req.body);
-  try {
-    bcrypt.hash(
-      req.body.user_password,
-      HASH_ROUND,
-      (bcryptError, hashPassword) => {
-        let sql = `insert into users (nickname, password) values(?, ?)`;
-        db.query(
-          sql,
-          [req.body.user_nickname, hashPassword],
-          (dbError, result) => {
-            if (dbError) {
-              throw dbError;
-            }
-          }
-        );
-      }
-    );
-  } catch (error) {
-    console.error(error);
-  }
-  return res.status(200).json({ message: "가입 success" });
-});
-
-function test(req, res, next) {
-  console.log("로그인 성공 후 next");
-}
-app.post("/login", cors(accecptURL), createToken, test, (req, res, next) => {
-  test();
-  return res.status(400);
-});
-
-app.post("/addcategory", cors(accecptURL), verifyToken, (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
-  console.log("전달받은 카테고리 명 : " + req.body.category);
-  //현재 로그인된 id의 id를 외래키로 사용하는 categories 테이블에 user_id를 삽입하고
-  //front에서 전달받은 category명을 테이블에 삽입함
-  //카테고리 id도 외래키 userId로 얻을 수 있음
-  let sql = insertCategoryQuery();
-  db.query(
-    sql,
-    [req.currentUserNickname, req.body.category],
-    (dbError, result) => {
-      if (dbError) {
-        throw dbError;
-      }
-    }
-  );
-
-  return res.status(200).json({ message: "카테고리 추가  success" });
-});
 
 app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -126,15 +40,10 @@ app.post("/addlink", cors(accecptURL), verifyToken, (req, res, next) => {
   let { title, price, link, info, currentCategory, registerTime } = req.body;
   let KST = new Date(registerTime.toString());
   KST.setHours(KST.getHours() + 9);
-
-  //한국표준시에 맞추기
-  //데이터 중복이 아닐 때 카드 추가
   let sql = insertLinkCardQuery(req, currentCategory);
-
   db.query(sql, [title, price, link, info, KST], (dbError, result) => {
     if (dbError) throw dbError;
   });
-
   return res.status(200).json({ message: "링크 추가 SUCCESS" });
 });
 
@@ -233,6 +142,7 @@ app.get("/api/mylink", cors(accecptURL), verifyToken, (req, res, next) => {
 app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   let searchTitle = req.body.currentLinkTitle;
+  console.log(req.body, "crawler요청");
 
   //0 : 실패
   //1 : 성공
@@ -254,6 +164,7 @@ app.post("/crawler", cors(accecptURL), verifyToken, (req, res) => {
   // });
   db.query(crawlTargetLinkCardId, (dbErr, dbResult) => {
     console.log("findID : ", dbResult[0].id);
+    console.log(dbResult[0], "crawler요청, dbResult");
 
     const crawlers = [
       ssgCrawler(searchTitle, dbResult[0].id),

@@ -1,29 +1,17 @@
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
-// 여기서 부터 미들웨어/데브툴 관련 임포트
 import { composeWithDevTools } from "redux-devtools-extension";
-import {logger} from "redux-logger";
-import registerReducer from "./reducers/registerReducer";
-import signUpReducer from "./SignUp/reducer";
-import doubleCheckReducer from "./DoubleCheck/reducer";
-import loginReducer from "./Login/reducer";
-import addCategoryReducer from "./AddCategory/reducer";
-import linkDataApiCallReducer from './LinkData/reducer';
+import registerReducer from "./Register/reducer";
+import categoryReducer from "./Category/reducer";
+import linkDataApiCallReducer from "./LinkData/reducer";
 import createSagaMiddleware from "redux-saga";
-import currentCategoryReducer from './CurrentCategory/reducer';
-import addLinkReducer from './AddLink/reducer';
-import runCrawlerReducer from './RunCrawler/reducer';
-import reloadReducer from './ReloadCrawl/reducer';
-import logoutReducer from './Logout/reducer';
+import crawlReducer from "./Crawl/reducer";
+import loginReducer from "./Login/reducer";
 
 import rootSaga from "./saga";
-const initialState = {
-  
-};
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
-  const middlewares = [sagaMiddleware]; //thunk (비동기작업을 돕는 라이브러리)를 넣음
-  //배포용과 개발용의 미들웨어 차이를 두기 위함
+  const middlewares = [sagaMiddleware];
   const enhancer =
     process.env.NODE_ENV === "production"
       ? compose(applyMiddleware([]))
@@ -32,20 +20,12 @@ const configureStore = () => {
   const store = createStore(
     combineReducers({
       registerReducer,
-      signUpReducer,
-      doubleCheckReducer,
-      loginReducer,
-      addCategoryReducer,
+      categoryReducer,
       linkDataApiCallReducer,
-      currentCategoryReducer,
-      addLinkReducer,
-      runCrawlerReducer,
-      reloadReducer,
-      logoutReducer
+      crawlReducer,
+      loginReducer,
     }),
-    initialState,
-    enhancer,
-    // applyMiddleware(sagaMiddleware, logger),
+    enhancer
   );
   sagaMiddleware.run(rootSaga);
   return store;

@@ -1,6 +1,6 @@
-const selectCrawlTargetLinkCardIdQuery = (req, searchTitle) => {
+const selectCrawlTargetLinkCardIdQuery = (id, searchTitle) => {
   return `select id from links where users_id =
-  (select id from users where nickname = '${req.currentUserNickname}'
+  (select id from users where id = '${id}'
   and title ='${searchTitle}'
   )`;
 };
@@ -45,7 +45,52 @@ const selectUserDataQuery = (req) => {
  ORDER BY registerTime DESC`;
 };
 
+const selectCategories = (id) => {
+  return `select title, id from categories where users_id = ${id}
+  `;
+};
+
+const selectLinkCardList = (id) => {
+  return `
+  select id,title,price,link,info,registerTime from links where categories_id = ${id};`;
+};
+
+const selectProducts = (id) => {
+  return `
+  select 
+  crawl.id as crawlId,
+  crawl.title as crawlTitle,
+  crawl.price as crawlPrice,
+  crawl.source as crawlSource,
+  crawl.link as crawlLink,
+  crawl.imgsrc as crawlImgSrc,
+  links.id as linksId,
+  links.categories_id as categoriesId
+  from crawl LEFT join links on crawl.links_id = links.id where links.users_id = ${id};`;
+};
+
+const selectCards = (id) => {
+  return `
+  select
+    title,
+    id,
+    info,
+    price,
+    link,
+    registerTime,
+    categories_id as categoryId
+   from links where users_id = ${id}`;
+};
+
+const selectCrawlList = (id) => {
+  return `select * from crawl where links_id = ${id}`;
+};
 exports.selectCrawlTargetLinkCardIdQuery = selectCrawlTargetLinkCardIdQuery;
 exports.selectCardCrawledDataQuery = selectCardCrawledDataQuery;
 exports.selectLinkCardIdQuery = selectLinkCardIdQuery;
 exports.selectUserDataQuery = selectUserDataQuery;
+exports.selectCategories = selectCategories;
+exports.selectLinkCardList = selectLinkCardList;
+exports.selectProducts = selectProducts;
+exports.selectCards = selectCards;
+exports.selectCrawlList = selectCrawlList;

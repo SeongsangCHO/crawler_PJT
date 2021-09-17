@@ -1,59 +1,124 @@
+import { STATUS } from "components/utils/constants";
 import {
-  LINK_DATA_REQUEST,
-  LINK_DATA_SUCCESS,
-  LINK_DATA_FAILURE,
   DELETE_CARD_REQUEST,
   DELETE_CARD_SUCCESS,
   DELETE_CARD_FAILURE,
-} from "../actions/Action";
+  GET_PRODUCTS_LIST_REQUEST,
+  GET_PRODUCTS_LIST_SUCCESS,
+  GET_PRODUCTS_LIST_FAILURE,
+  GET_CARDS_FAILURE,
+  GET_CARDS_SUCCESS,
+  GET_CARDS_REQUEST,
+  SET_FILTERED_CARDS,
+  ADD_CARD_REQUEST,
+  ADD_CARD_SUCCESS,
+  ADD_CARD_FAILURE,
+  SET_SELECTED_CARD_ID,
+} from "../actions/ActionType";
 
 const initialState = {
-  data: null,
-  message: "",
-  isCalled:false,
-  isDeleted:false,
+  products: [],
+  status: "",
+  cards: [],
+  selectedCardData: {
+    id: -1,
+    title: "",
+    price: -1,
+  },
+  filteredCards: [],
 };
 
 const linkDataApiCallReducer = (state = initialState, action) => {
   switch (action?.type) {
-    case LINK_DATA_REQUEST: {
-      console.log("링크API REQUEST_리듀서");
-      return { ...state,isCalled:action.isCalled };
-    }
-    case LINK_DATA_SUCCESS: {
-      console.log("링크API SUCCESS_리듀서");
+    case SET_SELECTED_CARD_ID: {
       return {
         ...state,
-        data: { ...action.data },
-        isCalled: action.isCalled,
-        message: "success",
+        selectedCardData: {
+          id: action.id,
+          title: action.title,
+          price: action.price,
+        },
       };
     }
-    case LINK_DATA_FAILURE: {
-      console.log("링크API FAILURE_리듀서");
+    case SET_FILTERED_CARDS: {
       return {
         ...state,
-        error: action?.err,
-        isCalled: false,
-        message: "failure",
+        filteredCards: state.cards.filter((card) =>
+          action.id === -1 ? card : action.id === card.categoryId
+        ),
       };
+    }
+    case GET_CARDS_REQUEST: {
+      return {
+        ...state,
+        status: STATUS.request,
+      };
+    }
+    case GET_CARDS_SUCCESS: {
+      return {
+        ...state,
+        status: STATUS.success,
+        cards: [...action.cards],
+        filteredCards: [...action.cards],
+      };
+    }
+    case GET_CARDS_FAILURE: {
+      return { ...state, status: STATUS.failure };
+    }
+    case GET_PRODUCTS_LIST_REQUEST: {
+      return {
+        ...state,
+        status: STATUS.request,
+      };
+    }
+    case GET_PRODUCTS_LIST_SUCCESS: {
+      return {
+        ...state,
+        products: [...action.products],
+        status: STATUS.success,
+      };
+    }
+    case GET_PRODUCTS_LIST_FAILURE: {
+      return { ...state, status: STATUS.failure };
     }
 
+    case ADD_CARD_REQUEST: {
+      return { ...state, status: STATUS.request };
+    }
+    case ADD_CARD_SUCCESS: {
+      return {
+        ...state,
+        cards: [...state.cards, action.data],
+        filteredCards: [...state.filteredCards, action.data],
+        status: STATUS.success,
+      };
+    }
+    case ADD_CARD_FAILURE: {
+      return { ...state, status: STATUS.failure };
+    }
     case DELETE_CARD_REQUEST: {
-      return {...state, isDeleted:false, currentCategory:action.currentCategory};
+      return {
+        ...state,
+        isDeleted: false,
+        currentCategory: action.currentCategory,
+      };
     }
     case DELETE_CARD_SUCCESS: {
-      
-      const currentCategory = state.currentCategory
-      let result = state.data.category.map((category) =>{
-        if(Object.keys(category)[0] === currentCategory){
-          return {[currentCategory]: category[currentCategory].filter((item) => item.id !== action.deletedId)}
+      const currentCategory = state.currentCategory;
+      let result = state.data.category.map((category) => {
+        if (Object.keys(category)[0] === currentCategory) {
+          return {
+            [currentCategory]: category[currentCategory].filter(
+              (item) => item.id !== action.deletedId
+            ),
+          };
         }
         return category;
-      })
-      return {...state, data:{category:result}, isDeleted:true}
+      });
+      return { ...state, data: { category: result }, isDeleted: true };
     }
     case DELETE_CARD_FAILURE: {
+      break;
     }
     default:
       return state;

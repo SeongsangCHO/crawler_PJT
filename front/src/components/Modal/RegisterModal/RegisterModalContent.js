@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import NickNameInput from "./NickNameInput";
 import PasswordInput from "./PasswordInput";
 import "react-notifications/lib/notifications.css";
-import CreateNotification from "components/CreateNotification";
+import CreateNotification from "components/common/CreateNotification";
+import { requestSignUp } from "redux/actions/Register";
 
 const RegisterModalContent = ({
   onToggleRegisterModal,
@@ -15,12 +16,7 @@ const RegisterModalContent = ({
   const [isSignUp, setIsSignUp] = useState(false);
 
   const [isMatchPassword, setIsMatchPassword] = useState(false);
-  const isDoubleNickName = useSelector(
-    (state) => state.doubleCheckReducer.isDouble
-  );
-  const userNickName = useSelector(
-    (state) => state.doubleCheckReducer.data.user_nickname
-  );
+  const { isDouble, nickName } = useSelector((state) => state.registerReducer);
 
   // useCallback으로 변경하기
   const handlePassword = (inputPassword) => {
@@ -38,41 +34,35 @@ const RegisterModalContent = ({
   };
   const signUpVaildCheck = () => {
     if (
-      userNickName === undefined ||
-      userNickName === "" ||
+      nickName === undefined ||
+      nickName === "" ||
       password === "" ||
       password.length < 8 ||
-      isDoubleNickName ||
+      isDouble ||
       !isMatchPassword
     ) {
       return true;
     }
     return false;
   };
+  const errorMsg = () => {
+    if (nickName === undefined) {
+      return "닉네임 중복";
+    }
+    if (!isMatchPassword || nickName === "" || password === "") {
+      return "닉네임 또는 비밀번호를 확인해주세요";
+    }
+    if (password.length < 8) {
+      return "비밀번호는 8글자 이상으로 입력해주세요.";
+    }
+  };
   const onSignUp = (e) => {
     e.preventDefault();
-    //예외 핸들링
     if (signUpVaildCheck()) {
-      let errorMsg;
-      if (isDoubleNickName || userNickName === undefined) {
-        errorMsg = "닉네임 중복";
-      }
-      if (!isMatchPassword || userNickName === "" || password === "") {
-        errorMsg = "닉네임 또는 비밀번호를 확인해주세요";
-      }
-      if (password.length < 8) {
-        errorMsg = "비밀번호는 8글자 이상으로 입력해주세요.";
-      }
-      CreateNotification("error")(errorMsg);
+      CreateNotification("error")(errorMsg());
       return;
     } else {
-      dispatch({
-        type: "SIGN_UP_REQUEST",
-        data: {
-          user_nickname: userNickName,
-          user_password: password,
-        },
-      });
+      dispatch(requestSignUp({ nickName, password }));
       CreateNotification("success")("가입 성공");
       setIsSignUp(true);
     }
@@ -80,7 +70,7 @@ const RegisterModalContent = ({
 
   return (
     <RegisterForm onSubmit={onSignUp}>
-      <span>Create Account</span>
+      <ModalTitle>Create Account</ModalTitle>
       <NickNameInput />
       <PasswordInput
         isMatchPassword={isMatchPassword}
@@ -100,14 +90,14 @@ const RegisterModalContent = ({
 };
 
 export default React.memo(RegisterModalContent);
+
 const RegisterForm = styled.form`
   display: flex;
-  width: 100%;
-  height: 100%;
   flex-direction: column;
-  padding: 15px;
-  @media (max-width: 576px) {
-    padding: 15px;
+  width: 100%;
+  padding: 20px;
+  & input + input {
+    margin-top: 15px;
   }
 `;
 
@@ -124,4 +114,9 @@ const LoginButton = styled.button`
   color: white;
   transition: 0.5s;
   margin-top: 5px;
+`;
+
+const ModalTitle = styled.h1`
+  font-size: 1.5em;
+  margin-bottom: 15px;
 `;

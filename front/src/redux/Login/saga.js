@@ -1,34 +1,50 @@
 import { loginURL } from "../api";
 import { put, call } from "redux-saga/effects";
-import axios from "axios";
-import { LOGIN_SUCCESS, LOGIN_FAILURE } from "../actions/Action";
-
+import { requestPost } from "redux/api";
+import {
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+} from "../actions/ActionType";
 
 function loginAPI(loginData) {
-  console.log("loginAPI in saga");
-
-  return axios.post(loginURL, loginData, {
-    withCredentials: true,
+  return requestPost({
+    url: loginURL,
+    body: loginData,
+    accessToken: "",
   });
 }
 
 function* loginRequest(action) {
   try {
-    console.log("loginRequest in saga");
     const result = yield call(loginAPI, action.data);
-    console.log(result);
-    if (result.status == 200) {
+    if (result.status === 200) {
       yield put({
         type: LOGIN_SUCCESS,
-        user_nickname: action.data.user_nickname,
+        nickName: action.data.nickName,
         isLogined: true,
         token: result.data.token,
       });
+      sessionStorage.setItem("token", JSON.stringify(result.data.token));
+      window.location.href = "http://localhost:3000/";
     }
   } catch (err) {
     yield put({ type: LOGIN_FAILURE, isLogined: false });
     console.error(err);
   }
 }
+function* logoutRequest() {
+  try {
+    yield put({
+      type: LOGOUT_SUCCESS,
+      message: "SUCCESS",
+    });
+    sessionStorage.clear("token");
+  } catch (err) {
+    yield put({ type: LOGOUT_FAILURE, message: err.message });
+    console.error(err);
+  }
+}
 
-export { loginRequest };
+export { logoutRequest, loginRequest };

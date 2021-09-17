@@ -6,7 +6,60 @@ const GlobalStyle = createGlobalStyle`
   *, *::before, *::after {
     box-sizing: border-box;
   }
-  body {
+  html,body {
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  }
+  body.scorll-hidden{
+    overflow-y: hidden;
+  }
+  a {
+    text-decoration: none;
+  }
+  a:visited {
+    color: white;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+      monospace;
+  }
+  button{
+    border: none;
+  }
+
+  @font-face {
+    font-family: "paybooc-Bold";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'HangeulNuri-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/HangeulNuri-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  button {
+    outline: 0;
+    cursor: pointer;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    font-family: "paybooc-Bold";
+    box-sizing: border-box;
   }
 `;
 

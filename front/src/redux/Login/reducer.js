@@ -1,34 +1,58 @@
-
-
+import { STATUS } from "components/utils/constants";
 import {
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-} from "../actions/Action";
+} from "../actions/ActionType";
 
 const initialState = {
-  user_nickname: '',
-  isLogined: '',
-  token:document.cookie.slice(document.cookie.indexOf('=')),
+  nickName: "",
+  isLogined: sessionStorage.getItem("token") ? true : "",
+  token: sessionStorage.getItem("token"),
+  message: "",
+  status: "",
 };
 
-//상태가 변화할 때 수행되는 함수
-//Type에 따른 상태변화
 const loginReducer = (state = initialState, action) => {
-
   switch (action?.type) {
     case LOGIN_REQUEST: {
-      console.log("로그인 REQUEST_리듀서");
-      console.log(state)
-      return { ...state, isLogined: action.isLogined };
+      return { ...state };
     }
     case LOGIN_SUCCESS: {
-      console.log("로그인 SUCCESS_리듀서");
-      return { ...state,user_nickname: action.user_nickname,  isLogined: action.isLogined, token: action.token};
+      return {
+        ...state,
+        nickName: action.nickName,
+        isLogined: action.isLogined,
+        token: action.token,
+        status: STATUS.success,
+      };
     }
     case LOGIN_FAILURE: {
-      console.log("로그인 FAILURE_리듀서");
+      return {
+        ...state,
+        status: STATUS.failure,
+      };
+    }
+    case LOGOUT_REQUEST: {
       return { ...state, isLogined: false };
+    }
+    case LOGOUT_SUCCESS: {
+      return {
+        ...state,
+        isLogined: false,
+        nickName: "",
+        token: "",
+        status: STATUS.success,
+      };
+    }
+    case LOGOUT_FAILURE: {
+      return {
+        ...state,
+        status: STATUS.failure,
+      };
     }
     default:
       return state;
