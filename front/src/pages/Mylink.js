@@ -12,19 +12,14 @@ import useSpinner from "hooks/useSpinner";
 import useModal from "hooks/useModal";
 import CrawlListModal from "components/Modal/CrawlListModal/CrawlListModal";
 import { GET_CRAWL_DATA_LIST_REQUEST } from "redux/actions/ActionType";
-import Badge from "components/common/Badge";
 
 const MyLink = () => {
   const dispatch = useDispatch();
   const { isLoading } = useSpinner();
-  const sectionRef = useRef(null);
   const { products } = useSelector(
     (state) => state.linkDataApiCallReducer.products
   );
   const { isOpen, modalOpen, modalClose } = useModal();
-  const scrollToTop = () => {
-    sectionRef.current.scrollIntoView();
-  };
   const { categories, status, selectedCategoryId } = useSelector(
     (state) => state.categoryReducer
   );
@@ -54,12 +49,11 @@ const MyLink = () => {
     }
   }, [selectedCardData]);
   return (
-    <MyLinkSection id="MyLinkSection" ref={sectionRef}>
+    <MyLinkSection id="MyLinkSection">
       <CategoryTab />
       <CategoryList categories={categories} />
       <CardList cards={cards} selectedCategoryId={selectedCategoryId} />
       <ProductList products={products} />
-      <ScrollTopButton onClick={scrollToTop}>맨 위로</ScrollTopButton>
       {isLoading && <Spinner />}
       {isOpen && (
         <CrawlListModal
@@ -72,24 +66,6 @@ const MyLink = () => {
 };
 
 export default MyLink;
-
-const ScrollTopButton = styled.a`
-  position: fixed;
-  bottom: 15px;
-  right: 5px;
-  background-color: tomato;
-  color: white;
-  height: 30px;
-  border-radius: 5px;
-  line-height: 20px;
-  padding: 5px;
-  cursor: pointer;
-  :hover {
-    color: tomato;
-    background-color: white;
-    text-decoration: none;
-  }
-`;
 
 const MyLinkSection = styled.main`
   margin: 0 15px 0 15px;

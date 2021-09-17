@@ -6,6 +6,7 @@ import {
   SET_FILTERED_CARDS,
   SET_SELECTED_CATEGORY_ID,
 } from "redux/actions/ActionType";
+import { Shadow } from "styles/mixin";
 const CategoryItem = ({ category, itemIdx, setFocusIdx, focusIdx }) => {
   const dispatch = useDispatch();
   const handleItemClick = () => {
@@ -34,7 +35,11 @@ const Item = styled.li`
 `;
 
 const TitleButton = styled(Button)`
-  &.focus {
+  ${Shadow}
+  background-color:white;
+  transition: 0.2s;
+  &.focus,
+  &:hover {
     background-color: ${({ theme }) => theme.colors.primary};
     color: white;
   }

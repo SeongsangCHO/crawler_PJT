@@ -15,10 +15,19 @@ function Jumbotron() {
 
 export default Jumbotron;
 
-const Container = styled.main`
+const Container = styled.div`
   display: flex;
-  max-width: 768px;
+  justify-content: center;
+  align-items: center;
+  max-width: 1080px;
+  width: 100%;
   margin: 0 auto;
+  gap: 30px;
+  @media screen and (max-width: 768px) {
+    & {
+      flex-direction: column;
+    }
+  }
 `;
 
 const ImageWrapper = styled.div``;

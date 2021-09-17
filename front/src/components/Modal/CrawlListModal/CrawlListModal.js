@@ -1,5 +1,6 @@
+import TopScrollButton from "components/common/TopScrollButton";
 import Portal from "components/Portal/Portal";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_SELECTED_CARD_ID } from "redux/actions/ActionType";
 import styled from "styled-components";
@@ -7,6 +8,7 @@ import CrawlItem from "./CrawlItem";
 
 const CrawlListModal = ({ modalClose, title }) => {
   const dispatch = useDispatch();
+  const titleRef = useRef(null);
   const handleClose = (e) => {
     const { id } = e.target;
     if (id === "dim") {
@@ -29,7 +31,7 @@ const CrawlListModal = ({ modalClose, title }) => {
     <Portal onClick={handleClose}>
       <Container className={animation && "animation"}>
         <Header>
-          <Title>
+          <Title id="title" ref={titleRef}>
             <span>{title}</span> 상품 수집정보
           </Title>
         </Header>
@@ -42,7 +44,7 @@ const CrawlListModal = ({ modalClose, title }) => {
             />
           ))}
         </ItemWrapper>
-        크롤러모달
+        <TopScrollButton Ref={titleRef} moveId="title" />
       </Container>
     </Portal>
   );
@@ -62,6 +64,8 @@ const Container = styled.aside`
   right: -100%;
   padding: 15px;
   font-size: 16px;
+  scroll-behavior: smooth;
+
   &.animation {
     right: 0;
   }

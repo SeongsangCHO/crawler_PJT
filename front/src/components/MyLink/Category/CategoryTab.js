@@ -5,6 +5,7 @@ import useModal from "hooks/useModal";
 import CreateNotification from "../../common/CreateNotification";
 import { useSelector } from "react-redux";
 import Button from "components/common/Button";
+import { Shadow } from "styles/mixin";
 
 const CategoryWrapper = styled.div`
   padding: 5px;
@@ -39,4 +40,11 @@ export default CategoryTab;
 
 const CategoryAddButton = styled(Button)`
   margin-bottom: 5px;
+  ${Shadow}
+  background-color: white;
+  transition: 0.2s;
+  &:hover {
+    color: white;
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
 `;

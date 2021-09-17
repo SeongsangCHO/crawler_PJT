@@ -6,6 +6,7 @@ import {
   SET_SELECTED_CATEGORY_ID,
 } from "redux/actions/ActionType";
 import styled from "styled-components";
+import { Shadow } from "styles/mixin";
 import CategoryItem from "./CategoryItem";
 
 const CategoryList = ({ categories }) => {
@@ -44,7 +45,11 @@ CategoryList.propTypes = {};
 export default CategoryList;
 
 const TotalCategory = styled(Button)`
-  &.focus {
+  ${Shadow}
+  background-color:white;
+  transition: 0.2s;
+  &.focus,
+  &:hover {
     background-color: ${({ theme }) => theme.colors.primary};
     color: white;
   }
