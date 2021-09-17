@@ -5,7 +5,7 @@ import { requestGetCategoires } from "redux/actions/Category";
 import CategoryList from "components/Category/CategoryList";
 import { requestGetCards } from "redux/actions/LinkCard";
 import ProductList from "components/Product/ProductList";
-import CategoryTab from "components/MyLink/Category/CategoryTab";
+import CategoryAddButton from "components/Category/CategoryAddButton";
 import CardList from "components/Card/CardList";
 import Spinner from "components/common/Spinner";
 import useSpinner from "hooks/useSpinner";
@@ -50,7 +50,7 @@ const MyLink = () => {
   }, [selectedCardData]);
   return (
     <MyLinkSection id="MyLinkSection">
-      <CategoryTab />
+      <CategoryAddButton />
       <CategoryList categories={categories} />
       <CardList cards={cards} selectedCategoryId={selectedCategoryId} />
       <ProductList products={products} />
