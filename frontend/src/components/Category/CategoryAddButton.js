@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import CategoryAddModal from "components/Modal/CategoryAddModal/CategoryAddModal";
 import useModal from "hooks/useModal";
-import CreateNotification from "../../common/CreateNotification";
+import CreateNotification from "components/common/CreateNotification";
 import { useSelector } from "react-redux";
 import Button from "components/common/Button";
 import { Shadow } from "styles/mixin";
@@ -14,7 +14,7 @@ const CategoryWrapper = styled.div`
   }
 `;
 
-const CategoryTab = () => {
+const CategoryAddButton = () => {
   const { modalOpen, modalClose, isOpen } = useModal();
   const isAddCategory = useSelector(
     (state) => state.categoryReducer.isAddCategory
@@ -27,7 +27,7 @@ const CategoryTab = () => {
 
   return (
     <CategoryWrapper>
-      <CategoryAddButton onClick={modalOpen}>카테고리 추가</CategoryAddButton>
+      <CategoryAddBtn onClick={modalOpen}>카테고리 추가</CategoryAddBtn>
       <hr />
       {isOpen && (
         <CategoryAddModal modalOpen={modalOpen} modalClose={modalClose} />
@@ -36,9 +36,9 @@ const CategoryTab = () => {
   );
 };
 
-export default CategoryTab;
+export default CategoryAddButton;
 
-const CategoryAddButton = styled(Button)`
+const CategoryAddBtn = styled(Button)`
   margin-bottom: 5px;
   ${Shadow}
   background-color: white;

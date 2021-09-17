@@ -17,7 +17,6 @@ function App() {
       <NotificationContainer />
       <Switch>
         <Route exact path={"/"} component={Home} />
-        {/* <Route exact path={"/mylink"} component={MyLink} /> */}
         <PrivateRoute exact path="/mylink" component={MyLink} />
         <Route exact path="/401" component={UnAuthPage} />
       </Switch>
